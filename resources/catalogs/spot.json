@@ -1,0 +1,1983 @@
+[
+    {
+        "id": "spot:GET:/api/v3/ping",
+        "apiGroup": "spot",
+        "category": "General",
+        "method": "GET",
+        "path": "/api/v3/ping",
+        "security": "NONE",
+        "weight": 1,
+        "params": [],
+        "notes": "Test connectivity to the Rest API.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#test-connectivity"
+    },
+    {
+        "id": "spot:GET:/api/v3/time",
+        "apiGroup": "spot",
+        "category": "General",
+        "method": "GET",
+        "path": "/api/v3/time",
+        "security": "NONE",
+        "weight": 1,
+        "params": [],
+        "notes": "Test connectivity and get server time.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#check-server-time"
+    },
+    {
+        "id": "spot:GET:/api/v3/exchangeInfo",
+        "apiGroup": "spot",
+        "category": "General",
+        "method": "GET",
+        "path": "/api/v3/exchangeInfo",
+        "security": "NONE",
+        "weight": 20,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": false,
+                "description": "Trading pair symbol"
+            },
+            {
+                "name": "symbols",
+                "type": "STRING",
+                "required": false,
+                "description": "Array of symbols as JSON string e.g. [\"BTCUSDT\",\"ETHUSDT\"]"
+            },
+            {
+                "name": "permissions",
+                "type": "STRING",
+                "required": false,
+                "description": "Filter by permissions"
+            }
+        ],
+        "notes": "Current exchange trading rules and symbol information.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#exchange-information"
+    },
+    {
+        "id": "spot:GET:/api/v3/depth",
+        "apiGroup": "spot",
+        "category": "Market Data",
+        "method": "GET",
+        "path": "/api/v3/depth",
+        "security": "NONE",
+        "weight": 5,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "limit",
+                "type": "LONG",
+                "required": false,
+                "description": "Default 100; max 5000"
+            }
+        ],
+        "notes": "Order book depth.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#order-book"
+    },
+    {
+        "id": "spot:GET:/api/v3/trades",
+        "apiGroup": "spot",
+        "category": "Market Data",
+        "method": "GET",
+        "path": "/api/v3/trades",
+        "security": "NONE",
+        "weight": 10,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "limit",
+                "type": "LONG",
+                "required": false,
+                "description": "Default 500; max 1000"
+            }
+        ],
+        "notes": "Get recent trades.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#recent-trades-list"
+    },
+    {
+        "id": "spot:GET:/api/v3/historicalTrades",
+        "apiGroup": "spot",
+        "category": "Market Data",
+        "method": "GET",
+        "path": "/api/v3/historicalTrades",
+        "security": "API_KEY",
+        "weight": 10,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "limit",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "fromId",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Get older trades.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#old-trade-lookup"
+    },
+    {
+        "id": "spot:GET:/api/v3/aggTrades",
+        "apiGroup": "spot",
+        "category": "Market Data",
+        "method": "GET",
+        "path": "/api/v3/aggTrades",
+        "security": "NONE",
+        "weight": 2,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "fromId",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "startTime",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "endTime",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "limit",
+                "type": "LONG",
+                "required": false,
+                "description": "Default 500; max 1000"
+            }
+        ],
+        "notes": "Get compressed, aggregate trades.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#compressedaggregate-trades-list"
+    },
+    {
+        "id": "spot:GET:/api/v3/klines",
+        "apiGroup": "spot",
+        "category": "Market Data",
+        "method": "GET",
+        "path": "/api/v3/klines",
+        "security": "NONE",
+        "weight": 2,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "interval",
+                "type": "ENUM",
+                "required": true,
+                "enumValues": [
+                    "1s",
+                    "1m",
+                    "3m",
+                    "5m",
+                    "15m",
+                    "30m",
+                    "1h",
+                    "2h",
+                    "4h",
+                    "6h",
+                    "8h",
+                    "12h",
+                    "1d",
+                    "3d",
+                    "1w",
+                    "1M"
+                ]
+            },
+            {
+                "name": "startTime",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "endTime",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "timeZone",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "limit",
+                "type": "LONG",
+                "required": false,
+                "description": "Default 500; max 1000"
+            }
+        ],
+        "notes": "Kline/candlestick bars for a symbol.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#klinecandlestick-data"
+    },
+    {
+        "id": "spot:GET:/api/v3/uiKlines",
+        "apiGroup": "spot",
+        "category": "Market Data",
+        "method": "GET",
+        "path": "/api/v3/uiKlines",
+        "security": "NONE",
+        "weight": 2,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "interval",
+                "type": "ENUM",
+                "required": true,
+                "enumValues": [
+                    "1s",
+                    "1m",
+                    "3m",
+                    "5m",
+                    "15m",
+                    "30m",
+                    "1h",
+                    "2h",
+                    "4h",
+                    "6h",
+                    "8h",
+                    "12h",
+                    "1d",
+                    "3d",
+                    "1w",
+                    "1M"
+                ]
+            },
+            {
+                "name": "startTime",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "endTime",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "timeZone",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "limit",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Modified kline data optimized for presentation of candlestick charts.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#uiklines"
+    },
+    {
+        "id": "spot:GET:/api/v3/avgPrice",
+        "apiGroup": "spot",
+        "category": "Market Data",
+        "method": "GET",
+        "path": "/api/v3/avgPrice",
+        "security": "NONE",
+        "weight": 2,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": true
+            }
+        ],
+        "notes": "Current average price for a symbol.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#current-average-price"
+    },
+    {
+        "id": "spot:GET:/api/v3/ticker/24hr",
+        "apiGroup": "spot",
+        "category": "Market Data",
+        "method": "GET",
+        "path": "/api/v3/ticker/24hr",
+        "security": "NONE",
+        "weight": 5,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "symbols",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "type",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "FULL",
+                    "MINI"
+                ]
+            }
+        ],
+        "notes": "24hr ticker price change statistics.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#24hr-ticker-price-change-statistics"
+    },
+    {
+        "id": "spot:GET:/api/v3/ticker/tradingDay",
+        "apiGroup": "spot",
+        "category": "Market Data",
+        "method": "GET",
+        "path": "/api/v3/ticker/tradingDay",
+        "security": "NONE",
+        "weight": 4,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "symbols",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "timeZone",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "type",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "FULL",
+                    "MINI"
+                ]
+            }
+        ],
+        "notes": "Price change statistics for a trading day.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#trading-day-ticker"
+    },
+    {
+        "id": "spot:GET:/api/v3/ticker/price",
+        "apiGroup": "spot",
+        "category": "Market Data",
+        "method": "GET",
+        "path": "/api/v3/ticker/price",
+        "security": "NONE",
+        "weight": 2,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "symbols",
+                "type": "STRING",
+                "required": false
+            }
+        ],
+        "notes": "Latest price for a symbol or symbols.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#symbol-price-ticker"
+    },
+    {
+        "id": "spot:GET:/api/v3/ticker/bookTicker",
+        "apiGroup": "spot",
+        "category": "Market Data",
+        "method": "GET",
+        "path": "/api/v3/ticker/bookTicker",
+        "security": "NONE",
+        "weight": 2,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "symbols",
+                "type": "STRING",
+                "required": false
+            }
+        ],
+        "notes": "Best price/qty on the order book for a symbol or symbols.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#symbol-order-book-ticker"
+    },
+    {
+        "id": "spot:GET:/api/v3/ticker",
+        "apiGroup": "spot",
+        "category": "Market Data",
+        "method": "GET",
+        "path": "/api/v3/ticker",
+        "security": "NONE",
+        "weight": 4,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "symbols",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "windowSize",
+                "type": "STRING",
+                "required": false,
+                "description": "e.g. 1m,2h,1d. Defaults to 1d"
+            },
+            {
+                "name": "type",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "FULL",
+                    "MINI"
+                ]
+            }
+        ],
+        "notes": "Rolling window price change statistics.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#rolling-window-price-change-statistics"
+    },
+    {
+        "id": "spot:POST:/api/v3/order/test",
+        "apiGroup": "spot",
+        "category": "Trading",
+        "method": "POST",
+        "path": "/api/v3/order/test",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "side",
+                "type": "ENUM",
+                "required": true,
+                "enumValues": [
+                    "BUY",
+                    "SELL"
+                ]
+            },
+            {
+                "name": "type",
+                "type": "ENUM",
+                "required": true,
+                "enumValues": [
+                    "LIMIT",
+                    "MARKET",
+                    "STOP_LOSS",
+                    "STOP_LOSS_LIMIT",
+                    "TAKE_PROFIT",
+                    "TAKE_PROFIT_LIMIT",
+                    "LIMIT_MAKER"
+                ]
+            },
+            {
+                "name": "timeInForce",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "GTC",
+                    "IOC",
+                    "FOK"
+                ]
+            },
+            {
+                "name": "quantity",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "quoteOrderQty",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "price",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "newClientOrderId",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "strategyId",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "strategyType",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "stopPrice",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "icebergQty",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "newOrderRespType",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "ACK",
+                    "RESULT",
+                    "FULL"
+                ]
+            },
+            {
+                "name": "selfTradePreventionMode",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "EXPIRE_TAKER",
+                    "EXPIRE_MAKER",
+                    "EXPIRE_BOTH",
+                    "NONE"
+                ]
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Test new order creation (does not create real order).",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#test-new-order-trade"
+    },
+    {
+        "id": "spot:POST:/api/v3/order",
+        "apiGroup": "spot",
+        "category": "Trading",
+        "method": "POST",
+        "path": "/api/v3/order",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "side",
+                "type": "ENUM",
+                "required": true,
+                "enumValues": [
+                    "BUY",
+                    "SELL"
+                ]
+            },
+            {
+                "name": "type",
+                "type": "ENUM",
+                "required": true,
+                "enumValues": [
+                    "LIMIT",
+                    "MARKET",
+                    "STOP_LOSS",
+                    "STOP_LOSS_LIMIT",
+                    "TAKE_PROFIT",
+                    "TAKE_PROFIT_LIMIT",
+                    "LIMIT_MAKER"
+                ]
+            },
+            {
+                "name": "timeInForce",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "GTC",
+                    "IOC",
+                    "FOK"
+                ]
+            },
+            {
+                "name": "quantity",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "quoteOrderQty",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "price",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "newClientOrderId",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "strategyId",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "strategyType",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "stopPrice",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "trailingDelta",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "icebergQty",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "newOrderRespType",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "ACK",
+                    "RESULT",
+                    "FULL"
+                ]
+            },
+            {
+                "name": "selfTradePreventionMode",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "EXPIRE_TAKER",
+                    "EXPIRE_MAKER",
+                    "EXPIRE_BOTH",
+                    "NONE"
+                ]
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Send in a new order.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#new-order-trade"
+    },
+    {
+        "id": "spot:DELETE:/api/v3/order",
+        "apiGroup": "spot",
+        "category": "Trading",
+        "method": "DELETE",
+        "path": "/api/v3/order",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "orderId",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "origClientOrderId",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "newClientOrderId",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "cancelRestrictions",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "ONLY_NEW",
+                    "ONLY_PARTIALLY_FILLED"
+                ]
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Cancel an active order.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#cancel-order-trade"
+    },
+    {
+        "id": "spot:DELETE:/api/v3/openOrders",
+        "apiGroup": "spot",
+        "category": "Trading",
+        "method": "DELETE",
+        "path": "/api/v3/openOrders",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Cancel all open orders on a symbol.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#cancel-all-open-orders-on-a-symbol-trade"
+    },
+    {
+        "id": "spot:GET:/api/v3/order",
+        "apiGroup": "spot",
+        "category": "Trading",
+        "method": "GET",
+        "path": "/api/v3/order",
+        "security": "SIGNED",
+        "weight": 4,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "orderId",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "origClientOrderId",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Check an order status.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#query-order-user_data"
+    },
+    {
+        "id": "spot:POST:/api/v3/order/cancelReplace",
+        "apiGroup": "spot",
+        "category": "Trading",
+        "method": "POST",
+        "path": "/api/v3/order/cancelReplace",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "side",
+                "type": "ENUM",
+                "required": true,
+                "enumValues": [
+                    "BUY",
+                    "SELL"
+                ]
+            },
+            {
+                "name": "type",
+                "type": "ENUM",
+                "required": true,
+                "enumValues": [
+                    "LIMIT",
+                    "MARKET",
+                    "STOP_LOSS",
+                    "STOP_LOSS_LIMIT",
+                    "TAKE_PROFIT",
+                    "TAKE_PROFIT_LIMIT",
+                    "LIMIT_MAKER"
+                ]
+            },
+            {
+                "name": "cancelReplaceMode",
+                "type": "ENUM",
+                "required": true,
+                "enumValues": [
+                    "STOP_ON_FAILURE",
+                    "ALLOW_FAILURE"
+                ]
+            },
+            {
+                "name": "timeInForce",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "GTC",
+                    "IOC",
+                    "FOK"
+                ]
+            },
+            {
+                "name": "quantity",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "quoteOrderQty",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "price",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "cancelNewClientOrderId",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "cancelOrigClientOrderId",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "cancelOrderId",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "newClientOrderId",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "stopPrice",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "trailingDelta",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "icebergQty",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "newOrderRespType",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "ACK",
+                    "RESULT",
+                    "FULL"
+                ]
+            },
+            {
+                "name": "selfTradePreventionMode",
+                "type": "ENUM",
+                "required": false
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Cancel an existing order and send a new order on the same symbol.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#cancel-an-existing-order-and-send-a-new-order-trade"
+    },
+    {
+        "id": "spot:GET:/api/v3/openOrders",
+        "apiGroup": "spot",
+        "category": "Trading",
+        "method": "GET",
+        "path": "/api/v3/openOrders",
+        "security": "SIGNED",
+        "weight": 6,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Get all open orders on a symbol.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#current-open-orders-user_data"
+    },
+    {
+        "id": "spot:GET:/api/v3/allOrders",
+        "apiGroup": "spot",
+        "category": "Trading",
+        "method": "GET",
+        "path": "/api/v3/allOrders",
+        "security": "SIGNED",
+        "weight": 20,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "orderId",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "startTime",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "endTime",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "limit",
+                "type": "LONG",
+                "required": false,
+                "description": "Default 500; max 1000"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Get all account orders; active, canceled, or filled.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#all-orders-user_data"
+    },
+    {
+        "id": "spot:POST:/api/v3/order/oco",
+        "apiGroup": "spot",
+        "category": "Trading",
+        "method": "POST",
+        "path": "/api/v3/order/oco",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "side",
+                "type": "ENUM",
+                "required": true,
+                "enumValues": [
+                    "BUY",
+                    "SELL"
+                ]
+            },
+            {
+                "name": "quantity",
+                "type": "DECIMAL",
+                "required": true
+            },
+            {
+                "name": "price",
+                "type": "DECIMAL",
+                "required": true
+            },
+            {
+                "name": "stopPrice",
+                "type": "DECIMAL",
+                "required": true
+            },
+            {
+                "name": "listClientOrderId",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "limitClientOrderId",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "limitIcebergQty",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "trailingDelta",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "stopClientOrderId",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "stopLimitPrice",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "stopIcebergQty",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "stopLimitTimeInForce",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "GTC",
+                    "FOK",
+                    "IOC"
+                ]
+            },
+            {
+                "name": "newOrderRespType",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "ACK",
+                    "RESULT",
+                    "FULL"
+                ]
+            },
+            {
+                "name": "selfTradePreventionMode",
+                "type": "ENUM",
+                "required": false
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Send in a new OCO order.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#new-oco-trade"
+    },
+    {
+        "id": "spot:GET:/api/v3/myTrades",
+        "apiGroup": "spot",
+        "category": "Trading",
+        "method": "GET",
+        "path": "/api/v3/myTrades",
+        "security": "SIGNED",
+        "weight": 20,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "orderId",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "startTime",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "endTime",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "fromId",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "limit",
+                "type": "LONG",
+                "required": false,
+                "description": "Default 500; max 1000"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Get trades for a specific account and symbol.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#account-trade-list-user_data"
+    },
+    {
+        "id": "spot:GET:/api/v3/rateLimit/order",
+        "apiGroup": "spot",
+        "category": "Trading",
+        "method": "GET",
+        "path": "/api/v3/rateLimit/order",
+        "security": "SIGNED",
+        "weight": 40,
+        "params": [
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Displays the user's current order count usage for all intervals.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#query-unfilled-order-count-user_data"
+    },
+    {
+        "id": "spot:POST:/api/v3/sor/order",
+        "apiGroup": "spot",
+        "category": "Trading",
+        "method": "POST",
+        "path": "/api/v3/sor/order",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "side",
+                "type": "ENUM",
+                "required": true,
+                "enumValues": [
+                    "BUY",
+                    "SELL"
+                ]
+            },
+            {
+                "name": "type",
+                "type": "ENUM",
+                "required": true,
+                "enumValues": [
+                    "LIMIT",
+                    "MARKET"
+                ]
+            },
+            {
+                "name": "quantity",
+                "type": "DECIMAL",
+                "required": true
+            },
+            {
+                "name": "timeInForce",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "GTC",
+                    "IOC",
+                    "FOK"
+                ]
+            },
+            {
+                "name": "price",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "newClientOrderId",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "newOrderRespType",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "ACK",
+                    "RESULT",
+                    "FULL"
+                ]
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Places an order with SOR.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#new-order-using-sor-trade"
+    },
+    {
+        "id": "spot:GET:/api/v3/account",
+        "apiGroup": "spot",
+        "category": "Account",
+        "method": "GET",
+        "path": "/api/v3/account",
+        "security": "SIGNED",
+        "weight": 20,
+        "params": [
+            {
+                "name": "omitZeroBalances",
+                "type": "BOOLEAN",
+                "required": false,
+                "description": "If true, will hide all zero balances"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Get current account information.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#account-information-user_data"
+    },
+    {
+        "id": "spot:GET:/api/v3/account/commission",
+        "apiGroup": "spot",
+        "category": "Account",
+        "method": "GET",
+        "path": "/api/v3/account/commission",
+        "security": "SIGNED",
+        "weight": 20,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": true
+            }
+        ],
+        "notes": "Get current account commission rates.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#query-commission-rates-user_data"
+    },
+    {
+        "id": "spot:POST:/api/v3/userDataStream",
+        "apiGroup": "spot",
+        "category": "User Data Streams",
+        "method": "POST",
+        "path": "/api/v3/userDataStream",
+        "security": "API_KEY",
+        "weight": 2,
+        "params": [],
+        "notes": "Start a new user data stream.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#start-user-data-stream-user_stream"
+    },
+    {
+        "id": "spot:PUT:/api/v3/userDataStream",
+        "apiGroup": "spot",
+        "category": "User Data Streams",
+        "method": "PUT",
+        "path": "/api/v3/userDataStream",
+        "security": "API_KEY",
+        "weight": 2,
+        "params": [
+            {
+                "name": "listenKey",
+                "type": "STRING",
+                "required": true
+            }
+        ],
+        "notes": "Keepalive a user data stream.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#keepalive-user-data-stream-user_stream"
+    },
+    {
+        "id": "spot:DELETE:/api/v3/userDataStream",
+        "apiGroup": "spot",
+        "category": "User Data Streams",
+        "method": "DELETE",
+        "path": "/api/v3/userDataStream",
+        "security": "API_KEY",
+        "weight": 2,
+        "params": [
+            {
+                "name": "listenKey",
+                "type": "STRING",
+                "required": true
+            }
+        ],
+        "notes": "Close a user data stream.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#close-user-data-stream-user_stream"
+    },
+    {
+        "id": "spot:GET:/sapi/v1/system/status",
+        "apiGroup": "spot",
+        "category": "Wallet",
+        "method": "GET",
+        "path": "/sapi/v1/system/status",
+        "security": "NONE",
+        "weight": 1,
+        "params": [],
+        "notes": "Fetch system status.",
+        "docUrl": "https://developers.binance.com/docs/wallet/others/system-status"
+    },
+    {
+        "id": "spot:GET:/sapi/v1/capital/config/getall",
+        "apiGroup": "spot",
+        "category": "Wallet",
+        "method": "GET",
+        "path": "/sapi/v1/capital/config/getall",
+        "security": "SIGNED",
+        "weight": 10,
+        "params": [
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Get information of coins (available for deposit and withdraw).",
+        "docUrl": "https://developers.binance.com/docs/wallet/capital/all-coins-info"
+    },
+    {
+        "id": "spot:GET:/sapi/v1/accountSnapshot",
+        "apiGroup": "spot",
+        "category": "Wallet",
+        "method": "GET",
+        "path": "/sapi/v1/accountSnapshot",
+        "security": "SIGNED",
+        "weight": 2400,
+        "params": [
+            {
+                "name": "type",
+                "type": "ENUM",
+                "required": true,
+                "enumValues": [
+                    "SPOT",
+                    "MARGIN",
+                    "FUTURES"
+                ]
+            },
+            {
+                "name": "startTime",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "endTime",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "limit",
+                "type": "LONG",
+                "required": false,
+                "description": "min 7, max 30, default 7"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Daily account snapshot.",
+        "docUrl": "https://developers.binance.com/docs/wallet/account/daily-account-snapshot"
+    },
+    {
+        "id": "spot:POST:/sapi/v1/capital/withdraw/apply",
+        "apiGroup": "spot",
+        "category": "Wallet",
+        "method": "POST",
+        "path": "/sapi/v1/capital/withdraw/apply",
+        "security": "SIGNED",
+        "weight": 600,
+        "params": [
+            {
+                "name": "coin",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "address",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "amount",
+                "type": "DECIMAL",
+                "required": true
+            },
+            {
+                "name": "withdrawOrderId",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "network",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "addressTag",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "transactionFeeFlag",
+                "type": "BOOLEAN",
+                "required": false
+            },
+            {
+                "name": "name",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "walletType",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Submit a withdraw request.",
+        "docUrl": "https://developers.binance.com/docs/wallet/capital/withdraw"
+    },
+    {
+        "id": "spot:GET:/sapi/v1/capital/deposit/hisrec",
+        "apiGroup": "spot",
+        "category": "Wallet",
+        "method": "GET",
+        "path": "/sapi/v1/capital/deposit/hisrec",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "coin",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "status",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "startTime",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "endTime",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "offset",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "limit",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "txId",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Fetch deposit history.",
+        "docUrl": "https://developers.binance.com/docs/wallet/capital/deposit-history"
+    },
+    {
+        "id": "spot:GET:/sapi/v1/capital/withdraw/history",
+        "apiGroup": "spot",
+        "category": "Wallet",
+        "method": "GET",
+        "path": "/sapi/v1/capital/withdraw/history",
+        "security": "SIGNED",
+        "weight": 18000,
+        "params": [
+            {
+                "name": "coin",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "withdrawOrderId",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "status",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "startTime",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "endTime",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "offset",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "limit",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Fetch withdraw history.",
+        "docUrl": "https://developers.binance.com/docs/wallet/capital/withdraw-history"
+    },
+    {
+        "id": "spot:GET:/sapi/v1/capital/deposit/address",
+        "apiGroup": "spot",
+        "category": "Wallet",
+        "method": "GET",
+        "path": "/sapi/v1/capital/deposit/address",
+        "security": "SIGNED",
+        "weight": 10,
+        "params": [
+            {
+                "name": "coin",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "network",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Fetch deposit address.",
+        "docUrl": "https://developers.binance.com/docs/wallet/capital/deposit-address"
+    },
+    {
+        "id": "spot:GET:/sapi/v1/account/status",
+        "apiGroup": "spot",
+        "category": "Wallet",
+        "method": "GET",
+        "path": "/sapi/v1/account/status",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Fetch account status detail.",
+        "docUrl": "https://developers.binance.com/docs/wallet/account/account-status"
+    },
+    {
+        "id": "spot:GET:/sapi/v1/account/apiTradingStatus",
+        "apiGroup": "spot",
+        "category": "Wallet",
+        "method": "GET",
+        "path": "/sapi/v1/account/apiTradingStatus",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Fetch account API trading status with details.",
+        "docUrl": "https://developers.binance.com/docs/wallet/account/account-api-trading-status"
+    },
+    {
+        "id": "spot:POST:/sapi/v1/asset/transfer",
+        "apiGroup": "spot",
+        "category": "Wallet",
+        "method": "POST",
+        "path": "/sapi/v1/asset/transfer",
+        "security": "SIGNED",
+        "weight": 900,
+        "params": [
+            {
+                "name": "type",
+                "type": "ENUM",
+                "required": true,
+                "enumValues": [
+                    "MAIN_UMFUTURE",
+                    "MAIN_CMFUTURE",
+                    "MAIN_MARGIN",
+                    "UMFUTURE_MAIN",
+                    "UMFUTURE_MARGIN",
+                    "CMFUTURE_MAIN",
+                    "CMFUTURE_MARGIN",
+                    "MARGIN_MAIN",
+                    "MARGIN_UMFUTURE",
+                    "MARGIN_CMFUTURE",
+                    "MAIN_FUNDING",
+                    "FUNDING_MAIN",
+                    "FUNDING_UMFUTURE",
+                    "FUNDING_CMFUTURE",
+                    "UMFUTURE_FUNDING",
+                    "CMFUTURE_FUNDING"
+                ]
+            },
+            {
+                "name": "asset",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "amount",
+                "type": "DECIMAL",
+                "required": true
+            },
+            {
+                "name": "fromSymbol",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "toSymbol",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "User Universal Transfer.",
+        "docUrl": "https://developers.binance.com/docs/wallet/asset/user-universal-transfer"
+    },
+    {
+        "id": "spot:GET:/sapi/v1/asset/transfer",
+        "apiGroup": "spot",
+        "category": "Wallet",
+        "method": "GET",
+        "path": "/sapi/v1/asset/transfer",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "type",
+                "type": "ENUM",
+                "required": true
+            },
+            {
+                "name": "startTime",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "endTime",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "current",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "size",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Query User Universal Transfer History.",
+        "docUrl": "https://developers.binance.com/docs/wallet/asset/query-user-universal-transfer"
+    },
+    {
+        "id": "spot:GET:/sapi/v1/asset/tradeFee",
+        "apiGroup": "spot",
+        "category": "Wallet",
+        "method": "GET",
+        "path": "/sapi/v1/asset/tradeFee",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Fetch trade fee.",
+        "docUrl": "https://developers.binance.com/docs/wallet/asset/trade-fee"
+    },
+    {
+        "id": "spot:GET:/sapi/v1/account/apiRestrictions",
+        "apiGroup": "spot",
+        "category": "Wallet",
+        "method": "GET",
+        "path": "/sapi/v1/account/apiRestrictions",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Get API Key Permission.",
+        "docUrl": "https://developers.binance.com/docs/wallet/account/api-key-permission"
+    },
+    {
+        "id": "spot:POST:/sapi/v1/margin/order",
+        "apiGroup": "spot",
+        "category": "Margin",
+        "method": "POST",
+        "path": "/sapi/v1/margin/order",
+        "security": "SIGNED",
+        "weight": 6,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "side",
+                "type": "ENUM",
+                "required": true,
+                "enumValues": [
+                    "BUY",
+                    "SELL"
+                ]
+            },
+            {
+                "name": "type",
+                "type": "ENUM",
+                "required": true,
+                "enumValues": [
+                    "LIMIT",
+                    "MARKET",
+                    "STOP_LOSS",
+                    "STOP_LOSS_LIMIT",
+                    "TAKE_PROFIT",
+                    "TAKE_PROFIT_LIMIT",
+                    "LIMIT_MAKER"
+                ]
+            },
+            {
+                "name": "isIsolated",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "quantity",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "quoteOrderQty",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "price",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "stopPrice",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "newClientOrderId",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "icebergQty",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "newOrderRespType",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "ACK",
+                    "RESULT",
+                    "FULL"
+                ]
+            },
+            {
+                "name": "sideEffectType",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "NO_SIDE_EFFECT",
+                    "MARGIN_BUY",
+                    "AUTO_REPAY",
+                    "AUTO_BORROW_REPAY"
+                ]
+            },
+            {
+                "name": "timeInForce",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "GTC",
+                    "IOC",
+                    "FOK"
+                ]
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Post a new order for margin account.",
+        "docUrl": "https://developers.binance.com/docs/margin_trading/trade/margin-account-new-order"
+    },
+    {
+        "id": "spot:GET:/sapi/v1/margin/account",
+        "apiGroup": "spot",
+        "category": "Margin",
+        "method": "GET",
+        "path": "/sapi/v1/margin/account",
+        "security": "SIGNED",
+        "weight": 10,
+        "params": [
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Get margin account details.",
+        "docUrl": "https://developers.binance.com/docs/margin_trading/account/query-cross-margin-account-details"
+    },
+    {
+        "id": "spot:GET:/sapi/v1/margin/maxBorrowable",
+        "apiGroup": "spot",
+        "category": "Margin",
+        "method": "GET",
+        "path": "/sapi/v1/margin/maxBorrowable",
+        "security": "SIGNED",
+        "weight": 50,
+        "params": [
+            {
+                "name": "asset",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "isolatedSymbol",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Query maximum borrow amount.",
+        "docUrl": "https://developers.binance.com/docs/margin_trading/borrow-and-repay/query-max-borrow"
+    },
+    {
+        "id": "spot:GET:/sapi/v1/convert/exchangeInfo",
+        "apiGroup": "spot",
+        "category": "Convert",
+        "method": "GET",
+        "path": "/sapi/v1/convert/exchangeInfo",
+        "security": "SIGNED",
+        "weight": 50,
+        "params": [
+            {
+                "name": "fromAsset",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "toAsset",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Query for all convertible token pairs and the tokens available for conversion.",
+        "docUrl": "https://developers.binance.com/docs/convert/market-data"
+    }
+]

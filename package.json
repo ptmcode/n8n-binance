@@ -1,0 +1,67 @@
+{
+    "name": "n8n-nodes-binance-universal",
+    "version": "1.0.0",
+    "description": "n8n community node for all Binance REST endpoints (Spot + USDⓈ-M Futures)",
+    "keywords": [
+        "n8n-community-node-package",
+        "n8n",
+        "binance",
+        "crypto",
+        "spot",
+        "futures",
+        "usd-m"
+    ],
+    "license": "MIT",
+    "homepage": "https://github.com/ptmcode/n8n-binance",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/ptmcode/n8n-binance.git"
+    },
+    "main": "dist/nodes/BinanceUniversal/BinanceUniversal.node.js",
+    "scripts": {
+        "build": "n8n-node build",
+        "build:watch": "tsc --watch",
+        "build:prod": "npm run clean && npm run build",
+        "build:publish": "npm run build:prod && npm run lint",
+        "clean": "rimraf dist",
+        "dev": "n8n-node dev",
+        "lint": "n8n-node lint",
+        "lint:fix": "n8n-node lint --fix",
+        "release": "n8n-node release",
+        "prepublishOnly": "npm run build:publish",
+        "format": "prettier --write \"**/*.ts\""
+    },
+    "files": [
+        "dist"
+    ],
+    "n8n": {
+        "n8nNodesApiVersion": 1,
+        "strict": false,
+        "nodes": [
+            "dist/nodes/BinanceUniversal/BinanceUniversal.node.js"
+        ]
+    },
+    "devDependencies": {
+        "@types/jest": "^29.5.12",
+        "@types/node": "^22",
+        "@typescript-eslint/eslint-plugin": "^8.18.2",
+        "@typescript-eslint/parser": "^8.18.2",
+        "eslint": "^9.32.0",
+        "gulp": "^4.0.2",
+        "jest": "^29.7.0",
+        "n8n-workflow": "^1.27.0",
+        "ts-jest": "^29.1.2",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.9.2"
+    },
+    "peerDependencies": {
+        "n8n-workflow": "*"
+    },
+    "dependencies": {
+        "@n8n/node-cli": "*",
+        "prettier": "3.6.2",
+        "axios": "^1.6.7",
+        "cheerio": "^1.0.0-rc.12",
+        "js-yaml": "^4.1.0"
+    }
+}
