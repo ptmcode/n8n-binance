@@ -105,7 +105,21 @@ export class BinanceUniversal implements INodeType {
                     path = entry.path;
                     security = entry.security;
 
-                    // Collect parameters from key-value pairs
+                    // Collect parameters from dynamic endpoint-specific fields
+                    for (const param of entry.params) {
+                        const fieldName = `param_${endpointId}_${param.name}`;
+                        try {
+                            const value = this.getNodeParameter(fieldName, i, undefined);
+                            // Only add the parameter if it has a value (not empty string, undefined, or 0 for optional params)
+                            if (value !== undefined && value !== '' && !(value === 0 && !param.required)) {
+                                params[param.name] = value;
+                            }
+                        } catch (error) {
+                            // Field might not exist if it's a legacy workflow, skip silently
+                        }
+                    }
+
+                    // Also collect parameters from key-value pairs (for backward compatibility and edge cases)
                     const catalogParamsKV = this.getNodeParameter('catalogParams', i, {}) as {
                         param?: Array<{ name: string; value: string }>;
                     };

@@ -38,29 +38,108 @@ const usdmCategories = getCategories(usdmCatalog);
 const spotEndpoints = getEndpointOptions(spotCatalog);
 const usdmEndpoints = getEndpointOptions(usdmCatalog);
 
+// Create index maps for security type lookups
+const spotSecurityMap = new Map<string, string>();
+for (const entry of spotCatalog) {
+    spotSecurityMap.set(entry.id, entry.security);
+}
+
+const usdmSecurityMap = new Map<string, string>();
+for (const entry of usdmCatalog) {
+    usdmSecurityMap.set(entry.id, entry.security);
+}
+
+// Get endpoint IDs that require API_KEY or SIGNED security
+const spotEndpointsRequiringApiKey = spotCatalog
+    .filter((e) => e.security === 'API_KEY' || e.security === 'SIGNED')
+    .map((e) => e.id);
+
+const spotEndpointsRequiringSigned = spotCatalog
+    .filter((e) => e.security === 'SIGNED')
+    .map((e) => e.id);
+
+const usdmEndpointsRequiringApiKey = usdmCatalog
+    .filter((e) => e.security === 'API_KEY' || e.security === 'SIGNED')
+    .map((e) => e.id);
+
+const usdmEndpointsRequiringSigned = usdmCatalog
+    .filter((e) => e.security === 'SIGNED')
+    .map((e) => e.id);
+
+// ─── Dynamic Parameter Generation ──────────────────────────────────────────
+
+/**
+ * Generate n8n properties for a single endpoint parameter
+ */
+function generateParamProperty(
+    param: CatalogEntry['params'][0],
+    endpointId: string,
+    apiGroup: 'spot' | 'usdm',
+): INodeProperties {
+    const fieldName = `param_${endpointId}_${param.name}`;
+    const endpointField = apiGroup === 'spot' ? 'endpointIdSpot' : 'endpointIdUsdm';
+
+    // Determine the input type based on parameter type
+    let inputType: 'string' | 'number' | 'boolean' = 'string';
+    if (param.type === 'LONG' || param.type === 'INT' || param.type === 'DECIMAL') {
+        inputType = 'number';
+    } else if (param.type === 'BOOLEAN') {
+        inputType = 'boolean';
+    }
+
+    const property: INodeProperties = {
+        displayName: param.name,
+        name: fieldName,
+        type: inputType,
+        displayOptions: {
+            show: {
+                mode: ['catalog'],
+                apiGroup: [apiGroup],
+                [endpointField]: [endpointId],
+            },
+        },
+        default: inputType === 'number' ? 0 : inputType === 'boolean' ? false : '',
+        description: param.description || `Parameter: ${param.name}`,
+        required: param.required,
+    };
+
+    // Add enum options if available
+    if (param.enumValues && param.enumValues.length > 0 && inputType === 'string') {
+        (property as any).type = 'options';
+        (property as any).options = param.enumValues.map((v) => ({ name: v, value: v }));
+    }
+
+    return property;
+}
+
+/**
+ * Generate all parameter properties for all endpoints in both catalogs
+ */
+function generateAllParamProperties(): INodeProperties[] {
+    const properties: INodeProperties[] = [];
+
+    // Generate for spot endpoints
+    for (const entry of spotCatalog) {
+        for (const param of entry.params) {
+            properties.push(generateParamProperty(param, entry.id, 'spot'));
+        }
+    }
+
+    // Generate for usdm endpoints
+    for (const entry of usdmCatalog) {
+        for (const param of entry.params) {
+            properties.push(generateParamProperty(param, entry.id, 'usdm'));
+        }
+    }
+
+    return properties;
+}
+
+const dynamicParamProperties = generateAllParamProperties();
+
 // ─── Node Properties ────────────────────────────────────────────────────────
 
 export const nodeProperties: INodeProperties[] = [
-    // === Authentication ===
-    {
-        displayName: 'API Key',
-        name: 'apiKey',
-        type: 'string',
-        typeOptions: { password: true },
-        default: '',
-        description: 'Binance API Key. Use expressions like {{$json.binanceApiKey}} to pass dynamically.',
-        placeholder: 'Your Binance API Key',
-    },
-    {
-        displayName: 'API Secret',
-        name: 'apiSecret',
-        type: 'string',
-        typeOptions: { password: true },
-        default: '',
-        description: 'Binance API Secret. Use expressions like {{$json.binanceApiSecret}} to pass dynamically.',
-        placeholder: 'Your Binance API Secret',
-    },
-
     // === API Group ===
     {
         displayName: 'API Group',
@@ -182,6 +261,74 @@ export const nodeProperties: INodeProperties[] = [
         description: 'Select a USD-M Futures API endpoint from the catalog',
     },
 
+    // === Authentication (Catalog Mode - Spot) ===
+    {
+        displayName: 'API Key',
+        name: 'apiKey',
+        type: 'string',
+        typeOptions: { password: true },
+        displayOptions: {
+            show: {
+                mode: ['catalog'],
+                apiGroup: ['spot'],
+                endpointIdSpot: spotEndpointsRequiringApiKey,
+            },
+        },
+        default: '',
+        description: 'Binance API Key. Use expressions like {{$json.binanceApiKey}} to pass dynamically.',
+        placeholder: 'Your Binance API Key',
+    },
+    {
+        displayName: 'API Secret',
+        name: 'apiSecret',
+        type: 'string',
+        typeOptions: { password: true },
+        displayOptions: {
+            show: {
+                mode: ['catalog'],
+                apiGroup: ['spot'],
+                endpointIdSpot: spotEndpointsRequiringSigned,
+            },
+        },
+        default: '',
+        description: 'Binance API Secret. Use expressions like {{$json.binanceApiSecret}} to pass dynamically.',
+        placeholder: 'Your Binance API Secret',
+    },
+
+    // === Authentication (Catalog Mode - USD-M) ===
+    {
+        displayName: 'API Key',
+        name: 'apiKey',
+        type: 'string',
+        typeOptions: { password: true },
+        displayOptions: {
+            show: {
+                mode: ['catalog'],
+                apiGroup: ['usdm'],
+                endpointIdUsdm: usdmEndpointsRequiringApiKey,
+            },
+        },
+        default: '',
+        description: 'Binance API Key. Use expressions like {{$json.binanceApiKey}} to pass dynamically.',
+        placeholder: 'Your Binance API Key',
+    },
+    {
+        displayName: 'API Secret',
+        name: 'apiSecret',
+        type: 'string',
+        typeOptions: { password: true },
+        displayOptions: {
+            show: {
+                mode: ['catalog'],
+                apiGroup: ['usdm'],
+                endpointIdUsdm: usdmEndpointsRequiringSigned,
+            },
+        },
+        default: '',
+        description: 'Binance API Secret. Use expressions like {{$json.binanceApiSecret}} to pass dynamically.',
+        placeholder: 'Your Binance API Secret',
+    },
+
     // Endpoint info (read-only notice)
     {
         displayName: 'Endpoint Info',
@@ -190,7 +337,22 @@ export const nodeProperties: INodeProperties[] = [
         displayOptions: {
             show: { mode: ['catalog'] },
         },
-        default: 'Select an endpoint above to see its required and optional parameters. Provide parameters below as key-value pairs or JSON.',
+        default: 'Select an endpoint above. Parameters specific to that endpoint will appear below.',
+    },
+
+    // ─── Dynamic Endpoint-Specific Parameters ──────────────────────────────
+    // Insert all dynamically generated parameter fields here
+    ...dynamicParamProperties,
+
+    // ─── Legacy Generic Parameters (kept for backward compatibility) ───────
+    {
+        displayName: 'Additional Parameters',
+        name: 'additionalParametersNotice',
+        type: 'notice',
+        displayOptions: {
+            show: { mode: ['catalog'] },
+        },
+        default: 'You can also add extra parameters below if needed (e.g., for testing or edge cases).',
     },
 
     // Parameters input (key-value pairs)
@@ -305,6 +467,37 @@ export const nodeProperties: INodeProperties[] = [
         ],
         default: 'NONE',
         description: 'Security type for the endpoint',
+    },
+    // === Authentication (Custom Mode) ===
+    {
+        displayName: 'API Key',
+        name: 'apiKey',
+        type: 'string',
+        typeOptions: { password: true },
+        displayOptions: {
+            show: {
+                mode: ['custom'],
+                customSecurity: ['API_KEY', 'SIGNED'],
+            },
+        },
+        default: '',
+        description: 'Binance API Key. Use expressions like {{$json.binanceApiKey}} to pass dynamically.',
+        placeholder: 'Your Binance API Key',
+    },
+    {
+        displayName: 'API Secret',
+        name: 'apiSecret',
+        type: 'string',
+        typeOptions: { password: true },
+        displayOptions: {
+            show: {
+                mode: ['custom'],
+                customSecurity: ['SIGNED'],
+            },
+        },
+        default: '',
+        description: 'Binance API Secret. Use expressions like {{$json.binanceApiSecret}} to pass dynamically.',
+        placeholder: 'Your Binance API Secret',
     },
     {
         displayName: 'Parameters',
