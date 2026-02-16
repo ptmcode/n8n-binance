@@ -10,10 +10,14 @@ import type { INodeProperties } from 'n8n-workflow';
 
 import spotCatalogJson from '../../resources/catalogs/spot.json';
 import usdmCatalogJson from '../../resources/catalogs/usdm.json';
+import walletCatalogJson from '../../resources/catalogs/wallet.json';
+import subAccountCatalogJson from '../../resources/catalogs/sub-account.json';
 import type { CatalogEntry } from './catalogTypes';
 
 const spotCatalog: CatalogEntry[] = spotCatalogJson as unknown as CatalogEntry[];
 const usdmCatalog: CatalogEntry[] = usdmCatalogJson as unknown as CatalogEntry[];
+const walletCatalog: CatalogEntry[] = walletCatalogJson as unknown as CatalogEntry[];
+const subAccountCatalog: CatalogEntry[] = subAccountCatalogJson as unknown as CatalogEntry[];
 
 /** Get unique categories for a given API group */
 function getCategories(catalog: CatalogEntry[]): Array<{ name: string; value: string }> {
@@ -37,6 +41,8 @@ function getEndpointOptions(
 
 const spotCategories = getCategories(spotCatalog);
 const usdmCategories = getCategories(usdmCatalog);
+const walletCategories = getCategories(walletCatalog);
+const subAccountCategories = getCategories(subAccountCatalog);
 
 // Create endpoint options grouped by category
 const spotEndpointsByCategory = new Map<string, Array<{ name: string; value: string; description?: string }>>();
@@ -49,6 +55,16 @@ for (const category of usdmCategories) {
     usdmEndpointsByCategory.set(category.value, getEndpointOptions(usdmCatalog, category.value));
 }
 
+const walletEndpointsByCategory = new Map<string, Array<{ name: string; value: string; description?: string }>>();
+for (const category of walletCategories) {
+    walletEndpointsByCategory.set(category.value, getEndpointOptions(walletCatalog, category.value));
+}
+
+const subAccountEndpointsByCategory = new Map<string, Array<{ name: string; value: string; description?: string }>>();
+for (const category of subAccountCategories) {
+    subAccountEndpointsByCategory.set(category.value, getEndpointOptions(subAccountCatalog, category.value));
+}
+
 // Create index maps for security type lookups
 const spotSecurityMap = new Map<string, string>();
 for (const entry of spotCatalog) {
@@ -58,6 +74,16 @@ for (const entry of spotCatalog) {
 const usdmSecurityMap = new Map<string, string>();
 for (const entry of usdmCatalog) {
     usdmSecurityMap.set(entry.id, entry.security);
+}
+
+const walletSecurityMap = new Map<string, string>();
+for (const entry of walletCatalog) {
+    walletSecurityMap.set(entry.id, entry.security);
+}
+
+const subAccountSecurityMap = new Map<string, string>();
+for (const entry of subAccountCatalog) {
+    subAccountSecurityMap.set(entry.id, entry.security);
 }
 
 // Get endpoint IDs that require API_KEY or SIGNED security
@@ -77,6 +103,22 @@ const usdmEndpointsRequiringSigned = usdmCatalog
     .filter((e) => e.security === 'SIGNED')
     .map((e) => e.id);
 
+const walletEndpointsRequiringApiKey = walletCatalog
+    .filter((e) => e.security === 'API_KEY' || e.security === 'SIGNED')
+    .map((e) => e.id);
+
+const walletEndpointsRequiringSigned = walletCatalog
+    .filter((e) => e.security === 'SIGNED')
+    .map((e) => e.id);
+
+const subAccountEndpointsRequiringApiKey = subAccountCatalog
+    .filter((e) => e.security === 'API_KEY' || e.security === 'SIGNED')
+    .map((e) => e.id);
+
+const subAccountEndpointsRequiringSigned = subAccountCatalog
+    .filter((e) => e.security === 'SIGNED')
+    .map((e) => e.id);
+
 // ─── Dynamic Parameter Generation ──────────────────────────────────────────
 
 /**
@@ -85,10 +127,25 @@ const usdmEndpointsRequiringSigned = usdmCatalog
 function generateParamProperty(
     param: CatalogEntry['params'][0],
     endpointId: string,
-    apiGroup: 'spot' | 'usdm',
+    apiGroup: 'spot' | 'usdm' | 'wallet' | 'sub-account',
 ): INodeProperties {
     const fieldName = `param_${endpointId}_${param.name}`;
-    const endpointField = apiGroup === 'spot' ? 'endpointIdSpot' : 'endpointIdUsdm';
+    let endpointField: string;
+
+    switch (apiGroup) {
+        case 'spot':
+            endpointField = 'endpointIdSpot';
+            break;
+        case 'usdm':
+            endpointField = 'endpointIdUsdm';
+            break;
+        case 'wallet':
+            endpointField = 'endpointIdWallet';
+            break;
+        case 'sub-account':
+            endpointField = 'endpointIdSubAccount';
+            break;
+    }
 
     // Determine the input type based on parameter type
     let inputType: 'string' | 'number' | 'boolean' = 'string';
@@ -143,6 +200,20 @@ function generateAllParamProperties(): INodeProperties[] {
         }
     }
 
+    // Generate for wallet endpoints
+    for (const entry of walletCatalog) {
+        for (const param of entry.params) {
+            properties.push(generateParamProperty(param, entry.id, 'wallet'));
+        }
+    }
+
+    // Generate for sub-account endpoints
+    for (const entry of subAccountCatalog) {
+        for (const param of entry.params) {
+            properties.push(generateParamProperty(param, entry.id, 'sub-account'));
+        }
+    }
+
     return properties;
 }
 
@@ -159,6 +230,8 @@ export const nodeProperties: INodeProperties[] = [
         options: [
             { name: 'Spot', value: 'spot' },
             { name: 'USD-M Futures', value: 'usdm' },
+            { name: 'Wallet', value: 'wallet' },
+            { name: 'Sub Account', value: 'sub-account' },
         ],
         default: 'spot',
         description: 'Select the Binance API group to use',
@@ -197,6 +270,44 @@ export const nodeProperties: INodeProperties[] = [
         ],
         default: 'https://fapi.binance.com',
         description: 'Binance USD-M Futures API base URL',
+    },
+    {
+        displayName: 'Base URL',
+        name: 'baseUrlWallet',
+        type: 'options',
+        displayOptions: {
+            show: { apiGroup: ['wallet'] },
+        },
+        options: [
+            { name: 'api.binance.com (Primary)', value: 'https://api.binance.com' },
+            { name: 'api1.binance.com', value: 'https://api1.binance.com' },
+            { name: 'api2.binance.com', value: 'https://api2.binance.com' },
+            { name: 'api3.binance.com', value: 'https://api3.binance.com' },
+            { name: 'api4.binance.com', value: 'https://api4.binance.com' },
+            { name: 'api-gcp.binance.com (GCP)', value: 'https://api-gcp.binance.com' },
+            { name: 'Testnet (testnet.binance.vision)', value: 'https://testnet.binance.vision' },
+        ],
+        default: 'https://api.binance.com',
+        description: 'Binance Wallet API base URL',
+    },
+    {
+        displayName: 'Base URL',
+        name: 'baseUrlSubAccount',
+        type: 'options',
+        displayOptions: {
+            show: { apiGroup: ['sub-account'] },
+        },
+        options: [
+            { name: 'api.binance.com (Primary)', value: 'https://api.binance.com' },
+            { name: 'api1.binance.com', value: 'https://api1.binance.com' },
+            { name: 'api2.binance.com', value: 'https://api2.binance.com' },
+            { name: 'api3.binance.com', value: 'https://api3.binance.com' },
+            { name: 'api4.binance.com', value: 'https://api4.binance.com' },
+            { name: 'api-gcp.binance.com (GCP)', value: 'https://api-gcp.binance.com' },
+            { name: 'Testnet (testnet.binance.vision)', value: 'https://testnet.binance.vision' },
+        ],
+        default: 'https://api.binance.com',
+        description: 'Binance Sub Account API base URL',
     },
 
     // === Mode ===
@@ -246,6 +357,30 @@ export const nodeProperties: INodeProperties[] = [
         default: usdmCategories[0]?.value || '',
         description: 'USD-M Futures API endpoint category',
     },
+    // Wallet category
+    {
+        displayName: 'Category',
+        name: 'categoryWallet',
+        type: 'options',
+        displayOptions: {
+            show: { mode: ['catalog'], apiGroup: ['wallet'] },
+        },
+        options: walletCategories,
+        default: walletCategories[0]?.value || '',
+        description: 'Wallet API endpoint category',
+    },
+    // Sub Account category
+    {
+        displayName: 'Category',
+        name: 'categorySubAccount',
+        type: 'options',
+        displayOptions: {
+            show: { mode: ['catalog'], apiGroup: ['sub-account'] },
+        },
+        options: subAccountCategories,
+        default: subAccountCategories[0]?.value || '',
+        description: 'Sub Account API endpoint category',
+    },
 
     // Generate Spot endpoint fields for each category
     ...Array.from(spotEndpointsByCategory.entries()).map(([category, endpoints]) => ({
@@ -279,6 +414,40 @@ export const nodeProperties: INodeProperties[] = [
         options: endpoints,
         default: '',
         description: 'Select a USD-M Futures API endpoint from the catalog',
+    })),
+
+    // Generate Wallet endpoint fields for each category
+    ...Array.from(walletEndpointsByCategory.entries()).map(([category, endpoints]) => ({
+        displayName: 'Endpoint',
+        name: 'endpointIdWallet',
+        type: 'options' as const,
+        displayOptions: {
+            show: {
+                mode: ['catalog'],
+                apiGroup: ['wallet'],
+                categoryWallet: [category],
+            },
+        },
+        options: endpoints,
+        default: '',
+        description: 'Select a Wallet API endpoint from the catalog',
+    })),
+
+    // Generate Sub Account endpoint fields for each category
+    ...Array.from(subAccountEndpointsByCategory.entries()).map(([category, endpoints]) => ({
+        displayName: 'Endpoint',
+        name: 'endpointIdSubAccount',
+        type: 'options' as const,
+        displayOptions: {
+            show: {
+                mode: ['catalog'],
+                apiGroup: ['sub-account'],
+                categorySubAccount: [category],
+            },
+        },
+        options: endpoints,
+        default: '',
+        description: 'Select a Sub Account API endpoint from the catalog',
     })),
 
     // === Authentication (Catalog Mode - Spot) ===
@@ -342,6 +511,74 @@ export const nodeProperties: INodeProperties[] = [
                 mode: ['catalog'],
                 apiGroup: ['usdm'],
                 endpointIdUsdm: usdmEndpointsRequiringSigned,
+            },
+        },
+        default: '',
+        description: 'Binance API Secret. Use expressions like {{$json.binanceApiSecret}} to pass dynamically.',
+        placeholder: 'Your Binance API Secret',
+    },
+
+    // === Authentication (Catalog Mode - Wallet) ===
+    {
+        displayName: 'API Key',
+        name: 'apiKey',
+        type: 'string',
+        typeOptions: { password: true },
+        displayOptions: {
+            show: {
+                mode: ['catalog'],
+                apiGroup: ['wallet'],
+                endpointIdWallet: walletEndpointsRequiringApiKey,
+            },
+        },
+        default: '',
+        description: 'Binance API Key. Use expressions like {{$json.binanceApiKey}} to pass dynamically.',
+        placeholder: 'Your Binance API Key',
+    },
+    {
+        displayName: 'API Secret',
+        name: 'apiSecret',
+        type: 'string',
+        typeOptions: { password: true },
+        displayOptions: {
+            show: {
+                mode: ['catalog'],
+                apiGroup: ['wallet'],
+                endpointIdWallet: walletEndpointsRequiringSigned,
+            },
+        },
+        default: '',
+        description: 'Binance API Secret. Use expressions like {{$json.binanceApiSecret}} to pass dynamically.',
+        placeholder: 'Your Binance API Secret',
+    },
+
+    // === Authentication (Catalog Mode - Sub Account) ===
+    {
+        displayName: 'API Key',
+        name: 'apiKey',
+        type: 'string',
+        typeOptions: { password: true },
+        displayOptions: {
+            show: {
+                mode: ['catalog'],
+                apiGroup: ['sub-account'],
+                endpointIdSubAccount: subAccountEndpointsRequiringApiKey,
+            },
+        },
+        default: '',
+        description: 'Binance API Key. Use expressions like {{$json.binanceApiKey}} to pass dynamically.',
+        placeholder: 'Your Binance API Key',
+    },
+    {
+        displayName: 'API Secret',
+        name: 'apiSecret',
+        type: 'string',
+        typeOptions: { password: true },
+        displayOptions: {
+            show: {
+                mode: ['catalog'],
+                apiGroup: ['sub-account'],
+                endpointIdSubAccount: subAccountEndpointsRequiringSigned,
             },
         },
         default: '',

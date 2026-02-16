@@ -135,16 +135,16 @@ Every execution returns an n8n item with the following structure:
 
 ## Regenerating Catalogs
 
-The seed catalogs in `resources/catalogs/` can be regenerated from live Binance documentation:
+The seed catalogs in `resources/catalogs/` can be regenerated from Binance API documentation:
 
 ```bash
-# Generate Spot catalog from OpenAPI spec
-npm run generate:spot
+# Generate individual catalogs
+npm run generate:catalog:spot           # Spot API endpoints
+npm run generate:catalog:usdm           # USD-M Futures endpoints
+npm run generate:catalog:wallet         # Wallet API endpoints
+npm run generate:catalog:sub-account    # Sub-Account endpoints
 
-# Generate USD-M Futures catalog from developer docs
-npm run generate:usdm
-
-# Generate both
+# Generate all catalogs at once
 npm run generate:catalogs
 ```
 
@@ -185,12 +185,16 @@ npm run dev
 │       └── binance.svg                    # Node icon
 ├── resources/
 │   └── catalogs/
-│       ├── spot.json                      # ~48 Spot API endpoints
-│       └── usdm.json                      # ~52 USD-M Futures endpoints
+│       ├── spot.json                      # Spot API endpoints
+│       ├── usdm.json                      # USD-M Futures endpoints
+│       ├── wallet.json                    # Wallet API endpoints (21 endpoints)
+│       └── sub-account.json               # Sub-Account endpoints
 ├── scripts/
 │   ├── catalogTypes.ts                    # Shared types for generators
 │   ├── generateSpotCatalog.ts             # Spot catalog generator
-│   └── generateUsdmCatalog.ts             # USD-M catalog generator
+│   ├── generateUsdmCatalog.ts             # USD-M catalog generator
+│   ├── generateWalletCatalog.ts           # Wallet catalog generator
+│   └── generateSubAccountCatalog.ts       # Sub-Account catalog generator
 ├── tests/
 │   └── binanceHttp.test.ts                # Unit tests for HTTP helpers
 ├── package.json
@@ -210,9 +214,18 @@ npm run dev
 | Trading | New Order, Cancel, Query, OCO, SOR |
 | Account | Account Info, Trade List |
 | User Data Streams | Create/Keepalive/Close listen key |
-| Wallet | System Status, Coins, Deposit/Withdraw History, Dust Transfer |
 | Margin | Cross Margin Transfer, Borrow, Repay |
 | Convert | Accept Quote |
+
+### Wallet (`/sapi/*`)
+
+| Category | Examples |
+|----------|----------|
+| System | System Status |
+| Capital | All Coins Info, Withdraw, Deposit History, Deposit Address |
+| Account | Account Snapshot, Fast Withdraw Switch, Account Status, API Trading Status, API Key Permissions |
+| Asset | Dust Log, Dust Transfer, Asset Dividend, Asset Detail, Trade Fee, Funding Wallet, Cloud Mining History |
+| Transfer | Universal Transfer, Query Transfer History |
 
 ### USD-M Futures (`/fapi/*`)
 
@@ -223,6 +236,15 @@ npm run dev
 | Trading | New Order, Batch Orders, Cancel, Modify, Force Orders |
 | Account | Position Risk, Balance, Leverage, Margin Type, Income, Commission |
 | User Data Streams | Create/Keepalive/Close listen key |
+
+### Sub-Account (`/sapi/*`)
+
+| Category | Examples |
+|----------|----------|
+| Account Management | Create Virtual Sub-account, Query Sub-account List, Enable Margin/Futures |
+| API Management | Create API Key, Query API Key |
+| Asset Management | Query Sub-account Assets, Universal Transfer |
+| Managed Sub Account | Query Managed Sub-account List, Deposits, Withdrawals |
 
 ## License
 

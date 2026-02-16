@@ -29,7 +29,12 @@
         "lint:fix": "n8n-node lint --fix",
         "release": "n8n-node release",
         "prepublishOnly": "npm run build:publish",
-        "format": "prettier --write \"**/*.ts\""
+        "format": "prettier --write \"**/*.ts\"",
+        "generate:catalog:spot": "ts-node scripts/generateSpotCatalog.ts",
+        "generate:catalog:usdm": "ts-node scripts/generateUsdmCatalog.ts",
+        "generate:catalog:wallet": "ts-node scripts/generateWalletCatalog.ts",
+        "generate:catalog:sub-account": "ts-node scripts/generateSubAccountCatalog.ts",
+        "generate:catalogs": "npm run generate:catalog:spot && npm run generate:catalog:usdm && npm run generate:catalog:wallet && npm run generate:catalog:sub-account"
     },
     "files": [
         "dist"

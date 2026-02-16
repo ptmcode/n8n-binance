@@ -3,7 +3,7 @@
  *
  * n8n community node: Binance Universal (REST)
  *
- * Supports all Binance REST endpoints for Spot and USDⓈ-M Futures
+ * Supports all Binance REST endpoints for Spot, USDⓈ-M Futures, Wallet, and Sub Account
  * via a catalog-driven UI or custom request mode.
  */
 
@@ -27,14 +27,20 @@ import type { CatalogEntry, CatalogParam } from './catalogTypes';
 // Load catalogs
 import spotCatalogJson from '../../resources/catalogs/spot.json';
 import usdmCatalogJson from '../../resources/catalogs/usdm.json';
+import walletCatalogJson from '../../resources/catalogs/wallet.json';
+import subAccountCatalogJson from '../../resources/catalogs/sub-account.json';
 
 const spotCatalog: CatalogEntry[] = spotCatalogJson as unknown as CatalogEntry[];
 const usdmCatalog: CatalogEntry[] = usdmCatalogJson as unknown as CatalogEntry[];
+const walletCatalog: CatalogEntry[] = walletCatalogJson as unknown as CatalogEntry[];
+const subAccountCatalog: CatalogEntry[] = subAccountCatalogJson as unknown as CatalogEntry[];
 
 // Index catalogs by ID for fast lookup
 const catalogIndex = new Map<string, CatalogEntry>();
 for (const entry of spotCatalog) catalogIndex.set(entry.id, entry);
 for (const entry of usdmCatalog) catalogIndex.set(entry.id, entry);
+for (const entry of walletCatalog) catalogIndex.set(entry.id, entry);
+for (const entry of subAccountCatalog) catalogIndex.set(entry.id, entry);
 
 export class BinanceUniversal implements INodeType {
     description: INodeTypeDescription = {
@@ -43,8 +49,8 @@ export class BinanceUniversal implements INodeType {
         icon: 'file:binance.svg',
         group: ['transform'],
         version: 1,
-        subtitle: '={{$parameter["mode"] === "catalog" ? $parameter["apiGroup"] === "spot" ? $parameter["endpointIdSpot"] : $parameter["endpointIdUsdm"] : $parameter["customMethod"] + " " + $parameter["customPath"]}}',
-        description: 'Call any Binance REST endpoint (Spot + USDⓈ-M Futures) with automatic signing',
+        subtitle: '={{$parameter["mode"] === "catalog" ? $parameter["apiGroup"] === "spot" ? $parameter["endpointIdSpot"] : $parameter["apiGroup"] === "usdm" ? $parameter["endpointIdUsdm"] : $parameter["apiGroup"] === "wallet" ? $parameter["endpointIdWallet"] : $parameter["endpointIdSubAccount"] : $parameter["customMethod"] + " " + $parameter["customPath"]}}',
+        description: 'Call any Binance REST endpoint (Spot, USDⓈ-M Futures, Wallet, Sub Account) with automatic signing',
         defaults: {
             name: 'Binance Universal',
         },
@@ -68,6 +74,10 @@ export class BinanceUniversal implements INodeType {
                 let baseUrl: string;
                 if (apiGroup === 'usdm') {
                     baseUrl = this.getNodeParameter('baseUrlUsdm', i, 'https://fapi.binance.com') as string;
+                } else if (apiGroup === 'wallet') {
+                    baseUrl = this.getNodeParameter('baseUrlWallet', i, 'https://api.binance.com') as string;
+                } else if (apiGroup === 'sub-account') {
+                    baseUrl = this.getNodeParameter('baseUrlSubAccount', i, 'https://api.binance.com') as string;
                 } else {
                     baseUrl = this.getNodeParameter('baseUrl', i, 'https://api.binance.com') as string;
                 }
@@ -83,8 +93,18 @@ export class BinanceUniversal implements INodeType {
                     let endpointId: string;
                     if (apiGroup === 'spot') {
                         endpointId = this.getNodeParameter('endpointIdSpot', i) as string;
-                    } else {
+                    } else if (apiGroup === 'usdm') {
                         endpointId = this.getNodeParameter('endpointIdUsdm', i) as string;
+                    } else if (apiGroup === 'wallet') {
+                        endpointId = this.getNodeParameter('endpointIdWallet', i) as string;
+                    } else if (apiGroup === 'sub-account') {
+                        endpointId = this.getNodeParameter('endpointIdSubAccount', i) as string;
+                    } else {
+                        throw new NodeOperationError(
+                            this.getNode(),
+                            `Unknown API group: ${apiGroup}`,
+                            { itemIndex: i },
+                        );
                     }
 
                     const entry = catalogIndex.get(endpointId);
@@ -169,6 +189,20 @@ export class BinanceUniversal implements INodeType {
                         throw new NodeOperationError(
                             this.getNode(),
                             'For USD-M Futures API group, path must start with /fapi/ or /futures/',
+                            { itemIndex: i },
+                        );
+                    }
+                    if (apiGroup === 'wallet' && !path.startsWith('/sapi/')) {
+                        throw new NodeOperationError(
+                            this.getNode(),
+                            'For Wallet API group, path must start with /sapi/',
+                            { itemIndex: i },
+                        );
+                    }
+                    if (apiGroup === 'sub-account' && !path.startsWith('/sapi/')) {
+                        throw new NodeOperationError(
+                            this.getNode(),
+                            'For Sub Account API group, path must start with /sapi/',
                             { itemIndex: i },
                         );
                     }

@@ -1,0 +1,2190 @@
+[
+    {
+        "id": "sub_account_create_virtual",
+        "apiGroup": "sub-account",
+        "category": "Account Management",
+        "method": "POST",
+        "path": "/sapi/v1/sub-account/virtualSubAccount",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "subAccountString",
+                "type": "STRING",
+                "required": true,
+                "description": "Please input a string. We will create a virtual email using that string for you to register"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Create a Virtual Sub-account (For Master Account). This request will generate a virtual sub account under your master account.",
+        "docUrl": "https://developers.binance.com/docs/sub_account/account-management/Create-a-Virtual-Sub-account"
+    },
+    {
+        "id": "sub_account_list",
+        "apiGroup": "sub-account",
+        "category": "Account Management",
+        "method": "GET",
+        "path": "/sapi/v1/sub-account/list",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "email",
+                "type": "STRING",
+                "required": false,
+                "description": "Sub-account email"
+            },
+            {
+                "name": "isFreeze",
+                "type": "STRING",
+                "required": false,
+                "description": "Filter by freeze status",
+                "enumValues": [
+                    "true",
+                    "false"
+                ]
+            },
+            {
+                "name": "page",
+                "type": "INT",
+                "required": false,
+                "description": "Page number (default 1)"
+            },
+            {
+                "name": "limit",
+                "type": "INT",
+                "required": false,
+                "description": "Number of records per page (default 10, max 200)"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Query Sub-account List (For Master Account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/account-management/Query-Sub-account-List"
+    },
+    {
+        "id": "sub_account_status",
+        "apiGroup": "sub-account",
+        "category": "Account Management",
+        "method": "GET",
+        "path": "/sapi/v1/sub-account/status",
+        "security": "SIGNED",
+        "weight": 10,
+        "params": [
+            {
+                "name": "email",
+                "type": "STRING",
+                "required": false,
+                "description": "Sub-account email"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Query Sub-account Status (For Master Account). Get Sub-account's status on Margin/Futures (For Master Account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/account-management/Query-Sub-account-Status"
+    },
+    {
+        "id": "sub_account_enable_margin",
+        "apiGroup": "sub-account",
+        "category": "Account Management",
+        "method": "POST",
+        "path": "/sapi/v1/sub-account/margin/enable",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "email",
+                "type": "STRING",
+                "required": true,
+                "description": "Sub-account email"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Enable Margin for Sub-account (For Master Account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/account-management/Enable-Margin-for-Sub-account"
+    },
+    {
+        "id": "sub_account_margin_detail",
+        "apiGroup": "sub-account",
+        "category": "Account Management",
+        "method": "GET",
+        "path": "/sapi/v1/sub-account/margin/account",
+        "security": "SIGNED",
+        "weight": 10,
+        "params": [
+            {
+                "name": "email",
+                "type": "STRING",
+                "required": true,
+                "description": "Sub-account email"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Get Detail on Sub-account's Margin Account (For Master Account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/account-management/Get-Detail-on-Sub-accounts-Margin-Account"
+    },
+    {
+        "id": "sub_account_margin_summary",
+        "apiGroup": "sub-account",
+        "category": "Account Management",
+        "method": "GET",
+        "path": "/sapi/v1/sub-account/margin/accountSummary",
+        "security": "SIGNED",
+        "weight": 10,
+        "params": [
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Get Summary of Sub-account's Margin Account (For Master Account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/account-management/Get-Summary-of-Sub-accounts-Margin-Account"
+    },
+    {
+        "id": "sub_account_enable_futures",
+        "apiGroup": "sub-account",
+        "category": "Account Management",
+        "method": "POST",
+        "path": "/sapi/v1/sub-account/futures/enable",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "email",
+                "type": "STRING",
+                "required": true,
+                "description": "Sub-account email"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Enable Futures for Sub-account (For Master Account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/account-management/Enable-Futures-for-Sub-account"
+    },
+    {
+        "id": "sub_account_futures_detail",
+        "apiGroup": "sub-account",
+        "category": "Account Management",
+        "method": "GET",
+        "path": "/sapi/v1/sub-account/futures/account",
+        "security": "SIGNED",
+        "weight": 10,
+        "params": [
+            {
+                "name": "email",
+                "type": "STRING",
+                "required": true,
+                "description": "Sub-account email"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Get Detail on Sub-account's Futures Account (For Master Account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/account-management/Get-Detail-on-Sub-accounts-Futures-Account"
+    },
+    {
+        "id": "sub_account_futures_detail_v2",
+        "apiGroup": "sub-account",
+        "category": "Account Management",
+        "method": "GET",
+        "path": "/sapi/v2/sub-account/futures/account",
+        "security": "SIGNED",
+        "weight": 10,
+        "params": [
+            {
+                "name": "email",
+                "type": "STRING",
+                "required": true,
+                "description": "Sub-account email"
+            },
+            {
+                "name": "futuresType",
+                "type": "INT",
+                "required": true,
+                "description": "1: USDT Margined Futures, 2: COIN Margined Futures"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Get Detail on Sub-account's Futures Account V2 (For Master Account). Supports USDT and COIN margined futures",
+        "docUrl": "https://developers.binance.com/docs/sub_account/account-management/Get-Detail-on-Sub-accounts-Futures-Account-V2"
+    },
+    {
+        "id": "sub_account_futures_summary",
+        "apiGroup": "sub-account",
+        "category": "Account Management",
+        "method": "GET",
+        "path": "/sapi/v1/sub-account/futures/accountSummary",
+        "security": "SIGNED",
+        "weight": 10,
+        "params": [
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Get Summary of Sub-account's Futures Account (For Master Account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/account-management/Get-Summary-of-Sub-accounts-Futures-Account"
+    },
+    {
+        "id": "sub_account_futures_summary_v2",
+        "apiGroup": "sub-account",
+        "category": "Account Management",
+        "method": "GET",
+        "path": "/sapi/v2/sub-account/futures/accountSummary",
+        "security": "SIGNED",
+        "weight": 10,
+        "params": [
+            {
+                "name": "futuresType",
+                "type": "INT",
+                "required": true,
+                "description": "1: USDT Margined Futures, 2: COIN Margined Futures"
+            },
+            {
+                "name": "page",
+                "type": "INT",
+                "required": false,
+                "description": "Default 1"
+            },
+            {
+                "name": "limit",
+                "type": "INT",
+                "required": false,
+                "description": "Default 10, Max 20"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Get Summary of Sub-account's Futures Account V2 (For Master Account). Supports USDT and COIN margined futures",
+        "docUrl": "https://developers.binance.com/docs/sub_account/account-management/Get-Summary-of-Sub-accounts-Futures-Account-V2"
+    },
+    {
+        "id": "sub_account_futures_position_risk",
+        "apiGroup": "sub-account",
+        "category": "Account Management",
+        "method": "GET",
+        "path": "/sapi/v1/sub-account/futures/positionRisk",
+        "security": "SIGNED",
+        "weight": 10,
+        "params": [
+            {
+                "name": "email",
+                "type": "STRING",
+                "required": true,
+                "description": "Sub-account email"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Get Futures Position-Risk of Sub-account (For Master Account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/account-management/Get-Futures-Position-Risk-of-Sub-account"
+    },
+    {
+        "id": "sub_account_futures_position_risk_v2",
+        "apiGroup": "sub-account",
+        "category": "Account Management",
+        "method": "GET",
+        "path": "/sapi/v2/sub-account/futures/positionRisk",
+        "security": "SIGNED",
+        "weight": 10,
+        "params": [
+            {
+                "name": "email",
+                "type": "STRING",
+                "required": true,
+                "description": "Sub-account email"
+            },
+            {
+                "name": "futuresType",
+                "type": "INT",
+                "required": true,
+                "description": "1: USDT Margined Futures, 2: COIN Margined Futures"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Get Futures Position-Risk of Sub-account V2 (For Master Account). Supports USDT and COIN margined futures",
+        "docUrl": "https://developers.binance.com/docs/sub_account/account-management/Get-Futures-Position-Risk-of-Sub-account-V2"
+    },
+    {
+        "id": "sub_account_spot_summary",
+        "apiGroup": "sub-account",
+        "category": "Account Management",
+        "method": "GET",
+        "path": "/sapi/v1/sub-account/spotSummary",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "email",
+                "type": "STRING",
+                "required": false,
+                "description": "Sub-account email"
+            },
+            {
+                "name": "page",
+                "type": "INT",
+                "required": false,
+                "description": "Default 1"
+            },
+            {
+                "name": "size",
+                "type": "INT",
+                "required": false,
+                "description": "Default 10, max 20"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Get BTC valued asset summary of sub-accounts (For Master Account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/account-management/Query-Sub-account-Spot-Assets-Summary"
+    },
+    {
+        "id": "sub_account_deposit_address",
+        "apiGroup": "sub-account",
+        "category": "Account Management",
+        "method": "GET",
+        "path": "/sapi/v1/capital/deposit/subAddress",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "email",
+                "type": "STRING",
+                "required": true,
+                "description": "Sub-account email"
+            },
+            {
+                "name": "coin",
+                "type": "STRING",
+                "required": true,
+                "description": "Coin name"
+            },
+            {
+                "name": "network",
+                "type": "STRING",
+                "required": false,
+                "description": "Network"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Fetch sub-account deposit address (For Master Account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/account-management/Get-Sub-account-Deposit-Address"
+    },
+    {
+        "id": "sub_account_deposit_history",
+        "apiGroup": "sub-account",
+        "category": "Account Management",
+        "method": "GET",
+        "path": "/sapi/v1/capital/deposit/subHisrec",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "email",
+                "type": "STRING",
+                "required": true,
+                "description": "Sub-account email"
+            },
+            {
+                "name": "coin",
+                "type": "STRING",
+                "required": false,
+                "description": "Coin name"
+            },
+            {
+                "name": "status",
+                "type": "INT",
+                "required": false,
+                "description": "0(0:pending,6: credited but cannot withdraw, 1:success)"
+            },
+            {
+                "name": "startTime",
+                "type": "LONG",
+                "required": false,
+                "description": "Start time in milliseconds"
+            },
+            {
+                "name": "endTime",
+                "type": "LONG",
+                "required": false,
+                "description": "End time in milliseconds"
+            },
+            {
+                "name": "limit",
+                "type": "INT",
+                "required": false,
+                "description": "Default 500, max 1000"
+            },
+            {
+                "name": "offset",
+                "type": "INT",
+                "required": false,
+                "description": "Default 0"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Fetch sub-account deposit history (For Master Account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/account-management/Get-Sub-account-Deposit-History"
+    },
+    {
+        "id": "sub_account_assets_v3",
+        "apiGroup": "sub-account",
+        "category": "Account Management",
+        "method": "GET",
+        "path": "/sapi/v3/sub-account/assets",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "email",
+                "type": "STRING",
+                "required": true,
+                "description": "Sub-account email"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Query Sub-account Assets V3 (For Master Account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/account-management/Query-Sub-account-Assets-V3"
+    },
+    {
+        "id": "sub_account_assets_v4",
+        "apiGroup": "sub-account",
+        "category": "Account Management",
+        "method": "GET",
+        "path": "/sapi/v4/sub-account/assets",
+        "security": "SIGNED",
+        "weight": 60,
+        "params": [
+            {
+                "name": "email",
+                "type": "STRING",
+                "required": true,
+                "description": "Sub-account email"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Query Sub-account Assets V4 (For Master Account). Fetch sub-account assets",
+        "docUrl": "https://developers.binance.com/docs/sub_account/account-management/Query-Sub-account-Assets-V4"
+    },
+    {
+        "id": "sub_account_transaction_statistics",
+        "apiGroup": "sub-account",
+        "category": "Account Management",
+        "method": "GET",
+        "path": "/sapi/v1/sub-account/transaction-statistics",
+        "security": "SIGNED",
+        "weight": 60,
+        "params": [
+            {
+                "name": "email",
+                "type": "STRING",
+                "required": false,
+                "description": "Sub-account email"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Query Sub-account Transaction Statistics (For Master Account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/account-management/Query-Sub-account-Transaction-Statistics"
+    },
+    {
+        "id": "sub_account_enable_options",
+        "apiGroup": "sub-account",
+        "category": "Account Management",
+        "method": "POST",
+        "path": "/sapi/v1/sub-account/eoptions/enable",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "email",
+                "type": "STRING",
+                "required": true,
+                "description": "Sub-account email"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Enable Options for Sub-account (For Master Account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/account-management/Enable-Options-for-Sub-account"
+    },
+    {
+        "id": "sub_account_create_api_key",
+        "apiGroup": "sub-account",
+        "category": "API Management",
+        "method": "POST",
+        "path": "/sapi/v1/sub-account/subAccountApi/ipRestriction",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "email",
+                "type": "STRING",
+                "required": true,
+                "description": "Sub-account email"
+            },
+            {
+                "name": "subAccountApiKey",
+                "type": "STRING",
+                "required": true,
+                "description": "Sub-account API Key"
+            },
+            {
+                "name": "ipRestrict",
+                "type": "BOOLEAN",
+                "required": true,
+                "description": "IP restrict on or off"
+            },
+            {
+                "name": "ipAddress",
+                "type": "STRING",
+                "required": false,
+                "description": "Insert static IP in batch, separated by commas"
+            },
+            {
+                "name": "thirdPartyName",
+                "type": "STRING",
+                "required": false,
+                "description": "Third party name"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Enable or Disable IP Restriction for a Sub-account API Key (For Master Account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/api-management/Enable-or-Disable-IP-Restriction-for-a-Sub-account-API-Key"
+    },
+    {
+        "id": "sub_account_add_ip_list",
+        "apiGroup": "sub-account",
+        "category": "API Management",
+        "method": "POST",
+        "path": "/sapi/v1/sub-account/subAccountApi/ipRestriction/ipList",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "email",
+                "type": "STRING",
+                "required": true,
+                "description": "Sub-account email"
+            },
+            {
+                "name": "subAccountApiKey",
+                "type": "STRING",
+                "required": true,
+                "description": "Sub-account API Key"
+            },
+            {
+                "name": "ipAddress",
+                "type": "STRING",
+                "required": true,
+                "description": "Can be added in batches, separated by commas"
+            },
+            {
+                "name": "thirdPartyName",
+                "type": "STRING",
+                "required": false,
+                "description": "Third party name"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Add IP List for a Sub-account API Key (For Master Account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/api-management/Add-IP-List-for-a-Sub-account-API-Key"
+    },
+    {
+        "id": "sub_account_query_ip_restriction",
+        "apiGroup": "sub-account",
+        "category": "API Management",
+        "method": "GET",
+        "path": "/sapi/v1/sub-account/subAccountApi/ipRestriction",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "email",
+                "type": "STRING",
+                "required": true,
+                "description": "Sub-account email"
+            },
+            {
+                "name": "subAccountApiKey",
+                "type": "STRING",
+                "required": true,
+                "description": "Sub-account API Key"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Get IP Restriction for a Sub-account API Key (For Master Account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/api-management/Get-IP-Restriction-for-a-Sub-account-API-Key"
+    },
+    {
+        "id": "sub_account_delete_ip_list",
+        "apiGroup": "sub-account",
+        "category": "API Management",
+        "method": "DELETE",
+        "path": "/sapi/v1/sub-account/subAccountApi/ipRestriction/ipList",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "email",
+                "type": "STRING",
+                "required": true,
+                "description": "Sub-account email"
+            },
+            {
+                "name": "subAccountApiKey",
+                "type": "STRING",
+                "required": true,
+                "description": "Sub-account API Key"
+            },
+            {
+                "name": "ipAddress",
+                "type": "STRING",
+                "required": true,
+                "description": "Can be deleted in batches, separated by commas"
+            },
+            {
+                "name": "thirdPartyName",
+                "type": "STRING",
+                "required": false,
+                "description": "Third party name"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Delete IP List for a Sub-account API Key (For Master Account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/api-management/Delete-IP-List-for-a-Sub-account-API-Key"
+    },
+    {
+        "id": "sub_account_update_ip_restriction_v2",
+        "apiGroup": "sub-account",
+        "category": "API Management",
+        "method": "POST",
+        "path": "/sapi/v2/sub-account/subAccountApi/ipRestriction",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "email",
+                "type": "STRING",
+                "required": true,
+                "description": "Sub-account email"
+            },
+            {
+                "name": "subAccountApiKey",
+                "type": "STRING",
+                "required": true,
+                "description": "Sub-account API Key"
+            },
+            {
+                "name": "status",
+                "type": "STRING",
+                "required": true,
+                "description": "IP Restriction status. 1 = IP Unrestricted. 2 = Restrict access to trusted IPs only",
+                "enumValues": [
+                    "1",
+                    "2"
+                ]
+            },
+            {
+                "name": "ipAddress",
+                "type": "STRING",
+                "required": false,
+                "description": "Insert static IP in batch, separated by commas"
+            },
+            {
+                "name": "thirdPartyName",
+                "type": "STRING",
+                "required": false,
+                "description": "Third party name"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Update IP Restriction for Sub-Account API key (For Master Account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/api-management/Update-IP-Restriction-for-Sub-Account-API-key"
+    },
+    {
+        "id": "sub_account_transfer_to_sub",
+        "apiGroup": "sub-account",
+        "category": "Asset Management",
+        "method": "POST",
+        "path": "/sapi/v1/sub-account/transfer/subToSub",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "toEmail",
+                "type": "STRING",
+                "required": true,
+                "description": "Recipient sub-account email"
+            },
+            {
+                "name": "asset",
+                "type": "STRING",
+                "required": true,
+                "description": "Asset to transfer"
+            },
+            {
+                "name": "amount",
+                "type": "DECIMAL",
+                "required": true,
+                "description": "Amount to transfer"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Transfer to Sub-account of Same Master (For Sub-account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/asset-management/Transfer-to-Sub-account-of-Same-Master"
+    },
+    {
+        "id": "sub_account_transfer_to_master",
+        "apiGroup": "sub-account",
+        "category": "Asset Management",
+        "method": "POST",
+        "path": "/sapi/v1/sub-account/transfer/subToMaster",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "asset",
+                "type": "STRING",
+                "required": true,
+                "description": "Asset to transfer"
+            },
+            {
+                "name": "amount",
+                "type": "DECIMAL",
+                "required": true,
+                "description": "Amount to transfer"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Transfer to Master (For Sub-account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/asset-management/Transfer-to-Master"
+    },
+    {
+        "id": "sub_account_transfer_history",
+        "apiGroup": "sub-account",
+        "category": "Asset Management",
+        "method": "GET",
+        "path": "/sapi/v1/sub-account/transfer/subUserHistory",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "asset",
+                "type": "STRING",
+                "required": false,
+                "description": "Asset"
+            },
+            {
+                "name": "type",
+                "type": "INT",
+                "required": false,
+                "description": "1: transfer in, 2: transfer out"
+            },
+            {
+                "name": "startTime",
+                "type": "LONG",
+                "required": false,
+                "description": "Start time in milliseconds"
+            },
+            {
+                "name": "endTime",
+                "type": "LONG",
+                "required": false,
+                "description": "End time in milliseconds"
+            },
+            {
+                "name": "limit",
+                "type": "INT",
+                "required": false,
+                "description": "Default 500, max 1000"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Query Sub-account Transfer History (For Sub-account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/asset-management/Query-Sub-account-Transfer-History"
+    },
+    {
+        "id": "sub_account_universal_transfer",
+        "apiGroup": "sub-account",
+        "category": "Asset Management",
+        "method": "POST",
+        "path": "/sapi/v1/sub-account/universalTransfer",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "fromEmail",
+                "type": "STRING",
+                "required": false,
+                "description": "Send from master or sub email"
+            },
+            {
+                "name": "toEmail",
+                "type": "STRING",
+                "required": false,
+                "description": "Send to master or sub email"
+            },
+            {
+                "name": "fromAccountType",
+                "type": "STRING",
+                "required": true,
+                "description": "From account type",
+                "enumValues": [
+                    "SPOT",
+                    "USDT_FUTURE",
+                    "COIN_FUTURE",
+                    "MARGIN",
+                    "ISOLATED_MARGIN"
+                ]
+            },
+            {
+                "name": "toAccountType",
+                "type": "STRING",
+                "required": true,
+                "description": "To account type",
+                "enumValues": [
+                    "SPOT",
+                    "USDT_FUTURE",
+                    "COIN_FUTURE",
+                    "MARGIN",
+                    "ISOLATED_MARGIN"
+                ]
+            },
+            {
+                "name": "clientTranId",
+                "type": "STRING",
+                "required": false,
+                "description": "Must be unique"
+            },
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": false,
+                "description": "Only supported under ISOLATED_MARGIN type"
+            },
+            {
+                "name": "asset",
+                "type": "STRING",
+                "required": true,
+                "description": "Asset"
+            },
+            {
+                "name": "amount",
+                "type": "DECIMAL",
+                "required": true,
+                "description": "Amount"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Universal Transfer (For Master Account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/asset-management/Universal-Transfer"
+    },
+    {
+        "id": "sub_account_universal_transfer_history",
+        "apiGroup": "sub-account",
+        "category": "Asset Management",
+        "method": "GET",
+        "path": "/sapi/v1/sub-account/universalTransfer",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "fromEmail",
+                "type": "STRING",
+                "required": false,
+                "description": "Sub-account email"
+            },
+            {
+                "name": "toEmail",
+                "type": "STRING",
+                "required": false,
+                "description": "Sub-account email"
+            },
+            {
+                "name": "clientTranId",
+                "type": "STRING",
+                "required": false,
+                "description": "Transfer id"
+            },
+            {
+                "name": "startTime",
+                "type": "LONG",
+                "required": false,
+                "description": "Start time in milliseconds"
+            },
+            {
+                "name": "endTime",
+                "type": "LONG",
+                "required": false,
+                "description": "End time in milliseconds"
+            },
+            {
+                "name": "page",
+                "type": "INT",
+                "required": false,
+                "description": "Default 1"
+            },
+            {
+                "name": "limit",
+                "type": "INT",
+                "required": false,
+                "description": "Default 500, max 500"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Query Universal Transfer History (For Master Account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/asset-management/Query-Universal-Transfer-History"
+    },
+    {
+        "id": "sub_account_futures_asset_transfer",
+        "apiGroup": "sub-account",
+        "category": "Asset Management",
+        "method": "POST",
+        "path": "/sapi/v1/sub-account/futures/transfer",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "email",
+                "type": "STRING",
+                "required": true,
+                "description": "Sub-account email"
+            },
+            {
+                "name": "asset",
+                "type": "STRING",
+                "required": true,
+                "description": "Asset"
+            },
+            {
+                "name": "amount",
+                "type": "DECIMAL",
+                "required": true,
+                "description": "Amount"
+            },
+            {
+                "name": "type",
+                "type": "INT",
+                "required": true,
+                "description": "1: transfer from subaccount spot to subaccount futures, 2: transfer from subaccount futures to subaccount spot, 3: transfer from subaccount spot to subaccount COIN-margined, 4: transfer from subaccount COIN-margined to subaccount spot"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Sub-account Futures Asset Transfer (For Master Account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/asset-management/Sub-account-Futures-Asset-Transfer"
+    },
+    {
+        "id": "sub_account_margin_transfer",
+        "apiGroup": "sub-account",
+        "category": "Asset Management",
+        "method": "POST",
+        "path": "/sapi/v1/sub-account/margin/transfer",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "email",
+                "type": "STRING",
+                "required": true,
+                "description": "Sub-account email"
+            },
+            {
+                "name": "asset",
+                "type": "STRING",
+                "required": true,
+                "description": "Asset"
+            },
+            {
+                "name": "amount",
+                "type": "DECIMAL",
+                "required": true,
+                "description": "Amount"
+            },
+            {
+                "name": "type",
+                "type": "INT",
+                "required": true,
+                "description": "1: transfer from subaccount spot to subaccount margin, 2: transfer from subaccount margin to subaccount spot"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Margin Transfer for Sub-account (For Master Account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/asset-management/Margin-Transfer-for-Sub-account"
+    },
+    {
+        "id": "sub_account_transfer_history_master",
+        "apiGroup": "sub-account",
+        "category": "Asset Management",
+        "method": "GET",
+        "path": "/sapi/v1/sub-account/sub/transfer/history",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "fromEmail",
+                "type": "STRING",
+                "required": false,
+                "description": "Sub-account email"
+            },
+            {
+                "name": "toEmail",
+                "type": "STRING",
+                "required": false,
+                "description": "Sub-account email"
+            },
+            {
+                "name": "startTime",
+                "type": "LONG",
+                "required": false,
+                "description": "Start time in milliseconds"
+            },
+            {
+                "name": "endTime",
+                "type": "LONG",
+                "required": false,
+                "description": "End time in milliseconds"
+            },
+            {
+                "name": "page",
+                "type": "INT",
+                "required": false,
+                "description": "Default 1"
+            },
+            {
+                "name": "limit",
+                "type": "INT",
+                "required": false,
+                "description": "Default 500, max 500"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Query Sub-account Spot Asset Transfer History (For Master Account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/asset-management/Query-Sub-account-Spot-Asset-Transfer-History"
+    },
+    {
+        "id": "sub_account_futures_internal_transfer",
+        "apiGroup": "sub-account",
+        "category": "Asset Management",
+        "method": "POST",
+        "path": "/sapi/v1/sub-account/futures/internalTransfer",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "fromEmail",
+                "type": "STRING",
+                "required": true,
+                "description": "Sender email"
+            },
+            {
+                "name": "toEmail",
+                "type": "STRING",
+                "required": true,
+                "description": "Recipient email"
+            },
+            {
+                "name": "futuresType",
+                "type": "INT",
+                "required": true,
+                "description": "1: USDT-margined Futures, 2: Coin-margined Futures"
+            },
+            {
+                "name": "asset",
+                "type": "STRING",
+                "required": true,
+                "description": "Asset"
+            },
+            {
+                "name": "amount",
+                "type": "DECIMAL",
+                "required": true,
+                "description": "Amount"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Futures Transfer for Sub-account (For Master Account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/asset-management/Futures-Transfer-for-Sub-account"
+    },
+    {
+        "id": "sub_account_futures_internal_transfer_history",
+        "apiGroup": "sub-account",
+        "category": "Asset Management",
+        "method": "GET",
+        "path": "/sapi/v1/sub-account/futures/internalTransfer",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "email",
+                "type": "STRING",
+                "required": true,
+                "description": "Sub-account email"
+            },
+            {
+                "name": "futuresType",
+                "type": "INT",
+                "required": true,
+                "description": "1: USDT-margined Futures, 2: Coin-margined Futures"
+            },
+            {
+                "name": "startTime",
+                "type": "LONG",
+                "required": false,
+                "description": "Start time in milliseconds"
+            },
+            {
+                "name": "endTime",
+                "type": "LONG",
+                "required": false,
+                "description": "End time in milliseconds"
+            },
+            {
+                "name": "page",
+                "type": "INT",
+                "required": false,
+                "description": "Default 1"
+            },
+            {
+                "name": "limit",
+                "type": "INT",
+                "required": false,
+                "description": "Default 50, max 500"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Query Sub-account Futures Asset Transfer History (For Master Account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/asset-management/Query-Sub-account-Futures-Asset-Transfer-History"
+    },
+    {
+        "id": "sub_account_move_position",
+        "apiGroup": "sub-account",
+        "category": "Asset Management",
+        "method": "POST",
+        "path": "/sapi/v1/sub-account/futures/move-position",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "fromEmail",
+                "type": "STRING",
+                "required": true,
+                "description": "From email (master or sub)"
+            },
+            {
+                "name": "toEmail",
+                "type": "STRING",
+                "required": true,
+                "description": "To email (master or sub)"
+            },
+            {
+                "name": "futuresType",
+                "type": "INT",
+                "required": true,
+                "description": "1: USDT-M Futures, 2: COIN-M Futures"
+            },
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": true,
+                "description": "Symbol"
+            },
+            {
+                "name": "amount",
+                "type": "DECIMAL",
+                "required": true,
+                "description": "Amount"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Move Position Between Sub-accounts (For Master Account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/asset-management/Move-Position-Between-Sub-accounts"
+    },
+    {
+        "id": "sub_account_move_position_history",
+        "apiGroup": "sub-account",
+        "category": "Asset Management",
+        "method": "GET",
+        "path": "/sapi/v1/sub-account/futures/move-position",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "fromEmail",
+                "type": "STRING",
+                "required": false,
+                "description": "From email"
+            },
+            {
+                "name": "toEmail",
+                "type": "STRING",
+                "required": false,
+                "description": "To email"
+            },
+            {
+                "name": "futuresType",
+                "type": "INT",
+                "required": true,
+                "description": "1: USDT-M Futures, 2: COIN-M Futures"
+            },
+            {
+                "name": "startTime",
+                "type": "LONG",
+                "required": false,
+                "description": "Start time in milliseconds"
+            },
+            {
+                "name": "endTime",
+                "type": "LONG",
+                "required": false,
+                "description": "End time in milliseconds"
+            },
+            {
+                "name": "page",
+                "type": "INT",
+                "required": false,
+                "description": "Default 1"
+            },
+            {
+                "name": "limit",
+                "type": "INT",
+                "required": false,
+                "description": "Default 50, max 500"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Query Move Position History (For Master Account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/asset-management/Query-Move-Position-History"
+    },
+    {
+        "id": "managed_sub_account_deposit",
+        "apiGroup": "sub-account",
+        "category": "Managed Sub Account",
+        "method": "POST",
+        "path": "/sapi/v1/managed-subaccount/deposit",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "toEmail",
+                "type": "STRING",
+                "required": true,
+                "description": "Recipient email"
+            },
+            {
+                "name": "asset",
+                "type": "STRING",
+                "required": true,
+                "description": "Asset"
+            },
+            {
+                "name": "amount",
+                "type": "DECIMAL",
+                "required": true,
+                "description": "Amount"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Deposit Assets Into The Managed Sub-account (For Investor Master Account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/managed-sub-account/Deposit-Assets-Into-The-Managed-Sub-account"
+    },
+    {
+        "id": "managed_sub_account_asset",
+        "apiGroup": "sub-account",
+        "category": "Managed Sub Account",
+        "method": "GET",
+        "path": "/sapi/v1/managed-subaccount/asset",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "email",
+                "type": "STRING",
+                "required": true,
+                "description": "Sub-account email"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Query Managed Sub-account Asset Details (For Investor Master Account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/managed-sub-account/Query-Managed-Sub-account-Asset-Details"
+    },
+    {
+        "id": "managed_sub_account_withdraw",
+        "apiGroup": "sub-account",
+        "category": "Managed Sub Account",
+        "method": "POST",
+        "path": "/sapi/v1/managed-subaccount/withdraw",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "fromEmail",
+                "type": "STRING",
+                "required": true,
+                "description": "Sender email"
+            },
+            {
+                "name": "asset",
+                "type": "STRING",
+                "required": true,
+                "description": "Asset"
+            },
+            {
+                "name": "amount",
+                "type": "DECIMAL",
+                "required": true,
+                "description": "Amount"
+            },
+            {
+                "name": "transferDate",
+                "type": "LONG",
+                "required": false,
+                "description": "Withdrawals is automatically occur on the transfer date (UTC0). If a date is not selected, the withdrawal occurs right now"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Withdrawal Assets From The Managed Sub-account (For Investor Master Account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/managed-sub-account/Withdrawal-Assets-From-The-Managed-Sub-account"
+    },
+    {
+        "id": "managed_sub_account_snapshot",
+        "apiGroup": "sub-account",
+        "category": "Managed Sub Account",
+        "method": "GET",
+        "path": "/sapi/v1/managed-subaccount/accountSnapshot",
+        "security": "SIGNED",
+        "weight": 2400,
+        "params": [
+            {
+                "name": "email",
+                "type": "STRING",
+                "required": true,
+                "description": "Sub-account email"
+            },
+            {
+                "name": "type",
+                "type": "STRING",
+                "required": true,
+                "description": "SPOT or MARGIN or FUTURES"
+            },
+            {
+                "name": "startTime",
+                "type": "LONG",
+                "required": false,
+                "description": "Start time in milliseconds"
+            },
+            {
+                "name": "endTime",
+                "type": "LONG",
+                "required": false,
+                "description": "End time in milliseconds"
+            },
+            {
+                "name": "limit",
+                "type": "INT",
+                "required": false,
+                "description": "min 7, max 30, default 7"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Query Managed Sub-account Snapshot (For Investor Master Account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/managed-sub-account/Query-Managed-Sub-account-Snapshot"
+    },
+    {
+        "id": "managed_sub_account_transfer_log_investor",
+        "apiGroup": "sub-account",
+        "category": "Managed Sub Account",
+        "method": "GET",
+        "path": "/sapi/v1/managed-subaccount/queryTransLogForInvestor",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "email",
+                "type": "STRING",
+                "required": true,
+                "description": "Managed sub-account email"
+            },
+            {
+                "name": "startTime",
+                "type": "LONG",
+                "required": true,
+                "description": "Start time in milliseconds"
+            },
+            {
+                "name": "endTime",
+                "type": "LONG",
+                "required": true,
+                "description": "End time in milliseconds"
+            },
+            {
+                "name": "page",
+                "type": "INT",
+                "required": true,
+                "description": "Page"
+            },
+            {
+                "name": "limit",
+                "type": "INT",
+                "required": true,
+                "description": "Limit (max 500)"
+            },
+            {
+                "name": "transfers",
+                "type": "STRING",
+                "required": false,
+                "description": "Transfer direction (FROM/TO)"
+            },
+            {
+                "name": "transferFunctionAccountType",
+                "type": "STRING",
+                "required": false,
+                "description": "Transfer function account type (SPOT/MARGIN/ISOLATED_MARGIN/USDT_FUTURE/COIN_FUTURE)"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Query Managed Sub-account Transfer Log (For Investor Master Account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/managed-sub-account/Query-Managed-Sub-account-Transfer-Log-For-Investor"
+    },
+    {
+        "id": "managed_sub_account_transfer_log_trading_team",
+        "apiGroup": "sub-account",
+        "category": "Managed Sub Account",
+        "method": "GET",
+        "path": "/sapi/v1/managed-subaccount/queryTransLogForTradeParent",
+        "security": "SIGNED",
+        "weight": 60,
+        "params": [
+            {
+                "name": "email",
+                "type": "STRING",
+                "required": true,
+                "description": "Managed sub-account email"
+            },
+            {
+                "name": "startTime",
+                "type": "LONG",
+                "required": true,
+                "description": "Start time in milliseconds"
+            },
+            {
+                "name": "endTime",
+                "type": "LONG",
+                "required": true,
+                "description": "End time in milliseconds"
+            },
+            {
+                "name": "page",
+                "type": "INT",
+                "required": true,
+                "description": "Page"
+            },
+            {
+                "name": "limit",
+                "type": "INT",
+                "required": true,
+                "description": "Limit (max 500)"
+            },
+            {
+                "name": "transfers",
+                "type": "STRING",
+                "required": false,
+                "description": "Transfer direction (FROM/TO)"
+            },
+            {
+                "name": "transferFunctionAccountType",
+                "type": "STRING",
+                "required": false,
+                "description": "Transfer function account type (SPOT/MARGIN/ISOLATED_MARGIN/USDT_FUTURE/COIN_FUTURE)"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Query Managed Sub-account Transfer Log (For Trading Team Sub-account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/managed-sub-account/Query-Managed-Sub-account-Transfer-Log-For-Trading-Team"
+    },
+    {
+        "id": "managed_sub_account_futures_asset",
+        "apiGroup": "sub-account",
+        "category": "Managed Sub Account",
+        "method": "GET",
+        "path": "/sapi/v1/managed-subaccount/fetch-future-asset",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "email",
+                "type": "STRING",
+                "required": true,
+                "description": "Managed sub-account email"
+            },
+            {
+                "name": "futuresType",
+                "type": "INT",
+                "required": false,
+                "description": "1:USDT-margined Futures, 2:COIN-margined Futures"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Query Managed Sub-account Futures Asset Details (For Investor Master Account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/managed-sub-account/Query-Managed-Sub-account-Futures-Asset-Details"
+    },
+    {
+        "id": "managed_sub_account_margin_asset",
+        "apiGroup": "sub-account",
+        "category": "Managed Sub Account",
+        "method": "GET",
+        "path": "/sapi/v1/managed-subaccount/marginAsset",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "email",
+                "type": "STRING",
+                "required": true,
+                "description": "Managed sub-account email"
+            },
+            {
+                "name": "marginType",
+                "type": "STRING",
+                "required": false,
+                "description": "CROSS or ISOLATED"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Query Managed Sub-account Margin Asset Details (For Investor Master Account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/managed-sub-account/Query-Managed-Sub-account-Margin-Asset-Details"
+    },
+    {
+        "id": "managed_sub_account_info",
+        "apiGroup": "sub-account",
+        "category": "Managed Sub Account",
+        "method": "GET",
+        "path": "/sapi/v1/managed-subaccount/info",
+        "security": "SIGNED",
+        "weight": 60,
+        "params": [
+            {
+                "name": "email",
+                "type": "STRING",
+                "required": false,
+                "description": "Managed sub-account email"
+            },
+            {
+                "name": "page",
+                "type": "INT",
+                "required": false,
+                "description": "Default 1"
+            },
+            {
+                "name": "limit",
+                "type": "INT",
+                "required": false,
+                "description": "Default 20, max 20"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Query Managed Sub Account List (For Investor)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/managed-sub-account/Query-Managed-Sub-Account-List"
+    },
+    {
+        "id": "managed_sub_account_deposit_address",
+        "apiGroup": "sub-account",
+        "category": "Managed Sub Account",
+        "method": "GET",
+        "path": "/sapi/v1/managed-subaccount/deposit/address",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "email",
+                "type": "STRING",
+                "required": true,
+                "description": "Managed sub-account email"
+            },
+            {
+                "name": "coin",
+                "type": "STRING",
+                "required": true,
+                "description": "Coin name"
+            },
+            {
+                "name": "network",
+                "type": "STRING",
+                "required": false,
+                "description": "Network"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Get Managed Sub-account Deposit Address (For Investor Master Account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/managed-sub-account/Get-Managed-Sub-account-Deposit-Address"
+    },
+    {
+        "id": "managed_sub_account_query_trans_log",
+        "apiGroup": "sub-account",
+        "category": "Managed Sub Account",
+        "method": "GET",
+        "path": "/sapi/v1/managed-subaccount/query-trans-log",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "email",
+                "type": "STRING",
+                "required": true,
+                "description": "Trading team sub-account email"
+            },
+            {
+                "name": "startTime",
+                "type": "LONG",
+                "required": true,
+                "description": "Start time in milliseconds"
+            },
+            {
+                "name": "endTime",
+                "type": "LONG",
+                "required": true,
+                "description": "End time in milliseconds"
+            },
+            {
+                "name": "page",
+                "type": "INT",
+                "required": true,
+                "description": "Page"
+            },
+            {
+                "name": "limit",
+                "type": "INT",
+                "required": true,
+                "description": "Limit (max 500)"
+            },
+            {
+                "name": "transfers",
+                "type": "STRING",
+                "required": false,
+                "description": "Transfer direction (FROM/TO)"
+            },
+            {
+                "name": "transferFunctionAccountType",
+                "type": "STRING",
+                "required": false,
+                "description": "Transfer function account type"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Query Managed Sub Account Transfer Log (For Trading Team Sub Account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/managed-sub-account/Query-Managed-Sub-Account-Transfer-Log"
+    }
+]
