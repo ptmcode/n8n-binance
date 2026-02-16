@@ -25,8 +25,10 @@ function getCategories(catalog: CatalogEntry[]): Array<{ name: string; value: st
 /** Get endpoint options for dropdown, optionally filtered by category */
 function getEndpointOptions(
     catalog: CatalogEntry[],
+    category?: string,
 ): Array<{ name: string; value: string; description?: string }> {
-    return catalog.map((e) => ({
+    const filtered = category ? catalog.filter((e) => e.category === category) : catalog;
+    return filtered.map((e) => ({
         name: `${e.method} ${e.path}`,
         value: e.id,
         description: e.notes || undefined,
@@ -35,8 +37,17 @@ function getEndpointOptions(
 
 const spotCategories = getCategories(spotCatalog);
 const usdmCategories = getCategories(usdmCatalog);
-const spotEndpoints = getEndpointOptions(spotCatalog);
-const usdmEndpoints = getEndpointOptions(usdmCatalog);
+
+// Create endpoint options grouped by category
+const spotEndpointsByCategory = new Map<string, Array<{ name: string; value: string; description?: string }>>();
+for (const category of spotCategories) {
+    spotEndpointsByCategory.set(category.value, getEndpointOptions(spotCatalog, category.value));
+}
+
+const usdmEndpointsByCategory = new Map<string, Array<{ name: string; value: string; description?: string }>>();
+for (const category of usdmCategories) {
+    usdmEndpointsByCategory.set(category.value, getEndpointOptions(usdmCatalog, category.value));
+}
 
 // Create index maps for security type lookups
 const spotSecurityMap = new Map<string, string>();
@@ -236,30 +247,39 @@ export const nodeProperties: INodeProperties[] = [
         description: 'USD-M Futures API endpoint category',
     },
 
-    // Spot endpoint
-    {
+    // Generate Spot endpoint fields for each category
+    ...Array.from(spotEndpointsByCategory.entries()).map(([category, endpoints]) => ({
         displayName: 'Endpoint',
         name: 'endpointIdSpot',
-        type: 'options',
+        type: 'options' as const,
         displayOptions: {
-            show: { mode: ['catalog'], apiGroup: ['spot'] },
+            show: {
+                mode: ['catalog'],
+                apiGroup: ['spot'],
+                categorySpot: [category],
+            },
         },
-        options: spotEndpoints,
+        options: endpoints,
         default: '',
         description: 'Select a Spot API endpoint from the catalog',
-    },
-    // USD-M endpoint
-    {
+    })),
+
+    // Generate USD-M endpoint fields for each category
+    ...Array.from(usdmEndpointsByCategory.entries()).map(([category, endpoints]) => ({
         displayName: 'Endpoint',
         name: 'endpointIdUsdm',
-        type: 'options',
+        type: 'options' as const,
         displayOptions: {
-            show: { mode: ['catalog'], apiGroup: ['usdm'] },
+            show: {
+                mode: ['catalog'],
+                apiGroup: ['usdm'],
+                categoryUsdm: [category],
+            },
         },
-        options: usdmEndpoints,
+        options: endpoints,
         default: '',
         description: 'Select a USD-M Futures API endpoint from the catalog',
-    },
+    })),
 
     // === Authentication (Catalog Mode - Spot) ===
     {
@@ -329,100 +349,9 @@ export const nodeProperties: INodeProperties[] = [
         placeholder: 'Your Binance API Secret',
     },
 
-    // Endpoint info (read-only notice)
-    {
-        displayName: 'Endpoint Info',
-        name: 'endpointInfo',
-        type: 'notice',
-        displayOptions: {
-            show: { mode: ['catalog'] },
-        },
-        default: 'Select an endpoint above. Parameters specific to that endpoint will appear below.',
-    },
-
     // ─── Dynamic Endpoint-Specific Parameters ──────────────────────────────
     // Insert all dynamically generated parameter fields here
     ...dynamicParamProperties,
-
-    // ─── Legacy Generic Parameters (kept for backward compatibility) ───────
-    {
-        displayName: 'Additional Parameters',
-        name: 'additionalParametersNotice',
-        type: 'notice',
-        displayOptions: {
-            show: { mode: ['catalog'] },
-        },
-        default: 'You can also add extra parameters below if needed (e.g., for testing or edge cases).',
-    },
-
-    // Parameters input (key-value pairs)
-    {
-        displayName: 'Parameters',
-        name: 'catalogParams',
-        type: 'fixedCollection',
-        displayOptions: {
-            show: { mode: ['catalog'] },
-        },
-        typeOptions: {
-            multipleValues: true,
-        },
-        default: {},
-        options: [
-            {
-                name: 'param',
-                displayName: 'Parameter',
-                values: [
-                    {
-                        displayName: 'Name',
-                        name: 'name',
-                        type: 'string',
-                        default: '',
-                        description: 'Parameter name',
-                    },
-                    {
-                        displayName: 'Value',
-                        name: 'value',
-                        type: 'string',
-                        default: '',
-                        description: 'Parameter value',
-                    },
-                ],
-            },
-        ],
-        description: 'Provide endpoint parameters as key-value pairs',
-    },
-
-    // JSON parameters input (alternative)
-    {
-        displayName: 'Parameters (JSON)',
-        name: 'catalogParamsJson',
-        type: 'string',
-        displayOptions: {
-            show: { mode: ['catalog'] },
-        },
-        typeOptions: {
-            rows: 5,
-        },
-        default: '',
-        description: 'Alternatively, provide parameters as a JSON object. This is merged with key-value params above (JSON values take precedence).',
-        placeholder: '{"symbol": "BTCUSDT", "interval": "1h"}',
-    },
-
-    // Body (JSON) for catalog mode
-    {
-        displayName: 'Request Body (JSON)',
-        name: 'catalogBody',
-        type: 'string',
-        displayOptions: {
-            show: { mode: ['catalog'] },
-        },
-        typeOptions: {
-            rows: 5,
-        },
-        default: '',
-        description: 'Optional JSON body for endpoints that require a request body (rare for Binance)',
-        placeholder: '{}',
-    },
 
     // ─── Custom Mode ────────────────────────────────────────────────────────
 
@@ -559,38 +488,5 @@ export const nodeProperties: INodeProperties[] = [
         default: '',
         description: 'Optional JSON request body',
         placeholder: '{}',
-    },
-
-    // ─── Advanced Options ───────────────────────────────────────────────────
-
-    {
-        displayName: 'Options',
-        name: 'options',
-        type: 'collection',
-        placeholder: 'Add Option',
-        default: {},
-        options: [
-            {
-                displayName: 'Send Body as JSON',
-                name: 'sendAsJson',
-                type: 'boolean',
-                default: false,
-                description: 'Whether to send the request body as JSON instead of form-encoded. Most Binance endpoints expect form-encoded.',
-            },
-            {
-                displayName: 'Receive Window (ms)',
-                name: 'recvWindow',
-                type: 'number',
-                default: 5000,
-                description: 'The receive window for SIGNED requests (milliseconds). Binance default is 5000.',
-            },
-            {
-                displayName: 'Skip Required Param Validation',
-                name: 'skipValidation',
-                type: 'boolean',
-                default: false,
-                description: 'Whether to skip the required parameter validation in catalog mode. Use if the catalog is outdated.',
-            },
-        ],
     },
 ];

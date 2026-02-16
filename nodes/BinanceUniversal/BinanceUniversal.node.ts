@@ -63,11 +63,6 @@ export class BinanceUniversal implements INodeType {
                 const mode = this.getNodeParameter('mode', i) as string;
                 const apiKey = this.getNodeParameter('apiKey', i, '') as string;
                 const apiSecret = this.getNodeParameter('apiSecret', i, '') as string;
-                const options = this.getNodeParameter('options', i, {}) as {
-                    sendAsJson?: boolean;
-                    recvWindow?: number;
-                    skipValidation?: boolean;
-                };
 
                 // Determine base URL
                 let baseUrl: string;
@@ -119,84 +114,41 @@ export class BinanceUniversal implements INodeType {
                         }
                     }
 
-                    // Also collect parameters from key-value pairs (for backward compatibility and edge cases)
-                    const catalogParamsKV = this.getNodeParameter('catalogParams', i, {}) as {
-                        param?: Array<{ name: string; value: string }>;
-                    };
-                    if (catalogParamsKV.param) {
-                        for (const p of catalogParamsKV.param) {
-                            if (p.name) params[p.name] = p.value;
-                        }
-                    }
-
-                    // Merge JSON parameters (JSON takes precedence)
-                    const catalogParamsJsonStr = this.getNodeParameter('catalogParamsJson', i, '') as string;
-                    if (catalogParamsJsonStr.trim()) {
-                        try {
-                            const jsonParams = JSON.parse(catalogParamsJsonStr);
-                            if (typeof jsonParams === 'object' && jsonParams !== null) {
-                                Object.assign(params, jsonParams);
-                            }
-                        } catch {
-                            throw new NodeOperationError(
-                                this.getNode(),
-                                'Invalid JSON in Parameters (JSON) field. Please provide a valid JSON object.',
-                                { itemIndex: i },
-                            );
-                        }
-                    }
-
-                    // Parse body
-                    const catalogBodyStr = this.getNodeParameter('catalogBody', i, '') as string;
-                    if (catalogBodyStr.trim()) {
-                        try {
-                            body = JSON.parse(catalogBodyStr);
-                        } catch {
-                            throw new NodeOperationError(
-                                this.getNode(),
-                                'Invalid JSON in Request Body field.',
-                                { itemIndex: i },
-                            );
-                        }
-                    }
-
                     // Validate required parameters
-                    if (!options.skipValidation) {
-                        const requiredNames = entry.params
-                            .filter((p: CatalogParam) => p.required)
-                            .map((p: CatalogParam) => p.name);
+                    const requiredNames = entry.params
+                        .filter((p: CatalogParam) => p.required)
+                        .map((p: CatalogParam) => p.name);
 
-                        // Don't require timestamp/signature - those are auto-added
-                        const filteredRequired = requiredNames.filter(
-                            (n: string) => n !== 'timestamp' && n !== 'signature',
+                    // Don't require timestamp/signature - those are auto-added
+                    const filteredRequired = requiredNames.filter(
+                        (n: string) => n !== 'timestamp' && n !== 'signature',
+                    );
+
+                    const missing = validateRequiredParams(params, filteredRequired);
+                    if (missing.length > 0) {
+                        throw new NodeOperationError(
+                            this.getNode(),
+                            `Missing required parameters: ${missing.join(', ')}\n\nEndpoint: ${entry.method} ${entry.path}\nRequired: ${filteredRequired.join(', ')}`,
+                            { itemIndex: i },
                         );
+                    }
 
-                        const missing = validateRequiredParams(params, filteredRequired);
-                        if (missing.length > 0) {
+                    // Validate conditional requiredWhen rules
+                    const conditionalRules = entry.params
+                        .filter((p: CatalogParam) => p.requiredWhen)
+                        .map((p: CatalogParam) => ({
+                            paramName: p.name,
+                            requiredWhen: p.requiredWhen!,
+                        }));
+
+                    if (conditionalRules.length > 0) {
+                        const errors = validateRequiredWhen(params, conditionalRules);
+                        if (errors.length > 0) {
                             throw new NodeOperationError(
                                 this.getNode(),
-                                `Missing required parameters: ${missing.join(', ')}\n\nEndpoint: ${entry.method} ${entry.path}\nRequired: ${filteredRequired.join(', ')}`,
+                                `Parameter validation errors:\n${errors.join('\n')}`,
                                 { itemIndex: i },
                             );
-                        }
-
-                        // Validate conditional requiredWhen rules
-                        const conditionalRules = entry.params
-                            .filter((p: CatalogParam) => p.requiredWhen)
-                            .map((p: CatalogParam) => ({
-                                paramName: p.name,
-                                requiredWhen: p.requiredWhen!,
-                            }));
-
-                        if (conditionalRules.length > 0) {
-                            const errors = validateRequiredWhen(params, conditionalRules);
-                            if (errors.length > 0) {
-                                throw new NodeOperationError(
-                                    this.getNode(),
-                                    `Parameter validation errors:\n${errors.join('\n')}`,
-                                    { itemIndex: i },
-                                );
-                            }
                         }
                     }
                 } else {
@@ -271,10 +223,10 @@ export class BinanceUniversal implements INodeType {
                     security,
                     params,
                     body,
-                    sendAsJson: options.sendAsJson,
+                    sendAsJson: false,
                     apiKey,
                     apiSecret,
-                    recvWindow: options.recvWindow,
+                    recvWindow: 5000,
                 });
 
                 returnData.push({
