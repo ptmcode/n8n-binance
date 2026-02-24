@@ -148,9 +148,12 @@ function generateParamProperty(
     }
 
     // Determine the input type based on parameter type
+    // For optional numeric parameters, use 'string' type to allow empty values
+    // For required numeric parameters, use 'number' type
     let inputType: 'string' | 'number' | 'boolean' = 'string';
     if (param.type === 'LONG' || param.type === 'INT' || param.type === 'DECIMAL') {
-        inputType = 'number';
+        // Only use 'number' type for required parameters, otherwise keep as 'string'
+        inputType = param.required ? 'number' : 'string';
     } else if (param.type === 'BOOLEAN') {
         inputType = 'boolean';
     }
@@ -166,7 +169,7 @@ function generateParamProperty(
                 [endpointField]: [endpointId],
             },
         },
-        default: inputType === 'number' ? 0 : inputType === 'boolean' ? false : '',
+        default: inputType === 'boolean' ? false : '',
         description: param.description || `Parameter: ${param.name}`,
         required: param.required,
     };

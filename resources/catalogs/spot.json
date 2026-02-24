@@ -868,7 +868,7 @@
     {
         "id": "spot:GET:/api/v3/order",
         "apiGroup": "spot",
-        "category": "Trading",
+        "category": "Account",
         "method": "GET",
         "path": "/api/v3/order",
         "security": "SIGNED",
@@ -891,12 +891,18 @@
             },
             {
                 "name": "recvWindow",
+                "type": "DECIMAL",
+                "required": false,
+                "description": "The value cannot be greater than 60000. Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified."
+            },
+            {
+                "name": "timestamp",
                 "type": "LONG",
-                "required": false
+                "required": true
             }
         ],
-        "notes": "Check an order status.",
-        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#query-order-user_data"
+        "notes": "Check an order's status. Either orderId or origClientOrderId must be sent.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api/account-endpoints#query-order-user_data"
     },
     {
         "id": "spot:POST:/api/v3/order/cancelReplace",
@@ -1031,7 +1037,7 @@
     {
         "id": "spot:GET:/api/v3/openOrders",
         "apiGroup": "spot",
-        "category": "Trading",
+        "category": "Account",
         "method": "GET",
         "path": "/api/v3/openOrders",
         "security": "SIGNED",
@@ -1044,17 +1050,23 @@
             },
             {
                 "name": "recvWindow",
+                "type": "DECIMAL",
+                "required": false,
+                "description": "The value cannot be greater than 60000. Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified."
+            },
+            {
+                "name": "timestamp",
                 "type": "LONG",
-                "required": false
+                "required": true
             }
         ],
-        "notes": "Get all open orders on a symbol.",
-        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#current-open-orders-user_data"
+        "notes": "Get all open orders on a symbol. Careful when accessing this with no symbol. Weight: 6 for a single symbol; 80 when the symbol parameter is omitted.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api/account-endpoints#current-open-orders-user_data"
     },
     {
         "id": "spot:GET:/api/v3/allOrders",
         "apiGroup": "spot",
-        "category": "Trading",
+        "category": "Account",
         "method": "GET",
         "path": "/api/v3/allOrders",
         "security": "SIGNED",
@@ -1082,18 +1094,24 @@
             },
             {
                 "name": "limit",
-                "type": "LONG",
+                "type": "INT",
                 "required": false,
-                "description": "Default 500; max 1000"
+                "description": "Default: 500; Maximum: 1000"
             },
             {
                 "name": "recvWindow",
+                "type": "DECIMAL",
+                "required": false,
+                "description": "The value cannot be greater than 60000. Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified."
+            },
+            {
+                "name": "timestamp",
                 "type": "LONG",
-                "required": false
+                "required": true
             }
         ],
-        "notes": "Get all account orders; active, canceled, or filled.",
-        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#all-orders-user_data"
+        "notes": "Get all account orders; active, canceled, or filled. The time between startTime and endTime can't be longer than 24 hours.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api/account-endpoints#all-orders-user_data"
     },
     {
         "id": "spot:POST:/api/v3/order/oco",
@@ -1205,7 +1223,7 @@
     {
         "id": "spot:GET:/api/v3/myTrades",
         "apiGroup": "spot",
-        "category": "Trading",
+        "category": "Account",
         "method": "GET",
         "path": "/api/v3/myTrades",
         "security": "SIGNED",
@@ -1219,7 +1237,8 @@
             {
                 "name": "orderId",
                 "type": "LONG",
-                "required": false
+                "required": false,
+                "description": "This can only be used in combination with symbol."
             },
             {
                 "name": "startTime",
@@ -1234,27 +1253,34 @@
             {
                 "name": "fromId",
                 "type": "LONG",
-                "required": false
+                "required": false,
+                "description": "TradeId to fetch from. Default gets most recent trades."
             },
             {
                 "name": "limit",
-                "type": "LONG",
+                "type": "INT",
                 "required": false,
-                "description": "Default 500; max 1000"
+                "description": "Default: 500; Maximum: 1000"
             },
             {
                 "name": "recvWindow",
+                "type": "DECIMAL",
+                "required": false,
+                "description": "The value cannot be greater than 60000. Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified."
+            },
+            {
+                "name": "timestamp",
                 "type": "LONG",
-                "required": false
+                "required": true
             }
         ],
-        "notes": "Get trades for a specific account and symbol.",
-        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#account-trade-list-user_data"
+        "notes": "Get trades for a specific account and symbol. The time between startTime and endTime can't be longer than 24 hours.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api/account-endpoints#account-trade-list-user_data"
     },
     {
         "id": "spot:GET:/api/v3/rateLimit/order",
         "apiGroup": "spot",
-        "category": "Trading",
+        "category": "Account",
         "method": "GET",
         "path": "/api/v3/rateLimit/order",
         "security": "SIGNED",
@@ -1262,12 +1288,303 @@
         "params": [
             {
                 "name": "recvWindow",
+                "type": "DECIMAL",
+                "required": false,
+                "description": "The value cannot be greater than 60000. Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified."
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true
+            }
+        ],
+        "notes": "Displays the user's unfilled order count for all intervals.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api/account-endpoints#query-unfilled-order-count-user_data"
+    },
+    {
+        "id": "spot:GET:/api/v3/orderList",
+        "apiGroup": "spot",
+        "category": "Account",
+        "method": "GET",
+        "path": "/api/v3/orderList",
+        "security": "SIGNED",
+        "weight": 4,
+        "params": [
+            {
+                "name": "orderListId",
+                "type": "LONG",
+                "required": false,
+                "description": "Query order list by orderListId. orderListId or origClientOrderId must be provided."
+            },
+            {
+                "name": "origClientOrderId",
+                "type": "STRING",
+                "required": false,
+                "description": "Query order list by listClientOrderId. orderListId or origClientOrderId must be provided."
+            },
+            {
+                "name": "recvWindow",
+                "type": "DECIMAL",
+                "required": false,
+                "description": "The value cannot be greater than 60000. Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified."
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true
+            }
+        ],
+        "notes": "Retrieves a specific order list based on provided optional parameters.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api/account-endpoints#query-order-list-user_data"
+    },
+    {
+        "id": "spot:GET:/api/v3/allOrderList",
+        "apiGroup": "spot",
+        "category": "Account",
+        "method": "GET",
+        "path": "/api/v3/allOrderList",
+        "security": "SIGNED",
+        "weight": 20,
+        "params": [
+            {
+                "name": "fromId",
+                "type": "LONG",
+                "required": false,
+                "description": "If supplied, neither startTime or endTime can be provided"
+            },
+            {
+                "name": "startTime",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "endTime",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "limit",
+                "type": "INT",
+                "required": false,
+                "description": "Default: 500; Maximum: 1000"
+            },
+            {
+                "name": "recvWindow",
+                "type": "DECIMAL",
+                "required": false,
+                "description": "The value cannot be greater than 60000. Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified."
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true
+            }
+        ],
+        "notes": "Retrieves all order lists based on provided optional parameters. Note that the time between startTime and endTime can't be longer than 24 hours.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api/account-endpoints#query-all-order-lists-user_data"
+    },
+    {
+        "id": "spot:GET:/api/v3/openOrderList",
+        "apiGroup": "spot",
+        "category": "Account",
+        "method": "GET",
+        "path": "/api/v3/openOrderList",
+        "security": "SIGNED",
+        "weight": 6,
+        "params": [
+            {
+                "name": "recvWindow",
+                "type": "DECIMAL",
+                "required": false,
+                "description": "The value cannot be greater than 60000. Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified."
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true
+            }
+        ],
+        "notes": "Get all open order lists.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api/account-endpoints#query-open-order-lists-user_data"
+    },
+    {
+        "id": "spot:GET:/api/v3/myPreventedMatches",
+        "apiGroup": "spot",
+        "category": "Account",
+        "method": "GET",
+        "path": "/api/v3/myPreventedMatches",
+        "security": "SIGNED",
+        "weight": 2,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "preventedMatchId",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "orderId",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "fromPreventedMatchId",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "limit",
+                "type": "INT",
+                "required": false,
+                "description": "Default: 500; Maximum: 1000"
+            },
+            {
+                "name": "recvWindow",
+                "type": "DECIMAL",
+                "required": false,
+                "description": "The value cannot be greater than 60000. Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified."
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true
+            }
+        ],
+        "notes": "Displays the list of orders that were expired due to STP. Supported combinations: symbol + preventedMatchId, symbol + orderId, symbol + orderId + fromPreventedMatchId (limit defaults to 500), symbol + orderId + fromPreventedMatchId + limit",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api/account-endpoints#query-prevented-matches-user_data"
+    },
+    {
+        "id": "spot:GET:/api/v3/myAllocations",
+        "apiGroup": "spot",
+        "category": "Account",
+        "method": "GET",
+        "path": "/api/v3/myAllocations",
+        "security": "SIGNED",
+        "weight": 20,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "startTime",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "endTime",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "fromAllocationId",
+                "type": "INT",
+                "required": false
+            },
+            {
+                "name": "limit",
+                "type": "INT",
+                "required": false,
+                "description": "Default: 500; Maximum: 1000"
+            },
+            {
+                "name": "orderId",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "recvWindow",
+                "type": "DECIMAL",
+                "required": false,
+                "description": "The value cannot be greater than 60000. Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified."
+            },
+            {
+                "name": "timestamp",
                 "type": "LONG",
                 "required": false
             }
         ],
-        "notes": "Displays the user's current order count usage for all intervals.",
-        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#query-unfilled-order-count-user_data"
+        "notes": "Retrieves allocations resulting from SOR order placement. Note: The time between startTime and endTime can't be longer than 24 hours.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api/account-endpoints#query-allocations-user_data"
+    },
+    {
+        "id": "spot:GET:/api/v3/order/amendments",
+        "apiGroup": "spot",
+        "category": "Account",
+        "method": "GET",
+        "path": "/api/v3/order/amendments",
+        "security": "SIGNED",
+        "weight": 4,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "orderId",
+                "type": "LONG",
+                "required": true
+            },
+            {
+                "name": "fromExecutionId",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "limit",
+                "type": "LONG",
+                "required": false,
+                "description": "Default:500; Maximum: 1000"
+            },
+            {
+                "name": "recvWindow",
+                "type": "DECIMAL",
+                "required": false,
+                "description": "The value cannot be greater than 60000. Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified."
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true
+            }
+        ],
+        "notes": "Queries all amendments of a single order.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api/account-endpoints#query-order-amendments-user_data"
+    },
+    {
+        "id": "spot:GET:/api/v3/myFilters",
+        "apiGroup": "spot",
+        "category": "Account",
+        "method": "GET",
+        "path": "/api/v3/myFilters",
+        "security": "SIGNED",
+        "weight": 40,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "recvWindow",
+                "type": "DECIMAL",
+                "required": false,
+                "description": "The value cannot be greater than 60000. Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified."
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true
+            }
+        ],
+        "notes": "Retrieves the list of filters relevant to an account on a given symbol. This is the only endpoint that shows if an account has MAX_ASSET filters applied to it.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api/account-endpoints#query-relevant-filters-user_data"
     },
     {
         "id": "spot:POST:/api/v3/sor/order",
@@ -1358,12 +1675,18 @@
                 "name": "omitZeroBalances",
                 "type": "BOOLEAN",
                 "required": false,
-                "description": "If true, will hide all zero balances"
+                "description": "When set to true, emits only the non-zero balances of an account. Default value: false"
             },
             {
                 "name": "recvWindow",
+                "type": "DECIMAL",
+                "required": false,
+                "description": "The value cannot be greater than 60000. Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified."
+            },
+            {
+                "name": "timestamp",
                 "type": "LONG",
-                "required": false
+                "required": true
             }
         ],
         "notes": "Get current account information.",
