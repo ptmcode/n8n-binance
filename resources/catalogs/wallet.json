@@ -250,6 +250,55 @@
         "docUrl": "https://developers.binance.com/docs/wallet/capital/withdraw-history"
     },
     {
+        "id": "wallet_capital_withdraw_address_list",
+        "apiGroup": "wallet",
+        "category": "Capital",
+        "method": "GET",
+        "path": "/sapi/v1/capital/withdraw/address/list",
+        "security": "SIGNED",
+        "weight": 10,
+        "params": [
+            {
+                "name": "coin",
+                "type": "STRING",
+                "required": false,
+                "description": "Coin name"
+            },
+            {
+                "name": "status",
+                "type": "INT",
+                "required": false,
+                "description": "Address status: 0(Disabled), 1(Enabled)"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Fetch withdraw address list.",
+        "docUrl": "https://developers.binance.com/docs/wallet/capital/withdraw-address-list"
+    },
+    {
+        "id": "wallet_capital_withdraw_quota",
+        "apiGroup": "wallet",
+        "category": "Capital",
+        "method": "GET",
+        "path": "/sapi/v1/capital/withdraw/quota",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [],
+        "notes": "Fetch withdraw quota information.",
+        "docUrl": "https://developers.binance.com/docs/wallet/capital/withdraw-quota"
+    },
+    {
         "id": "wallet_capital_deposit_address",
         "apiGroup": "wallet",
         "category": "Capital",
@@ -285,6 +334,92 @@
         ],
         "notes": "Fetch deposit address with network.",
         "docUrl": "https://developers.binance.com/docs/wallet/capital/deposit-address"
+    },
+    {
+        "id": "wallet_capital_deposit_address_list",
+        "apiGroup": "wallet",
+        "category": "Capital",
+        "method": "GET",
+        "path": "/sapi/v1/capital/deposit/address/list",
+        "security": "SIGNED",
+        "weight": 10,
+        "params": [
+            {
+                "name": "coin",
+                "type": "STRING",
+                "required": true,
+                "description": "Coin refers to the parent network address format that the address is using"
+            },
+            {
+                "name": "network",
+                "type": "STRING",
+                "required": false,
+                "description": "Network"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Fetch deposit address list with network.",
+        "docUrl": "https://developers.binance.com/docs/wallet/capital/deposit-address-list"
+    },
+    {
+        "id": "wallet_capital_deposit_credit_apply",
+        "apiGroup": "wallet",
+        "category": "Capital",
+        "method": "POST",
+        "path": "/sapi/v1/capital/deposit/credit-apply",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "depositId",
+                "type": "LONG",
+                "required": false,
+                "description": "Deposit record Id, priority use"
+            },
+            {
+                "name": "txId",
+                "type": "STRING",
+                "required": false,
+                "description": "Deposit txId, used when depositId is not specified"
+            },
+            {
+                "name": "subAccountId",
+                "type": "LONG",
+                "required": false,
+                "description": "Sub-accountId of Cloud user"
+            },
+            {
+                "name": "subUserId",
+                "type": "LONG",
+                "required": false,
+                "description": "Sub-userId of parent user"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Apply deposit credit for expired address (One click arrival). Params need to be in the POST body.",
+        "docUrl": "https://developers.binance.com/docs/wallet/capital/deposit-credit-apply"
     },
     {
         "id": "wallet_account_snapshot",
