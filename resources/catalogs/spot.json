@@ -36,19 +36,41 @@
                 "name": "symbol",
                 "type": "STRING",
                 "required": false,
-                "description": "Trading pair symbol"
+                "description": "Example: curl -X GET \"https://api.binance.com/api/v3/exchangeInfo?symbol=BNBBTC\""
             },
             {
                 "name": "symbols",
-                "type": "STRING",
+                "type": "ARRAY OF STRING",
                 "required": false,
-                "description": "Array of symbols as JSON string e.g. [\"BTCUSDT\",\"ETHUSDT\"]"
+                "description": "Examples: curl -X GET \"https://api.binance.com/api/v3/exchangeInfo?symbols=%5B%22BNBBTC%22,%22BTCUSDT%22%5D\" or curl -g -X GET 'https://api.binance.com/api/v3/exchangeInfo?symbols=[\"BTCUSDT\",\"BNBBTC\"]'"
             },
             {
                 "name": "permissions",
-                "type": "STRING",
+                "type": "ENUM",
                 "required": false,
-                "description": "Filter by permissions"
+                "description": "Examples: curl -X GET \"https://api.binance.com/api/v3/exchangeInfo?permissions=SPOT\" or curl -X GET \"https://api.binance.com/api/v3/exchangeInfo?permissions=%5B%22MARGIN%22,%22C%22,%22LEVERAGED%22%5D\" or curl -g -X GET 'https://api.binance.com/api/v3/exchangeInfo?permissions=[\"MARGIN\",\"LEVERAGED\"]'",
+                "enumValues": [
+                    "SPOT",
+                    "MARGIN",
+                    "LEVERAGED"
+                ]
+            },
+            {
+                "name": "showPermissionSets",
+                "type": "BOOLEAN",
+                "required": false,
+                "description": "Controls whether the content of the permissionSets field is populated or not. Defaults to true"
+            },
+            {
+                "name": "symbolStatus",
+                "type": "ENUM",
+                "required": false,
+                "description": "Filters for symbols that have this tradingStatus. Valid values: TRADING, HALT, BREAK. Cannot be used in combination with symbols or symbol",
+                "enumValues": [
+                    "TRADING",
+                    "HALT",
+                    "BREAK"
+                ]
             }
         ],
         "notes": "Current exchange trading rules and symbol information.",
@@ -70,9 +92,20 @@
             },
             {
                 "name": "limit",
-                "type": "LONG",
+                "type": "INT",
                 "required": false,
-                "description": "Default 100; max 5000"
+                "description": "Default: 100; Maximum: 5000. If limit > 5000, only 5000 entries will be returned."
+            },
+            {
+                "name": "symbolStatus",
+                "type": "ENUM",
+                "required": false,
+                "description": "Filters for symbols that have this tradingStatus. A status mismatch returns error -1220 SYMBOL_DOES_NOT_MATCH_STATUS. Valid values: TRADING, HALT, BREAK",
+                "enumValues": [
+                    "TRADING",
+                    "HALT",
+                    "BREAK"
+                ]
             }
         ],
         "notes": "Order book depth.",
@@ -108,7 +141,7 @@
         "category": "Market Data",
         "method": "GET",
         "path": "/api/v3/historicalTrades",
-        "security": "API_KEY",
+        "security": "NONE",
         "weight": 10,
         "params": [
             {
@@ -330,6 +363,18 @@
                 "required": false
             },
             {
+                "name": "symbolStatus",
+                "type": "ENUM",
+                "required": false,
+                "description": "Filters for symbols that have this tradingStatus. Valid values: TRADING, HALT, BREAK",
+                "enumValues": [
+                    "TRADING",
+                    "HALT",
+                    "BREAK"
+                ],
+                "default": "(none)"
+            },
+            {
                 "name": "type",
                 "type": "ENUM",
                 "required": false,
@@ -360,6 +405,18 @@
                 "name": "symbols",
                 "type": "STRING",
                 "required": false
+            },
+            {
+                "name": "symbolStatus",
+                "type": "ENUM",
+                "required": false,
+                "description": "Filters for symbols that have this tradingStatus. Valid values: TRADING, HALT, BREAK",
+                "enumValues": [
+                    "TRADING",
+                    "HALT",
+                    "BREAK"
+                ],
+                "default": "(none)"
             },
             {
                 "name": "timeZone",
@@ -397,6 +454,18 @@
                 "name": "symbols",
                 "type": "STRING",
                 "required": false
+            },
+            {
+                "name": "symbolStatus",
+                "type": "ENUM",
+                "required": false,
+                "description": "Filters for symbols that have this tradingStatus. Valid values: TRADING, HALT, BREAK",
+                "enumValues": [
+                    "TRADING",
+                    "HALT",
+                    "BREAK"
+                ],
+                "default": "(none)"
             }
         ],
         "notes": "Latest price for a symbol or symbols.",
@@ -420,6 +489,18 @@
                 "name": "symbols",
                 "type": "STRING",
                 "required": false
+            },
+            {
+                "name": "symbolStatus",
+                "type": "ENUM",
+                "required": false,
+                "description": "Filters for symbols that have this tradingStatus. Valid values: TRADING, HALT, BREAK",
+                "enumValues": [
+                    "TRADING",
+                    "HALT",
+                    "BREAK"
+                ],
+                "default": "(none)"
             }
         ],
         "notes": "Best price/qty on the order book for a symbol or symbols.",
@@ -443,6 +524,18 @@
                 "name": "symbols",
                 "type": "STRING",
                 "required": false
+            },
+            {
+                "name": "symbolStatus",
+                "type": "ENUM",
+                "required": false,
+                "description": "Filters for symbols that have this tradingStatus. Valid values: TRADING, HALT, BREAK",
+                "enumValues": [
+                    "TRADING",
+                    "HALT",
+                    "BREAK"
+                ],
+                "default": "(none)"
             },
             {
                 "name": "windowSize",
@@ -1293,691 +1386,5 @@
         ],
         "notes": "Get current account commission rates.",
         "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#query-commission-rates-user_data"
-    },
-    {
-        "id": "spot:POST:/api/v3/userDataStream",
-        "apiGroup": "spot",
-        "category": "User Data Streams",
-        "method": "POST",
-        "path": "/api/v3/userDataStream",
-        "security": "API_KEY",
-        "weight": 2,
-        "params": [],
-        "notes": "Start a new user data stream.",
-        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#start-user-data-stream-user_stream"
-    },
-    {
-        "id": "spot:PUT:/api/v3/userDataStream",
-        "apiGroup": "spot",
-        "category": "User Data Streams",
-        "method": "PUT",
-        "path": "/api/v3/userDataStream",
-        "security": "API_KEY",
-        "weight": 2,
-        "params": [
-            {
-                "name": "listenKey",
-                "type": "STRING",
-                "required": true
-            }
-        ],
-        "notes": "Keepalive a user data stream.",
-        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#keepalive-user-data-stream-user_stream"
-    },
-    {
-        "id": "spot:DELETE:/api/v3/userDataStream",
-        "apiGroup": "spot",
-        "category": "User Data Streams",
-        "method": "DELETE",
-        "path": "/api/v3/userDataStream",
-        "security": "API_KEY",
-        "weight": 2,
-        "params": [
-            {
-                "name": "listenKey",
-                "type": "STRING",
-                "required": true
-            }
-        ],
-        "notes": "Close a user data stream.",
-        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#close-user-data-stream-user_stream"
-    },
-    {
-        "id": "spot:GET:/sapi/v1/system/status",
-        "apiGroup": "spot",
-        "category": "Wallet",
-        "method": "GET",
-        "path": "/sapi/v1/system/status",
-        "security": "NONE",
-        "weight": 1,
-        "params": [],
-        "notes": "Fetch system status.",
-        "docUrl": "https://developers.binance.com/docs/wallet/others/system-status"
-    },
-    {
-        "id": "spot:GET:/sapi/v1/capital/config/getall",
-        "apiGroup": "spot",
-        "category": "Wallet",
-        "method": "GET",
-        "path": "/sapi/v1/capital/config/getall",
-        "security": "SIGNED",
-        "weight": 10,
-        "params": [
-            {
-                "name": "recvWindow",
-                "type": "LONG",
-                "required": false
-            }
-        ],
-        "notes": "Get information of coins (available for deposit and withdraw).",
-        "docUrl": "https://developers.binance.com/docs/wallet/capital/all-coins-info"
-    },
-    {
-        "id": "spot:GET:/sapi/v1/accountSnapshot",
-        "apiGroup": "spot",
-        "category": "Wallet",
-        "method": "GET",
-        "path": "/sapi/v1/accountSnapshot",
-        "security": "SIGNED",
-        "weight": 2400,
-        "params": [
-            {
-                "name": "type",
-                "type": "ENUM",
-                "required": true,
-                "enumValues": [
-                    "SPOT",
-                    "MARGIN",
-                    "FUTURES"
-                ]
-            },
-            {
-                "name": "startTime",
-                "type": "LONG",
-                "required": false
-            },
-            {
-                "name": "endTime",
-                "type": "LONG",
-                "required": false
-            },
-            {
-                "name": "limit",
-                "type": "LONG",
-                "required": false,
-                "description": "min 7, max 30, default 7"
-            },
-            {
-                "name": "recvWindow",
-                "type": "LONG",
-                "required": false
-            }
-        ],
-        "notes": "Daily account snapshot.",
-        "docUrl": "https://developers.binance.com/docs/wallet/account/daily-account-snapshot"
-    },
-    {
-        "id": "spot:POST:/sapi/v1/capital/withdraw/apply",
-        "apiGroup": "spot",
-        "category": "Wallet",
-        "method": "POST",
-        "path": "/sapi/v1/capital/withdraw/apply",
-        "security": "SIGNED",
-        "weight": 600,
-        "params": [
-            {
-                "name": "coin",
-                "type": "STRING",
-                "required": true
-            },
-            {
-                "name": "address",
-                "type": "STRING",
-                "required": true
-            },
-            {
-                "name": "amount",
-                "type": "DECIMAL",
-                "required": true
-            },
-            {
-                "name": "withdrawOrderId",
-                "type": "STRING",
-                "required": false
-            },
-            {
-                "name": "network",
-                "type": "STRING",
-                "required": false
-            },
-            {
-                "name": "addressTag",
-                "type": "STRING",
-                "required": false
-            },
-            {
-                "name": "transactionFeeFlag",
-                "type": "BOOLEAN",
-                "required": false
-            },
-            {
-                "name": "name",
-                "type": "STRING",
-                "required": false
-            },
-            {
-                "name": "walletType",
-                "type": "LONG",
-                "required": false
-            },
-            {
-                "name": "recvWindow",
-                "type": "LONG",
-                "required": false
-            }
-        ],
-        "notes": "Submit a withdraw request.",
-        "docUrl": "https://developers.binance.com/docs/wallet/capital/withdraw"
-    },
-    {
-        "id": "spot:GET:/sapi/v1/capital/deposit/hisrec",
-        "apiGroup": "spot",
-        "category": "Wallet",
-        "method": "GET",
-        "path": "/sapi/v1/capital/deposit/hisrec",
-        "security": "SIGNED",
-        "weight": 1,
-        "params": [
-            {
-                "name": "coin",
-                "type": "STRING",
-                "required": false
-            },
-            {
-                "name": "status",
-                "type": "LONG",
-                "required": false
-            },
-            {
-                "name": "startTime",
-                "type": "LONG",
-                "required": false
-            },
-            {
-                "name": "endTime",
-                "type": "LONG",
-                "required": false
-            },
-            {
-                "name": "offset",
-                "type": "LONG",
-                "required": false
-            },
-            {
-                "name": "limit",
-                "type": "LONG",
-                "required": false
-            },
-            {
-                "name": "txId",
-                "type": "STRING",
-                "required": false
-            },
-            {
-                "name": "recvWindow",
-                "type": "LONG",
-                "required": false
-            }
-        ],
-        "notes": "Fetch deposit history.",
-        "docUrl": "https://developers.binance.com/docs/wallet/capital/deposit-history"
-    },
-    {
-        "id": "spot:GET:/sapi/v1/capital/withdraw/history",
-        "apiGroup": "spot",
-        "category": "Wallet",
-        "method": "GET",
-        "path": "/sapi/v1/capital/withdraw/history",
-        "security": "SIGNED",
-        "weight": 18000,
-        "params": [
-            {
-                "name": "coin",
-                "type": "STRING",
-                "required": false
-            },
-            {
-                "name": "withdrawOrderId",
-                "type": "STRING",
-                "required": false
-            },
-            {
-                "name": "status",
-                "type": "LONG",
-                "required": false
-            },
-            {
-                "name": "startTime",
-                "type": "LONG",
-                "required": false
-            },
-            {
-                "name": "endTime",
-                "type": "LONG",
-                "required": false
-            },
-            {
-                "name": "offset",
-                "type": "LONG",
-                "required": false
-            },
-            {
-                "name": "limit",
-                "type": "LONG",
-                "required": false
-            },
-            {
-                "name": "recvWindow",
-                "type": "LONG",
-                "required": false
-            }
-        ],
-        "notes": "Fetch withdraw history.",
-        "docUrl": "https://developers.binance.com/docs/wallet/capital/withdraw-history"
-    },
-    {
-        "id": "spot:GET:/sapi/v1/capital/deposit/address",
-        "apiGroup": "spot",
-        "category": "Wallet",
-        "method": "GET",
-        "path": "/sapi/v1/capital/deposit/address",
-        "security": "SIGNED",
-        "weight": 10,
-        "params": [
-            {
-                "name": "coin",
-                "type": "STRING",
-                "required": true
-            },
-            {
-                "name": "network",
-                "type": "STRING",
-                "required": false
-            },
-            {
-                "name": "recvWindow",
-                "type": "LONG",
-                "required": false
-            }
-        ],
-        "notes": "Fetch deposit address.",
-        "docUrl": "https://developers.binance.com/docs/wallet/capital/deposit-address"
-    },
-    {
-        "id": "spot:GET:/sapi/v1/account/status",
-        "apiGroup": "spot",
-        "category": "Wallet",
-        "method": "GET",
-        "path": "/sapi/v1/account/status",
-        "security": "SIGNED",
-        "weight": 1,
-        "params": [
-            {
-                "name": "recvWindow",
-                "type": "LONG",
-                "required": false
-            }
-        ],
-        "notes": "Fetch account status detail.",
-        "docUrl": "https://developers.binance.com/docs/wallet/account/account-status"
-    },
-    {
-        "id": "spot:GET:/sapi/v1/account/apiTradingStatus",
-        "apiGroup": "spot",
-        "category": "Wallet",
-        "method": "GET",
-        "path": "/sapi/v1/account/apiTradingStatus",
-        "security": "SIGNED",
-        "weight": 1,
-        "params": [
-            {
-                "name": "recvWindow",
-                "type": "LONG",
-                "required": false
-            }
-        ],
-        "notes": "Fetch account API trading status with details.",
-        "docUrl": "https://developers.binance.com/docs/wallet/account/account-api-trading-status"
-    },
-    {
-        "id": "spot:POST:/sapi/v1/asset/transfer",
-        "apiGroup": "spot",
-        "category": "Wallet",
-        "method": "POST",
-        "path": "/sapi/v1/asset/transfer",
-        "security": "SIGNED",
-        "weight": 900,
-        "params": [
-            {
-                "name": "type",
-                "type": "ENUM",
-                "required": true,
-                "enumValues": [
-                    "MAIN_UMFUTURE",
-                    "MAIN_CMFUTURE",
-                    "MAIN_MARGIN",
-                    "UMFUTURE_MAIN",
-                    "UMFUTURE_MARGIN",
-                    "CMFUTURE_MAIN",
-                    "CMFUTURE_MARGIN",
-                    "MARGIN_MAIN",
-                    "MARGIN_UMFUTURE",
-                    "MARGIN_CMFUTURE",
-                    "MAIN_FUNDING",
-                    "FUNDING_MAIN",
-                    "FUNDING_UMFUTURE",
-                    "FUNDING_CMFUTURE",
-                    "UMFUTURE_FUNDING",
-                    "CMFUTURE_FUNDING"
-                ]
-            },
-            {
-                "name": "asset",
-                "type": "STRING",
-                "required": true
-            },
-            {
-                "name": "amount",
-                "type": "DECIMAL",
-                "required": true
-            },
-            {
-                "name": "fromSymbol",
-                "type": "STRING",
-                "required": false
-            },
-            {
-                "name": "toSymbol",
-                "type": "STRING",
-                "required": false
-            },
-            {
-                "name": "recvWindow",
-                "type": "LONG",
-                "required": false
-            }
-        ],
-        "notes": "User Universal Transfer.",
-        "docUrl": "https://developers.binance.com/docs/wallet/asset/user-universal-transfer"
-    },
-    {
-        "id": "spot:GET:/sapi/v1/asset/transfer",
-        "apiGroup": "spot",
-        "category": "Wallet",
-        "method": "GET",
-        "path": "/sapi/v1/asset/transfer",
-        "security": "SIGNED",
-        "weight": 1,
-        "params": [
-            {
-                "name": "type",
-                "type": "ENUM",
-                "required": true
-            },
-            {
-                "name": "startTime",
-                "type": "LONG",
-                "required": false
-            },
-            {
-                "name": "endTime",
-                "type": "LONG",
-                "required": false
-            },
-            {
-                "name": "current",
-                "type": "LONG",
-                "required": false
-            },
-            {
-                "name": "size",
-                "type": "LONG",
-                "required": false
-            },
-            {
-                "name": "recvWindow",
-                "type": "LONG",
-                "required": false
-            }
-        ],
-        "notes": "Query User Universal Transfer History.",
-        "docUrl": "https://developers.binance.com/docs/wallet/asset/query-user-universal-transfer"
-    },
-    {
-        "id": "spot:GET:/sapi/v1/asset/tradeFee",
-        "apiGroup": "spot",
-        "category": "Wallet",
-        "method": "GET",
-        "path": "/sapi/v1/asset/tradeFee",
-        "security": "SIGNED",
-        "weight": 1,
-        "params": [
-            {
-                "name": "symbol",
-                "type": "STRING",
-                "required": false
-            },
-            {
-                "name": "recvWindow",
-                "type": "LONG",
-                "required": false
-            }
-        ],
-        "notes": "Fetch trade fee.",
-        "docUrl": "https://developers.binance.com/docs/wallet/asset/trade-fee"
-    },
-    {
-        "id": "spot:GET:/sapi/v1/account/apiRestrictions",
-        "apiGroup": "spot",
-        "category": "Wallet",
-        "method": "GET",
-        "path": "/sapi/v1/account/apiRestrictions",
-        "security": "SIGNED",
-        "weight": 1,
-        "params": [
-            {
-                "name": "recvWindow",
-                "type": "LONG",
-                "required": false
-            }
-        ],
-        "notes": "Get API Key Permission.",
-        "docUrl": "https://developers.binance.com/docs/wallet/account/api-key-permission"
-    },
-    {
-        "id": "spot:POST:/sapi/v1/margin/order",
-        "apiGroup": "spot",
-        "category": "Margin",
-        "method": "POST",
-        "path": "/sapi/v1/margin/order",
-        "security": "SIGNED",
-        "weight": 6,
-        "params": [
-            {
-                "name": "symbol",
-                "type": "STRING",
-                "required": true
-            },
-            {
-                "name": "side",
-                "type": "ENUM",
-                "required": true,
-                "enumValues": [
-                    "BUY",
-                    "SELL"
-                ]
-            },
-            {
-                "name": "type",
-                "type": "ENUM",
-                "required": true,
-                "enumValues": [
-                    "LIMIT",
-                    "MARKET",
-                    "STOP_LOSS",
-                    "STOP_LOSS_LIMIT",
-                    "TAKE_PROFIT",
-                    "TAKE_PROFIT_LIMIT",
-                    "LIMIT_MAKER"
-                ]
-            },
-            {
-                "name": "isIsolated",
-                "type": "STRING",
-                "required": false
-            },
-            {
-                "name": "quantity",
-                "type": "DECIMAL",
-                "required": false
-            },
-            {
-                "name": "quoteOrderQty",
-                "type": "DECIMAL",
-                "required": false
-            },
-            {
-                "name": "price",
-                "type": "DECIMAL",
-                "required": false
-            },
-            {
-                "name": "stopPrice",
-                "type": "DECIMAL",
-                "required": false
-            },
-            {
-                "name": "newClientOrderId",
-                "type": "STRING",
-                "required": false
-            },
-            {
-                "name": "icebergQty",
-                "type": "DECIMAL",
-                "required": false
-            },
-            {
-                "name": "newOrderRespType",
-                "type": "ENUM",
-                "required": false,
-                "enumValues": [
-                    "ACK",
-                    "RESULT",
-                    "FULL"
-                ]
-            },
-            {
-                "name": "sideEffectType",
-                "type": "ENUM",
-                "required": false,
-                "enumValues": [
-                    "NO_SIDE_EFFECT",
-                    "MARGIN_BUY",
-                    "AUTO_REPAY",
-                    "AUTO_BORROW_REPAY"
-                ]
-            },
-            {
-                "name": "timeInForce",
-                "type": "ENUM",
-                "required": false,
-                "enumValues": [
-                    "GTC",
-                    "IOC",
-                    "FOK"
-                ]
-            },
-            {
-                "name": "recvWindow",
-                "type": "LONG",
-                "required": false
-            }
-        ],
-        "notes": "Post a new order for margin account.",
-        "docUrl": "https://developers.binance.com/docs/margin_trading/trade/margin-account-new-order"
-    },
-    {
-        "id": "spot:GET:/sapi/v1/margin/account",
-        "apiGroup": "spot",
-        "category": "Margin",
-        "method": "GET",
-        "path": "/sapi/v1/margin/account",
-        "security": "SIGNED",
-        "weight": 10,
-        "params": [
-            {
-                "name": "recvWindow",
-                "type": "LONG",
-                "required": false
-            }
-        ],
-        "notes": "Get margin account details.",
-        "docUrl": "https://developers.binance.com/docs/margin_trading/account/query-cross-margin-account-details"
-    },
-    {
-        "id": "spot:GET:/sapi/v1/margin/maxBorrowable",
-        "apiGroup": "spot",
-        "category": "Margin",
-        "method": "GET",
-        "path": "/sapi/v1/margin/maxBorrowable",
-        "security": "SIGNED",
-        "weight": 50,
-        "params": [
-            {
-                "name": "asset",
-                "type": "STRING",
-                "required": true
-            },
-            {
-                "name": "isolatedSymbol",
-                "type": "STRING",
-                "required": false
-            },
-            {
-                "name": "recvWindow",
-                "type": "LONG",
-                "required": false
-            }
-        ],
-        "notes": "Query maximum borrow amount.",
-        "docUrl": "https://developers.binance.com/docs/margin_trading/borrow-and-repay/query-max-borrow"
-    },
-    {
-        "id": "spot:GET:/sapi/v1/convert/exchangeInfo",
-        "apiGroup": "spot",
-        "category": "Convert",
-        "method": "GET",
-        "path": "/sapi/v1/convert/exchangeInfo",
-        "security": "SIGNED",
-        "weight": 50,
-        "params": [
-            {
-                "name": "fromAsset",
-                "type": "STRING",
-                "required": false
-            },
-            {
-                "name": "toAsset",
-                "type": "STRING",
-                "required": false
-            },
-            {
-                "name": "recvWindow",
-                "type": "LONG",
-                "required": false
-            }
-        ],
-        "notes": "Query for all convertible token pairs and the tokens available for conversion.",
-        "docUrl": "https://developers.binance.com/docs/convert/market-data"
     }
 ]

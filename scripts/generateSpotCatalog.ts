@@ -326,6 +326,7 @@ function generateFallbackCatalog() {
             security: 'NONE', weight: 5, params: [
                 { name: 'symbol', type: 'STRING', required: false },
                 { name: 'symbols', type: 'STRING', required: false },
+                { name: 'symbolStatus', type: 'ENUM', required: false, description: 'Filters for symbols that have this tradingStatus. Valid values: TRADING, HALT, BREAK', enumValues: ['TRADING', 'HALT', 'BREAK'], default: '(none)' },
                 { name: 'type', type: 'ENUM', required: false, enumValues: ['FULL', 'MINI'] },
             ], notes: '24hr ticker price change statistics.', docUrl: 'https://developers.binance.com/docs/binance-spot-api-docs/rest-api#24hr-ticker-price-change-statistics',
         },
@@ -335,6 +336,7 @@ function generateFallbackCatalog() {
             security: 'NONE', weight: 4, params: [
                 { name: 'symbol', type: 'STRING', required: false },
                 { name: 'symbols', type: 'STRING', required: false },
+                { name: 'symbolStatus', type: 'ENUM', required: false, description: 'Filters for symbols that have this tradingStatus. Valid values: TRADING, HALT, BREAK', enumValues: ['TRADING', 'HALT', 'BREAK'], default: '(none)' },
                 { name: 'timeZone', type: 'STRING', required: false },
                 { name: 'type', type: 'ENUM', required: false, enumValues: ['FULL', 'MINI'] },
             ], notes: 'Price change statistics for a trading day.', docUrl: 'https://developers.binance.com/docs/binance-spot-api-docs/rest-api#trading-day-ticker',
@@ -345,6 +347,7 @@ function generateFallbackCatalog() {
             security: 'NONE', weight: 2, params: [
                 { name: 'symbol', type: 'STRING', required: false },
                 { name: 'symbols', type: 'STRING', required: false },
+                { name: 'symbolStatus', type: 'ENUM', required: false, description: 'Filters for symbols that have this tradingStatus. Valid values: TRADING, HALT, BREAK', enumValues: ['TRADING', 'HALT', 'BREAK'], default: '(none)' },
             ], notes: 'Latest price for a symbol or symbols.', docUrl: 'https://developers.binance.com/docs/binance-spot-api-docs/rest-api#symbol-price-ticker',
         },
         {
@@ -353,6 +356,7 @@ function generateFallbackCatalog() {
             security: 'NONE', weight: 2, params: [
                 { name: 'symbol', type: 'STRING', required: false },
                 { name: 'symbols', type: 'STRING', required: false },
+                { name: 'symbolStatus', type: 'ENUM', required: false, description: 'Filters for symbols that have this tradingStatus. Valid values: TRADING, HALT, BREAK', enumValues: ['TRADING', 'HALT', 'BREAK'], default: '(none)' },
             ], notes: 'Best price/qty on the order book for a symbol or symbols.', docUrl: 'https://developers.binance.com/docs/binance-spot-api-docs/rest-api#symbol-order-book-ticker',
         },
         {
@@ -361,6 +365,7 @@ function generateFallbackCatalog() {
             security: 'NONE', weight: 4, params: [
                 { name: 'symbol', type: 'STRING', required: false },
                 { name: 'symbols', type: 'STRING', required: false },
+                { name: 'symbolStatus', type: 'ENUM', required: false, description: 'Filters for symbols that have this tradingStatus. Valid values: TRADING, HALT, BREAK', enumValues: ['TRADING', 'HALT', 'BREAK'], default: '(none)' },
                 { name: 'windowSize', type: 'STRING', required: false, description: 'e.g. 1m,2h,1d. Defaults to 1d' },
                 { name: 'type', type: 'ENUM', required: false, enumValues: ['FULL', 'MINI'] },
             ], notes: 'Rolling window price change statistics.', docUrl: 'https://developers.binance.com/docs/binance-spot-api-docs/rest-api#rolling-window-price-change-statistics',

@@ -8,6 +8,7 @@ export interface CatalogParam {
     required: boolean;
     description?: string;
     enumValues?: string[];
+    default?: string;
     /** Conditional requirement: param is required when another param has certain values */
     requiredWhen?: { param: string; values: string[] };
 }

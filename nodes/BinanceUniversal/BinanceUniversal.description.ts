@@ -174,7 +174,15 @@ function generateParamProperty(
     // Add enum options if available
     if (param.enumValues && param.enumValues.length > 0 && inputType === 'string') {
         (property as any).type = 'options';
-        (property as any).options = param.enumValues.map((v) => ({ name: v, value: v }));
+        // For optional enums, add an empty option to allow clearing the selection
+        if (!param.required) {
+            (property as any).options = [
+                { name: '(None)', value: '' },
+                ...param.enumValues.map((v) => ({ name: v, value: v }))
+            ];
+        } else {
+            (property as any).options = param.enumValues.map((v) => ({ name: v, value: v }));
+        }
     }
 
     return property;
