@@ -601,7 +601,8 @@
                     "GTC",
                     "IOC",
                     "FOK"
-                ]
+                ],
+                "default": "GTC"
             },
             {
                 "name": "quantity",
@@ -630,13 +631,20 @@
             },
             {
                 "name": "strategyType",
-                "type": "LONG",
-                "required": false
+                "type": "INT",
+                "required": false,
+                "description": "The value cannot be less than 1000000."
             },
             {
                 "name": "stopPrice",
                 "type": "DECIMAL",
                 "required": false
+            },
+            {
+                "name": "trailingDelta",
+                "type": "LONG",
+                "required": false,
+                "description": "Used for trailing stop orders."
             },
             {
                 "name": "icebergQty",
@@ -665,12 +673,49 @@
                 ]
             },
             {
+                "name": "pegPriceType",
+                "type": "ENUM",
+                "required": false,
+                "description": "PRIMARY_PEG or MARKET_PEG. See Pegged Orders.",
+                "enumValues": [
+                    "PRIMARY_PEG",
+                    "MARKET_PEG"
+                ]
+            },
+            {
+                "name": "pegOffsetValue",
+                "type": "INT",
+                "required": false,
+                "description": "Price level to peg the price to (max: 100). See Pegged Orders."
+            },
+            {
+                "name": "pegOffsetType",
+                "type": "ENUM",
+                "required": false,
+                "description": "Only PRICE_LEVEL is supported. See Pegged Orders.",
+                "enumValues": [
+                    "PRICE_LEVEL"
+                ]
+            },
+            {
+                "name": "computeCommissionRates",
+                "type": "BOOLEAN",
+                "required": false,
+                "description": "Default: false. See Commissions FAQ to learn more."
+            },
+            {
                 "name": "recvWindow",
+                "type": "DECIMAL",
+                "required": false,
+                "description": "The value cannot be greater than 60000. Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified."
+            },
+            {
+                "name": "timestamp",
                 "type": "LONG",
-                "required": false
+                "required": true
             }
         ],
-        "notes": "Test new order creation (does not create real order).",
+        "notes": "Test new order creation and signature/recvWindow. Creates and validates a new order but does not send it into the matching engine.",
         "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#test-new-order-trade"
     },
     {
@@ -718,7 +763,8 @@
                     "GTC",
                     "IOC",
                     "FOK"
-                ]
+                ],
+                "default": "GTC"
             },
             {
                 "name": "quantity",
@@ -738,7 +784,8 @@
             {
                 "name": "newClientOrderId",
                 "type": "STRING",
-                "required": false
+                "required": false,
+                "description": "A unique id among open orders. Automatically generated if not sent."
             },
             {
                 "name": "strategyId",
@@ -747,28 +794,33 @@
             },
             {
                 "name": "strategyType",
-                "type": "LONG",
-                "required": false
+                "type": "INT",
+                "required": false,
+                "description": "The value cannot be less than 1000000."
             },
             {
                 "name": "stopPrice",
                 "type": "DECIMAL",
-                "required": false
+                "required": false,
+                "description": "Used with STOP_LOSS, STOP_LOSS_LIMIT, TAKE_PROFIT, and TAKE_PROFIT_LIMIT orders."
             },
             {
                 "name": "trailingDelta",
                 "type": "LONG",
-                "required": false
+                "required": false,
+                "description": "See Trailing Stop order FAQ."
             },
             {
                 "name": "icebergQty",
                 "type": "DECIMAL",
-                "required": false
+                "required": false,
+                "description": "Used with LIMIT, STOP_LOSS_LIMIT, and TAKE_PROFIT_LIMIT to create an iceberg order."
             },
             {
                 "name": "newOrderRespType",
                 "type": "ENUM",
                 "required": false,
+                "description": "Set the response JSON. ACK, RESULT, or FULL; MARKET and LIMIT order types default to FULL, all other orders default to ACK.",
                 "enumValues": [
                     "ACK",
                     "RESULT",
@@ -779,6 +831,7 @@
                 "name": "selfTradePreventionMode",
                 "type": "ENUM",
                 "required": false,
+                "description": "The allowed enums is dependent on what is configured on the symbol.",
                 "enumValues": [
                     "EXPIRE_TAKER",
                     "EXPIRE_MAKER",
@@ -787,9 +840,40 @@
                 ]
             },
             {
+                "name": "pegPriceType",
+                "type": "ENUM",
+                "required": false,
+                "description": "PRIMARY_PEG or MARKET_PEG. See Pegged Orders Info.",
+                "enumValues": [
+                    "PRIMARY_PEG",
+                    "MARKET_PEG"
+                ]
+            },
+            {
+                "name": "pegOffsetValue",
+                "type": "INT",
+                "required": false,
+                "description": "Price level to peg the price to (max: 100). See Pegged Orders Info."
+            },
+            {
+                "name": "pegOffsetType",
+                "type": "ENUM",
+                "required": false,
+                "description": "Only PRICE_LEVEL is supported. See Pegged Orders Info.",
+                "enumValues": [
+                    "PRICE_LEVEL"
+                ]
+            },
+            {
                 "name": "recvWindow",
+                "type": "DECIMAL",
+                "required": false,
+                "description": "The value cannot be greater than 60000. Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified."
+            },
+            {
+                "name": "timestamp",
                 "type": "LONG",
-                "required": false
+                "required": true
             }
         ],
         "notes": "Send in a new order.",
@@ -945,6 +1029,7 @@
                 "name": "cancelReplaceMode",
                 "type": "ENUM",
                 "required": true,
+                "description": "STOP_ON_FAILURE or ALLOW_FAILURE",
                 "enumValues": [
                     "STOP_ON_FAILURE",
                     "ALLOW_FAILURE"
@@ -958,7 +1043,8 @@
                     "GTC",
                     "IOC",
                     "FOK"
-                ]
+                ],
+                "default": "GTC"
             },
             {
                 "name": "quantity",
@@ -978,22 +1064,37 @@
             {
                 "name": "cancelNewClientOrderId",
                 "type": "STRING",
-                "required": false
+                "required": false,
+                "description": "Used to uniquely identify this cancel. Automatically generated by default."
             },
             {
                 "name": "cancelOrigClientOrderId",
                 "type": "STRING",
-                "required": false
+                "required": false,
+                "description": "Either cancelOrderId or cancelOrigClientOrderId must be sent."
             },
             {
                 "name": "cancelOrderId",
                 "type": "LONG",
-                "required": false
+                "required": false,
+                "description": "Either cancelOrderId or cancelOrigClientOrderId must be sent."
             },
             {
                 "name": "newClientOrderId",
                 "type": "STRING",
+                "required": false,
+                "description": "Used to identify the new order."
+            },
+            {
+                "name": "strategyId",
+                "type": "LONG",
                 "required": false
+            },
+            {
+                "name": "strategyType",
+                "type": "INT",
+                "required": false,
+                "description": "The value cannot be less than 1000000."
             },
             {
                 "name": "stopPrice",
@@ -1003,7 +1104,8 @@
             {
                 "name": "trailingDelta",
                 "type": "LONG",
-                "required": false
+                "required": false,
+                "description": "See Trailing Stop order FAQ"
             },
             {
                 "name": "icebergQty",
@@ -1014,6 +1116,7 @@
                 "name": "newOrderRespType",
                 "type": "ENUM",
                 "required": false,
+                "description": "Allowed values: ACK, RESULT, FULL. MARKET and LIMIT orders types default to FULL; all other orders default to ACK",
                 "enumValues": [
                     "ACK",
                     "RESULT",
@@ -1023,16 +1126,127 @@
             {
                 "name": "selfTradePreventionMode",
                 "type": "ENUM",
-                "required": false
+                "required": false,
+                "description": "The allowed enums is dependent on what is configured on the symbol.",
+                "enumValues": [
+                    "EXPIRE_TAKER",
+                    "EXPIRE_MAKER",
+                    "EXPIRE_BOTH",
+                    "NONE"
+                ]
+            },
+            {
+                "name": "cancelRestrictions",
+                "type": "ENUM",
+                "required": false,
+                "description": "Supported values: ONLY_NEW, ONLY_PARTIALLY_FILLED",
+                "enumValues": [
+                    "ONLY_NEW",
+                    "ONLY_PARTIALLY_FILLED"
+                ]
+            },
+            {
+                "name": "orderRateLimitExceededMode",
+                "type": "ENUM",
+                "required": false,
+                "description": "Supported values: DO_NOTHING (default), CANCEL_ONLY",
+                "enumValues": [
+                    "DO_NOTHING",
+                    "CANCEL_ONLY"
+                ]
+            },
+            {
+                "name": "pegPriceType",
+                "type": "ENUM",
+                "required": false,
+                "description": "PRIMARY_PEG or MARKET_PEG. See Pegged Orders",
+                "enumValues": [
+                    "PRIMARY_PEG",
+                    "MARKET_PEG"
+                ]
+            },
+            {
+                "name": "pegOffsetValue",
+                "type": "INT",
+                "required": false,
+                "description": "Price level to peg the price to (max: 100). See Pegged Orders"
+            },
+            {
+                "name": "pegOffsetType",
+                "type": "ENUM",
+                "required": false,
+                "description": "Only PRICE_LEVEL is supported. See Pegged Orders",
+                "enumValues": [
+                    "PRICE_LEVEL"
+                ]
             },
             {
                 "name": "recvWindow",
+                "type": "DECIMAL",
+                "required": false,
+                "description": "The value cannot be greater than 60000. Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified."
+            },
+            {
+                "name": "timestamp",
                 "type": "LONG",
-                "required": false
+                "required": true
             }
         ],
-        "notes": "Cancel an existing order and send a new order on the same symbol.",
+        "notes": "Cancels an existing order and places a new order on the same symbol.",
         "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#cancel-an-existing-order-and-send-a-new-order-trade"
+    },
+    {
+        "id": "spot:PUT:/api/v3/order/amend/keepPriority",
+        "apiGroup": "spot",
+        "category": "Trading",
+        "method": "PUT",
+        "path": "/api/v3/order/amend/keepPriority",
+        "security": "SIGNED",
+        "weight": 4,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "orderId",
+                "type": "LONG",
+                "required": false,
+                "description": "orderId or origClientOrderId must be sent"
+            },
+            {
+                "name": "origClientOrderId",
+                "type": "STRING",
+                "required": false,
+                "description": "orderId or origClientOrderId must be sent"
+            },
+            {
+                "name": "newClientOrderId",
+                "type": "STRING",
+                "required": false,
+                "description": "The new client order ID for the order after being amended. If not sent, one will be randomly generated."
+            },
+            {
+                "name": "newQty",
+                "type": "DECIMAL",
+                "required": true,
+                "description": "newQty must be greater than 0 and less than the order's quantity."
+            },
+            {
+                "name": "recvWindow",
+                "type": "DECIMAL",
+                "required": false,
+                "description": "The value cannot be greater than 60000. Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified."
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true
+            }
+        ],
+        "notes": "Reduce the quantity of an existing open order while maintaining queue priority.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api/trading-endpoints#order-amend-keep-priority-trade"
     },
     {
         "id": "spot:GET:/api/v3/openOrders",
@@ -1194,7 +1408,8 @@
                     "GTC",
                     "FOK",
                     "IOC"
-                ]
+                ],
+                "default": "GTC"
             },
             {
                 "name": "newOrderRespType",
@@ -1209,16 +1424,1415 @@
             {
                 "name": "selfTradePreventionMode",
                 "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "EXPIRE_TAKER",
+                    "EXPIRE_MAKER",
+                    "EXPIRE_BOTH",
+                    "NONE"
+                ]
+            },
+            {
+                "name": "limitStrategyId",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "limitStrategyType",
+                "type": "INT",
+                "required": false,
+                "description": "The value cannot be less than 1000000."
+            },
+            {
+                "name": "stopStrategyId",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "stopStrategyType",
+                "type": "INT",
+                "required": false,
+                "description": "The value cannot be less than 1000000."
+            },
+            {
+                "name": "recvWindow",
+                "type": "DECIMAL",
+                "required": false,
+                "description": "The value cannot be greater than 60000. Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified."
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true
+            }
+        ],
+        "notes": "Send in a new OCO order. DEPRECATED - Use POST /api/v3/orderList/oco instead.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#new-oco---deprecated-trade"
+    },
+    {
+        "id": "spot:POST:/api/v3/orderList/oco",
+        "apiGroup": "spot",
+        "category": "Trading",
+        "method": "POST",
+        "path": "/api/v3/orderList/oco",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "listClientOrderId",
+                "type": "STRING",
+                "required": false,
+                "description": "Arbitrary unique ID among open order lists. Automatically generated if not sent."
+            },
+            {
+                "name": "side",
+                "type": "ENUM",
+                "required": true,
+                "description": "BUY or SELL",
+                "enumValues": [
+                    "BUY",
+                    "SELL"
+                ]
+            },
+            {
+                "name": "quantity",
+                "type": "DECIMAL",
+                "required": true,
+                "description": "Quantity for both orders of the order list."
+            },
+            {
+                "name": "aboveType",
+                "type": "ENUM",
+                "required": true,
+                "enumValues": [
+                    "STOP_LOSS_LIMIT",
+                    "STOP_LOSS",
+                    "LIMIT_MAKER",
+                    "TAKE_PROFIT",
+                    "TAKE_PROFIT_LIMIT"
+                ]
+            },
+            {
+                "name": "aboveClientOrderId",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "aboveIcebergQty",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "abovePrice",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "aboveStopPrice",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "aboveTrailingDelta",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "aboveTimeInForce",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "GTC",
+                    "FOK",
+                    "IOC"
+                ]
+            },
+            {
+                "name": "aboveStrategyId",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "aboveStrategyType",
+                "type": "INT",
+                "required": false
+            },
+            {
+                "name": "abovePegPriceType",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "PRIMARY_PEG",
+                    "MARKET_PEG"
+                ]
+            },
+            {
+                "name": "abovePegOffsetType",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "PRICE_LEVEL"
+                ]
+            },
+            {
+                "name": "abovePegOffsetValue",
+                "type": "INT",
+                "required": false
+            },
+            {
+                "name": "belowType",
+                "type": "ENUM",
+                "required": true,
+                "enumValues": [
+                    "STOP_LOSS",
+                    "STOP_LOSS_LIMIT",
+                    "TAKE_PROFIT",
+                    "TAKE_PROFIT_LIMIT"
+                ]
+            },
+            {
+                "name": "belowClientOrderId",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "belowIcebergQty",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "belowPrice",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "belowStopPrice",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "belowTrailingDelta",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "belowTimeInForce",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "GTC",
+                    "FOK",
+                    "IOC"
+                ]
+            },
+            {
+                "name": "belowStrategyId",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "belowStrategyType",
+                "type": "INT",
+                "required": false
+            },
+            {
+                "name": "belowPegPriceType",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "PRIMARY_PEG",
+                    "MARKET_PEG"
+                ]
+            },
+            {
+                "name": "belowPegOffsetType",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "PRICE_LEVEL"
+                ]
+            },
+            {
+                "name": "belowPegOffsetValue",
+                "type": "INT",
+                "required": false
+            },
+            {
+                "name": "newOrderRespType",
+                "type": "ENUM",
+                "required": false,
+                "description": "Select response format: ACK, RESULT, FULL",
+                "enumValues": [
+                    "ACK",
+                    "RESULT",
+                    "FULL"
+                ]
+            },
+            {
+                "name": "selfTradePreventionMode",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "EXPIRE_TAKER",
+                    "EXPIRE_MAKER",
+                    "EXPIRE_BOTH",
+                    "NONE"
+                ]
+            },
+            {
+                "name": "recvWindow",
+                "type": "DECIMAL",
+                "required": false,
+                "description": "The value cannot be greater than 60000. Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified."
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true
+            }
+        ],
+        "notes": "Send in a new OCO order list.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api/trading-endpoints#new-order-list---oco-trade"
+    },
+    {
+        "id": "spot:POST:/api/v3/orderList/oto",
+        "apiGroup": "spot",
+        "category": "Trading",
+        "method": "POST",
+        "path": "/api/v3/orderList/oto",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "listClientOrderId",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "newOrderRespType",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "ACK",
+                    "RESULT",
+                    "FULL"
+                ]
+            },
+            {
+                "name": "selfTradePreventionMode",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "EXPIRE_TAKER",
+                    "EXPIRE_MAKER",
+                    "EXPIRE_BOTH",
+                    "NONE"
+                ]
+            },
+            {
+                "name": "workingType",
+                "type": "ENUM",
+                "required": true,
+                "enumValues": [
+                    "LIMIT",
+                    "LIMIT_MAKER"
+                ]
+            },
+            {
+                "name": "workingSide",
+                "type": "ENUM",
+                "required": true,
+                "enumValues": [
+                    "BUY",
+                    "SELL"
+                ]
+            },
+            {
+                "name": "workingClientOrderId",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "workingPrice",
+                "type": "DECIMAL",
+                "required": true
+            },
+            {
+                "name": "workingQuantity",
+                "type": "DECIMAL",
+                "required": true
+            },
+            {
+                "name": "workingIcebergQty",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "workingTimeInForce",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "GTC",
+                    "FOK",
+                    "IOC"
+                ],
+                "default": "GTC"
+            },
+            {
+                "name": "workingStrategyId",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "workingStrategyType",
+                "type": "INT",
+                "required": false
+            },
+            {
+                "name": "workingPegPriceType",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "PRIMARY_PEG",
+                    "MARKET_PEG"
+                ]
+            },
+            {
+                "name": "workingPegOffsetType",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "PRICE_LEVEL"
+                ]
+            },
+            {
+                "name": "workingPegOffsetValue",
+                "type": "INT",
+                "required": false
+            },
+            {
+                "name": "pendingType",
+                "type": "ENUM",
+                "required": true,
+                "description": "Note that MARKET orders using quoteOrderQty are not supported.",
+                "enumValues": [
+                    "LIMIT",
+                    "MARKET",
+                    "STOP_LOSS",
+                    "STOP_LOSS_LIMIT",
+                    "TAKE_PROFIT",
+                    "TAKE_PROFIT_LIMIT",
+                    "LIMIT_MAKER"
+                ]
+            },
+            {
+                "name": "pendingSide",
+                "type": "ENUM",
+                "required": true,
+                "enumValues": [
+                    "BUY",
+                    "SELL"
+                ]
+            },
+            {
+                "name": "pendingClientOrderId",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "pendingPrice",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "pendingStopPrice",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "pendingTrailingDelta",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "pendingQuantity",
+                "type": "DECIMAL",
+                "required": true
+            },
+            {
+                "name": "pendingIcebergQty",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "pendingTimeInForce",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "GTC",
+                    "FOK",
+                    "IOC"
+                ]
+            },
+            {
+                "name": "pendingStrategyId",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "pendingStrategyType",
+                "type": "INT",
+                "required": false
+            },
+            {
+                "name": "pendingPegPriceType",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "PRIMARY_PEG",
+                    "MARKET_PEG"
+                ]
+            },
+            {
+                "name": "pendingPegOffsetType",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "PRICE_LEVEL"
+                ]
+            },
+            {
+                "name": "pendingPegOffsetValue",
+                "type": "INT",
                 "required": false
             },
             {
                 "name": "recvWindow",
+                "type": "DECIMAL",
+                "required": false,
+                "description": "The value cannot be greater than 60000. Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified."
+            },
+            {
+                "name": "timestamp",
                 "type": "LONG",
-                "required": false
+                "required": true
             }
         ],
-        "notes": "Send in a new OCO order.",
-        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#new-oco-trade"
+        "notes": "Place an OTO (One-Triggers-the-Other) order list.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api/trading-endpoints#new-order-list---oto-trade"
+    },
+    {
+        "id": "spot:POST:/api/v3/orderList/otoco",
+        "apiGroup": "spot",
+        "category": "Trading",
+        "method": "POST",
+        "path": "/api/v3/orderList/otoco",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "listClientOrderId",
+                "type": "STRING",
+                "required": false,
+                "description": "Arbitrary unique ID among open order lists. Automatically generated if not sent."
+            },
+            {
+                "name": "newOrderRespType",
+                "type": "ENUM",
+                "required": false,
+                "description": "Format of the JSON response.",
+                "enumValues": [
+                    "ACK",
+                    "RESULT",
+                    "FULL"
+                ]
+            },
+            {
+                "name": "selfTradePreventionMode",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "EXPIRE_TAKER",
+                    "EXPIRE_MAKER",
+                    "EXPIRE_BOTH",
+                    "NONE"
+                ]
+            },
+            {
+                "name": "workingType",
+                "type": "ENUM",
+                "required": true,
+                "enumValues": [
+                    "LIMIT",
+                    "LIMIT_MAKER"
+                ]
+            },
+            {
+                "name": "workingSide",
+                "type": "ENUM",
+                "required": true,
+                "enumValues": [
+                    "BUY",
+                    "SELL"
+                ]
+            },
+            {
+                "name": "workingClientOrderId",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "workingPrice",
+                "type": "DECIMAL",
+                "required": true
+            },
+            {
+                "name": "workingQuantity",
+                "type": "DECIMAL",
+                "required": true
+            },
+            {
+                "name": "workingIcebergQty",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "workingTimeInForce",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "GTC",
+                    "FOK",
+                    "IOC"
+                ],
+                "default": "GTC"
+            },
+            {
+                "name": "workingStrategyId",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "workingStrategyType",
+                "type": "INT",
+                "required": false,
+                "description": "Values smaller than 1000000 are reserved and cannot be used."
+            },
+            {
+                "name": "workingPegPriceType",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "PRIMARY_PEG",
+                    "MARKET_PEG"
+                ]
+            },
+            {
+                "name": "workingPegOffsetType",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "PRICE_LEVEL"
+                ]
+            },
+            {
+                "name": "workingPegOffsetValue",
+                "type": "INT",
+                "required": false
+            },
+            {
+                "name": "pendingSide",
+                "type": "ENUM",
+                "required": true,
+                "enumValues": [
+                    "BUY",
+                    "SELL"
+                ]
+            },
+            {
+                "name": "pendingQuantity",
+                "type": "DECIMAL",
+                "required": true
+            },
+            {
+                "name": "pendingAboveType",
+                "type": "ENUM",
+                "required": true,
+                "enumValues": [
+                    "STOP_LOSS_LIMIT",
+                    "STOP_LOSS",
+                    "LIMIT_MAKER",
+                    "TAKE_PROFIT",
+                    "TAKE_PROFIT_LIMIT"
+                ]
+            },
+            {
+                "name": "pendingAboveClientOrderId",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "pendingAbovePrice",
+                "type": "DECIMAL",
+                "required": false,
+                "description": "Can be used if pendingAboveType is STOP_LOSS_LIMIT, LIMIT_MAKER, or TAKE_PROFIT_LIMIT"
+            },
+            {
+                "name": "pendingAboveStopPrice",
+                "type": "DECIMAL",
+                "required": false,
+                "description": "Can be used if pendingAboveType is STOP_LOSS, STOP_LOSS_LIMIT, TAKE_PROFIT, TAKE_PROFIT_LIMIT"
+            },
+            {
+                "name": "pendingAboveTrailingDelta",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "pendingAboveIcebergQty",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "pendingAboveTimeInForce",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "GTC",
+                    "FOK",
+                    "IOC"
+                ]
+            },
+            {
+                "name": "pendingAboveStrategyId",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "pendingAboveStrategyType",
+                "type": "INT",
+                "required": false,
+                "description": "Values smaller than 1000000 are reserved and cannot be used."
+            },
+            {
+                "name": "pendingAbovePegPriceType",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "PRIMARY_PEG",
+                    "MARKET_PEG"
+                ]
+            },
+            {
+                "name": "pendingAbovePegOffsetType",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "PRICE_LEVEL"
+                ]
+            },
+            {
+                "name": "pendingAbovePegOffsetValue",
+                "type": "INT",
+                "required": false
+            },
+            {
+                "name": "pendingBelowType",
+                "type": "ENUM",
+                "required": true,
+                "enumValues": [
+                    "STOP_LOSS",
+                    "STOP_LOSS_LIMIT",
+                    "TAKE_PROFIT",
+                    "TAKE_PROFIT_LIMIT"
+                ]
+            },
+            {
+                "name": "pendingBelowClientOrderId",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "pendingBelowPrice",
+                "type": "DECIMAL",
+                "required": false,
+                "description": "Can be used if pendingBelowType is STOP_LOSS_LIMIT or TAKE_PROFIT_LIMIT"
+            },
+            {
+                "name": "pendingBelowStopPrice",
+                "type": "DECIMAL",
+                "required": false,
+                "description": "Can be used if pendingBelowType is STOP_LOSS, STOP_LOSS_LIMIT, TAKE_PROFIT or TAKE_PROFIT_LIMIT"
+            },
+            {
+                "name": "pendingBelowTrailingDelta",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "pendingBelowIcebergQty",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "pendingBelowTimeInForce",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "GTC",
+                    "FOK",
+                    "IOC"
+                ]
+            },
+            {
+                "name": "pendingBelowStrategyId",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "pendingBelowStrategyType",
+                "type": "INT",
+                "required": false,
+                "description": "Values smaller than 1000000 are reserved and cannot be used."
+            },
+            {
+                "name": "pendingBelowPegPriceType",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "PRIMARY_PEG",
+                    "MARKET_PEG"
+                ]
+            },
+            {
+                "name": "pendingBelowPegOffsetType",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "PRICE_LEVEL"
+                ]
+            },
+            {
+                "name": "pendingBelowPegOffsetValue",
+                "type": "INT",
+                "required": false
+            },
+            {
+                "name": "recvWindow",
+                "type": "DECIMAL",
+                "required": false,
+                "description": "The value cannot be greater than 60000. Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified."
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true
+            }
+        ],
+        "notes": "Place an OTOCO (One-Triggers-One-Cancels-the-Other) order list. An OTOCO has a working order that triggers 2 pending orders (forming an OCO pair).",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api/trading-endpoints#new-order-list---otoco-trade"
+    },
+    {
+        "id": "spot:POST:/api/v3/orderList/opo",
+        "apiGroup": "spot",
+        "category": "Trading",
+        "method": "POST",
+        "path": "/api/v3/orderList/opo",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "listClientOrderId",
+                "type": "STRING",
+                "required": false,
+                "description": "Arbitrary unique ID among open order lists. Automatically generated if not sent."
+            },
+            {
+                "name": "newOrderRespType",
+                "type": "ENUM",
+                "required": false,
+                "description": "Format of the JSON response.",
+                "enumValues": [
+                    "ACK",
+                    "RESULT",
+                    "FULL"
+                ]
+            },
+            {
+                "name": "selfTradePreventionMode",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "EXPIRE_TAKER",
+                    "EXPIRE_MAKER",
+                    "EXPIRE_BOTH",
+                    "NONE"
+                ]
+            },
+            {
+                "name": "workingType",
+                "type": "ENUM",
+                "required": true,
+                "enumValues": [
+                    "LIMIT",
+                    "LIMIT_MAKER"
+                ]
+            },
+            {
+                "name": "workingSide",
+                "type": "ENUM",
+                "required": true,
+                "enumValues": [
+                    "BUY",
+                    "SELL"
+                ]
+            },
+            {
+                "name": "workingClientOrderId",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "workingPrice",
+                "type": "DECIMAL",
+                "required": true
+            },
+            {
+                "name": "workingQuantity",
+                "type": "DECIMAL",
+                "required": true
+            },
+            {
+                "name": "workingIcebergQty",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "workingTimeInForce",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "GTC",
+                    "FOK",
+                    "IOC"
+                ]
+            },
+            {
+                "name": "workingStrategyId",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "workingStrategyType",
+                "type": "INT",
+                "required": false,
+                "description": "Values smaller than 1000000 are reserved and cannot be used."
+            },
+            {
+                "name": "workingPegPriceType",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "PRIMARY_PEG",
+                    "MARKET_PEG"
+                ]
+            },
+            {
+                "name": "workingPegOffsetType",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "PRICE_LEVEL"
+                ]
+            },
+            {
+                "name": "workingPegOffsetValue",
+                "type": "INT",
+                "required": false
+            },
+            {
+                "name": "pendingType",
+                "type": "ENUM",
+                "required": true,
+                "description": "Note that MARKET orders using quoteOrderQty are not supported.",
+                "enumValues": [
+                    "LIMIT",
+                    "MARKET",
+                    "STOP_LOSS",
+                    "STOP_LOSS_LIMIT",
+                    "TAKE_PROFIT",
+                    "TAKE_PROFIT_LIMIT",
+                    "LIMIT_MAKER"
+                ]
+            },
+            {
+                "name": "pendingSide",
+                "type": "ENUM",
+                "required": true,
+                "enumValues": [
+                    "BUY",
+                    "SELL"
+                ]
+            },
+            {
+                "name": "pendingClientOrderId",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "pendingPrice",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "pendingStopPrice",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "pendingTrailingDelta",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "pendingIcebergQty",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "pendingTimeInForce",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "GTC",
+                    "FOK",
+                    "IOC"
+                ]
+            },
+            {
+                "name": "pendingStrategyId",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "pendingStrategyType",
+                "type": "INT",
+                "required": false,
+                "description": "Values smaller than 1000000 are reserved and cannot be used."
+            },
+            {
+                "name": "pendingPegPriceType",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "PRIMARY_PEG",
+                    "MARKET_PEG"
+                ]
+            },
+            {
+                "name": "pendingPegOffsetType",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "PRICE_LEVEL"
+                ]
+            },
+            {
+                "name": "pendingPegOffsetValue",
+                "type": "INT",
+                "required": false
+            },
+            {
+                "name": "recvWindow",
+                "type": "DECIMAL",
+                "required": false,
+                "description": "The value cannot be greater than 60000. Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified."
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true
+            }
+        ],
+        "notes": "Place an OPO (One-Party-Only) order list. Similar to OTO but the pending order is only placed when the working order is partially filled.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api/trading-endpoints#new-order-list---opo-trade"
+    },
+    {
+        "id": "spot:POST:/api/v3/orderList/opoco",
+        "apiGroup": "spot",
+        "category": "Trading",
+        "method": "POST",
+        "path": "/api/v3/orderList/opoco",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "listClientOrderId",
+                "type": "STRING",
+                "required": false,
+                "description": "Arbitrary unique ID among open order lists. Automatically generated if not sent."
+            },
+            {
+                "name": "newOrderRespType",
+                "type": "ENUM",
+                "required": false,
+                "description": "Format of the JSON response.",
+                "enumValues": [
+                    "ACK",
+                    "RESULT",
+                    "FULL"
+                ]
+            },
+            {
+                "name": "selfTradePreventionMode",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "EXPIRE_TAKER",
+                    "EXPIRE_MAKER",
+                    "EXPIRE_BOTH",
+                    "NONE"
+                ]
+            },
+            {
+                "name": "workingType",
+                "type": "ENUM",
+                "required": true,
+                "enumValues": [
+                    "LIMIT",
+                    "LIMIT_MAKER"
+                ]
+            },
+            {
+                "name": "workingSide",
+                "type": "ENUM",
+                "required": true,
+                "enumValues": [
+                    "BUY",
+                    "SELL"
+                ]
+            },
+            {
+                "name": "workingClientOrderId",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "workingPrice",
+                "type": "DECIMAL",
+                "required": true
+            },
+            {
+                "name": "workingQuantity",
+                "type": "DECIMAL",
+                "required": true
+            },
+            {
+                "name": "workingIcebergQty",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "workingTimeInForce",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "GTC",
+                    "FOK",
+                    "IOC"
+                ]
+            },
+            {
+                "name": "workingStrategyId",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "workingStrategyType",
+                "type": "INT",
+                "required": false,
+                "description": "Values smaller than 1000000 are reserved and cannot be used."
+            },
+            {
+                "name": "workingPegPriceType",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "PRIMARY_PEG",
+                    "MARKET_PEG"
+                ]
+            },
+            {
+                "name": "workingPegOffsetType",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "PRICE_LEVEL"
+                ]
+            },
+            {
+                "name": "workingPegOffsetValue",
+                "type": "INT",
+                "required": false
+            },
+            {
+                "name": "pendingSide",
+                "type": "ENUM",
+                "required": true,
+                "enumValues": [
+                    "BUY",
+                    "SELL"
+                ]
+            },
+            {
+                "name": "pendingAboveType",
+                "type": "ENUM",
+                "required": true,
+                "enumValues": [
+                    "STOP_LOSS_LIMIT",
+                    "STOP_LOSS",
+                    "LIMIT_MAKER",
+                    "TAKE_PROFIT",
+                    "TAKE_PROFIT_LIMIT"
+                ]
+            },
+            {
+                "name": "pendingAboveClientOrderId",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "pendingAbovePrice",
+                "type": "DECIMAL",
+                "required": false,
+                "description": "Can be used if pendingAboveType is STOP_LOSS_LIMIT, LIMIT_MAKER, or TAKE_PROFIT_LIMIT"
+            },
+            {
+                "name": "pendingAboveStopPrice",
+                "type": "DECIMAL",
+                "required": false,
+                "description": "Can be used if pendingAboveType is STOP_LOSS, STOP_LOSS_LIMIT, TAKE_PROFIT, TAKE_PROFIT_LIMIT"
+            },
+            {
+                "name": "pendingAboveTrailingDelta",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "pendingAboveIcebergQty",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "pendingAboveTimeInForce",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "GTC",
+                    "FOK",
+                    "IOC"
+                ]
+            },
+            {
+                "name": "pendingAboveStrategyId",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "pendingAboveStrategyType",
+                "type": "INT",
+                "required": false,
+                "description": "Values smaller than 1000000 are reserved and cannot be used."
+            },
+            {
+                "name": "pendingAbovePegPriceType",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "PRIMARY_PEG",
+                    "MARKET_PEG"
+                ]
+            },
+            {
+                "name": "pendingAbovePegOffsetType",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "PRICE_LEVEL"
+                ]
+            },
+            {
+                "name": "pendingAbovePegOffsetValue",
+                "type": "INT",
+                "required": false
+            },
+            {
+                "name": "pendingBelowType",
+                "type": "ENUM",
+                "required": true,
+                "enumValues": [
+                    "STOP_LOSS",
+                    "STOP_LOSS_LIMIT",
+                    "TAKE_PROFIT",
+                    "TAKE_PROFIT_LIMIT"
+                ]
+            },
+            {
+                "name": "pendingBelowClientOrderId",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "pendingBelowPrice",
+                "type": "DECIMAL",
+                "required": false,
+                "description": "Can be used if pendingBelowType is STOP_LOSS_LIMIT or TAKE_PROFIT_LIMIT"
+            },
+            {
+                "name": "pendingBelowStopPrice",
+                "type": "DECIMAL",
+                "required": false,
+                "description": "Can be used if pendingBelowType is STOP_LOSS, STOP_LOSS_LIMIT, TAKE_PROFIT or TAKE_PROFIT_LIMIT"
+            },
+            {
+                "name": "pendingBelowTrailingDelta",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "pendingBelowIcebergQty",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "pendingBelowTimeInForce",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "GTC",
+                    "FOK",
+                    "IOC"
+                ]
+            },
+            {
+                "name": "pendingBelowStrategyId",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "pendingBelowStrategyType",
+                "type": "INT",
+                "required": false,
+                "description": "Values smaller than 1000000 are reserved and cannot be used."
+            },
+            {
+                "name": "pendingBelowPegPriceType",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "PRIMARY_PEG",
+                    "MARKET_PEG"
+                ]
+            },
+            {
+                "name": "pendingBelowPegOffsetType",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "PRICE_LEVEL"
+                ]
+            },
+            {
+                "name": "pendingBelowPegOffsetValue",
+                "type": "INT",
+                "required": false
+            },
+            {
+                "name": "recvWindow",
+                "type": "DECIMAL",
+                "required": false,
+                "description": "The value cannot be greater than 60000. Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified."
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true
+            }
+        ],
+        "notes": "Place an OPOCO order list. Similar to OTOCO but the pending OCO pair is only placed when the working order is partially filled.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api/trading-endpoints#new-order-list---opoco-trade"
+    },
+    {
+        "id": "spot:DELETE:/api/v3/orderList",
+        "apiGroup": "spot",
+        "category": "Trading",
+        "method": "DELETE",
+        "path": "/api/v3/orderList",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "orderListId",
+                "type": "LONG",
+                "required": false,
+                "description": "Either orderListId or listClientOrderId must be provided"
+            },
+            {
+                "name": "listClientOrderId",
+                "type": "STRING",
+                "required": false,
+                "description": "Either orderListId or listClientOrderId must be provided"
+            },
+            {
+                "name": "newClientOrderId",
+                "type": "STRING",
+                "required": false,
+                "description": "Used to uniquely identify this cancel. Automatically generated by default"
+            },
+            {
+                "name": "recvWindow",
+                "type": "DECIMAL",
+                "required": false,
+                "description": "The value cannot be greater than 60000. Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified."
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true
+            }
+        ],
+        "notes": "Cancel an entire Order list",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api/trading-endpoints#cancel-order-list-trade"
     },
     {
         "id": "spot:GET:/api/v3/myTrades",
@@ -1631,7 +3245,8 @@
                     "GTC",
                     "IOC",
                     "FOK"
-                ]
+                ],
+                "default": "GTC"
             },
             {
                 "name": "price",
@@ -1641,12 +3256,31 @@
             {
                 "name": "newClientOrderId",
                 "type": "STRING",
+                "required": false,
+                "description": "A unique id among open orders. Automatically generated if not sent."
+            },
+            {
+                "name": "strategyId",
+                "type": "LONG",
                 "required": false
+            },
+            {
+                "name": "strategyType",
+                "type": "INT",
+                "required": false,
+                "description": "The value cannot be less than 1000000."
+            },
+            {
+                "name": "icebergQty",
+                "type": "DECIMAL",
+                "required": false,
+                "description": "Used with LIMIT to create an iceberg order."
             },
             {
                 "name": "newOrderRespType",
                 "type": "ENUM",
                 "required": false,
+                "description": "Set the response JSON. ACK, RESULT, or FULL. Default to FULL",
                 "enumValues": [
                     "ACK",
                     "RESULT",
@@ -1654,13 +3288,151 @@
                 ]
             },
             {
+                "name": "selfTradePreventionMode",
+                "type": "ENUM",
+                "required": false,
+                "description": "The allowed enums is dependent on what is configured on the symbol.",
+                "enumValues": [
+                    "EXPIRE_TAKER",
+                    "EXPIRE_MAKER",
+                    "EXPIRE_BOTH",
+                    "NONE"
+                ]
+            },
+            {
                 "name": "recvWindow",
+                "type": "DECIMAL",
+                "required": false,
+                "description": "The value cannot be greater than 60000. Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified."
+            },
+            {
+                "name": "timestamp",
                 "type": "LONG",
-                "required": false
+                "required": true
             }
         ],
-        "notes": "Places an order with SOR.",
+        "notes": "Places an order using smart order routing (SOR). Only supports LIMIT and MARKET orders.",
         "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#new-order-using-sor-trade"
+    },
+    {
+        "id": "spot:POST:/api/v3/sor/order/test",
+        "apiGroup": "spot",
+        "category": "Trading",
+        "method": "POST",
+        "path": "/api/v3/sor/order/test",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "side",
+                "type": "ENUM",
+                "required": true,
+                "enumValues": [
+                    "BUY",
+                    "SELL"
+                ]
+            },
+            {
+                "name": "type",
+                "type": "ENUM",
+                "required": true,
+                "enumValues": [
+                    "LIMIT",
+                    "MARKET"
+                ]
+            },
+            {
+                "name": "quantity",
+                "type": "DECIMAL",
+                "required": true
+            },
+            {
+                "name": "timeInForce",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "GTC",
+                    "IOC",
+                    "FOK"
+                ],
+                "default": "GTC"
+            },
+            {
+                "name": "price",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "newClientOrderId",
+                "type": "STRING",
+                "required": false,
+                "description": "A unique id among open orders. Automatically generated if not sent."
+            },
+            {
+                "name": "strategyId",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "strategyType",
+                "type": "INT",
+                "required": false,
+                "description": "The value cannot be less than 1000000."
+            },
+            {
+                "name": "icebergQty",
+                "type": "DECIMAL",
+                "required": false,
+                "description": "Used with LIMIT to create an iceberg order."
+            },
+            {
+                "name": "newOrderRespType",
+                "type": "ENUM",
+                "required": false,
+                "description": "Set the response JSON. ACK, RESULT, or FULL. Default to FULL",
+                "enumValues": [
+                    "ACK",
+                    "RESULT",
+                    "FULL"
+                ]
+            },
+            {
+                "name": "selfTradePreventionMode",
+                "type": "ENUM",
+                "required": false,
+                "description": "The allowed enums is dependent on what is configured on the symbol.",
+                "enumValues": [
+                    "EXPIRE_TAKER",
+                    "EXPIRE_MAKER",
+                    "EXPIRE_BOTH",
+                    "NONE"
+                ]
+            },
+            {
+                "name": "computeCommissionRates",
+                "type": "BOOLEAN",
+                "required": false,
+                "description": "Default: false"
+            },
+            {
+                "name": "recvWindow",
+                "type": "DECIMAL",
+                "required": false,
+                "description": "The value cannot be greater than 60000. Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified."
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true
+            }
+        ],
+        "notes": "Test new order creation and signature/recvWindow using smart order routing (SOR). Creates and validates a new order but does not send it into the matching engine.",
+        "docUrl": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api#test-new-order-using-sor-trade"
     },
     {
         "id": "spot:GET:/api/v3/account",
