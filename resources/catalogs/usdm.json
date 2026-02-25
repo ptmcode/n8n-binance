@@ -1,41 +1,5 @@
 [
     {
-        "id": "usdm:GET:/fapi/v1/ping",
-        "apiGroup": "usdm",
-        "category": "General",
-        "method": "GET",
-        "path": "/fapi/v1/ping",
-        "security": "NONE",
-        "weight": 1,
-        "params": [],
-        "notes": "Test connectivity.",
-        "docUrl": "https://developers.binance.com/docs/derivatives/usds-margined-futures/general-info"
-    },
-    {
-        "id": "usdm:GET:/fapi/v1/time",
-        "apiGroup": "usdm",
-        "category": "General",
-        "method": "GET",
-        "path": "/fapi/v1/time",
-        "security": "NONE",
-        "weight": 1,
-        "params": [],
-        "notes": "Check server time.",
-        "docUrl": "https://developers.binance.com/docs/derivatives/usds-margined-futures/general-info"
-    },
-    {
-        "id": "usdm:GET:/fapi/v1/exchangeInfo",
-        "apiGroup": "usdm",
-        "category": "General",
-        "method": "GET",
-        "path": "/fapi/v1/exchangeInfo",
-        "security": "NONE",
-        "weight": 1,
-        "params": [],
-        "notes": "Exchange information.",
-        "docUrl": "https://developers.binance.com/docs/derivatives/usds-margined-futures/general-info"
-    },
-    {
         "id": "usdm:GET:/fapi/v1/depth",
         "apiGroup": "usdm",
         "category": "Market Data",
@@ -656,7 +620,7 @@
     {
         "id": "usdm:POST:/fapi/v1/order",
         "apiGroup": "usdm",
-        "category": "Trading",
+        "category": "Trade",
         "method": "POST",
         "path": "/fapi/v1/order",
         "security": "SIGNED",
@@ -819,7 +783,7 @@
     {
         "id": "usdm:POST:/fapi/v1/order/test",
         "apiGroup": "usdm",
-        "category": "Trading",
+        "category": "Trade",
         "method": "POST",
         "path": "/fapi/v1/order/test",
         "security": "SIGNED",
@@ -930,7 +894,7 @@
     {
         "id": "usdm:PUT:/fapi/v1/order",
         "apiGroup": "usdm",
-        "category": "Trading",
+        "category": "Trade",
         "method": "PUT",
         "path": "/fapi/v1/order",
         "security": "SIGNED",
@@ -987,7 +951,7 @@
     {
         "id": "usdm:POST:/fapi/v1/batchOrders",
         "apiGroup": "usdm",
-        "category": "Trading",
+        "category": "Trade",
         "method": "POST",
         "path": "/fapi/v1/batchOrders",
         "security": "SIGNED",
@@ -1011,7 +975,7 @@
     {
         "id": "usdm:GET:/fapi/v1/order",
         "apiGroup": "usdm",
-        "category": "Trading",
+        "category": "Trade",
         "method": "GET",
         "path": "/fapi/v1/order",
         "security": "SIGNED",
@@ -1044,7 +1008,7 @@
     {
         "id": "usdm:DELETE:/fapi/v1/order",
         "apiGroup": "usdm",
-        "category": "Trading",
+        "category": "Trade",
         "method": "DELETE",
         "path": "/fapi/v1/order",
         "security": "SIGNED",
@@ -1077,7 +1041,7 @@
     {
         "id": "usdm:DELETE:/fapi/v1/allOpenOrders",
         "apiGroup": "usdm",
-        "category": "Trading",
+        "category": "Trade",
         "method": "DELETE",
         "path": "/fapi/v1/allOpenOrders",
         "security": "SIGNED",
@@ -1100,7 +1064,7 @@
     {
         "id": "usdm:DELETE:/fapi/v1/batchOrders",
         "apiGroup": "usdm",
-        "category": "Trading",
+        "category": "Trade",
         "method": "DELETE",
         "path": "/fapi/v1/batchOrders",
         "security": "SIGNED",
@@ -1135,7 +1099,7 @@
     {
         "id": "usdm:POST:/fapi/v1/countdownCancelAll",
         "apiGroup": "usdm",
-        "category": "Trading",
+        "category": "Trade",
         "method": "POST",
         "path": "/fapi/v1/countdownCancelAll",
         "security": "SIGNED",
@@ -1164,7 +1128,7 @@
     {
         "id": "usdm:GET:/fapi/v1/openOrder",
         "apiGroup": "usdm",
-        "category": "Trading",
+        "category": "Trade",
         "method": "GET",
         "path": "/fapi/v1/openOrder",
         "security": "SIGNED",
@@ -1197,7 +1161,7 @@
     {
         "id": "usdm:GET:/fapi/v1/openOrders",
         "apiGroup": "usdm",
-        "category": "Trading",
+        "category": "Trade",
         "method": "GET",
         "path": "/fapi/v1/openOrders",
         "security": "SIGNED",
@@ -1220,7 +1184,7 @@
     {
         "id": "usdm:GET:/fapi/v1/allOrders",
         "apiGroup": "usdm",
-        "category": "Trading",
+        "category": "Trade",
         "method": "GET",
         "path": "/fapi/v1/allOrders",
         "security": "SIGNED",
@@ -1263,7 +1227,7 @@
     {
         "id": "usdm:GET:/fapi/v1/userTrades",
         "apiGroup": "usdm",
-        "category": "Trading",
+        "category": "Trade",
         "method": "GET",
         "path": "/fapi/v1/userTrades",
         "security": "SIGNED",
@@ -1311,7 +1275,7 @@
     {
         "id": "usdm:GET:/fapi/v1/forceOrders",
         "apiGroup": "usdm",
-        "category": "Trading",
+        "category": "Trade",
         "method": "GET",
         "path": "/fapi/v1/forceOrders",
         "security": "SIGNED",
@@ -1736,39 +1700,148 @@
         "docUrl": "https://developers.binance.com/docs/derivatives/usds-margined-futures/account/rest-api/User-Commission-Rate"
     },
     {
-        "id": "usdm:POST:/fapi/v1/listenKey",
+        "id": "usdm:GET:/fapi/v1/convert/exchangeInfo",
         "apiGroup": "usdm",
-        "category": "User Data Streams",
+        "category": "Convert",
+        "method": "GET",
+        "path": "/fapi/v1/convert/exchangeInfo",
+        "security": "NONE",
+        "weight": 20,
+        "params": [
+            {
+                "name": "fromAsset",
+                "type": "STRING",
+                "required": false,
+                "description": "User spends coin"
+            },
+            {
+                "name": "toAsset",
+                "type": "STRING",
+                "required": false,
+                "description": "User receives coin"
+            }
+        ],
+        "notes": "List all convert pairs.",
+        "docUrl": "https://developers.binance.com/docs/derivatives/usds-margined-futures/convert"
+    },
+    {
+        "id": "usdm:POST:/fapi/v1/convert/getQuote",
+        "apiGroup": "usdm",
+        "category": "Convert",
         "method": "POST",
-        "path": "/fapi/v1/listenKey",
-        "security": "API_KEY",
-        "weight": 1,
-        "params": [],
-        "notes": "Start user data stream.",
-        "docUrl": "https://developers.binance.com/docs/derivatives/usds-margined-futures/user-data-streams/rest-api/Start-User-Data-Stream"
+        "path": "/fapi/v1/convert/getQuote",
+        "security": "SIGNED",
+        "weight": 50,
+        "params": [
+            {
+                "name": "fromAsset",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "toAsset",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "fromAmount",
+                "type": "DECIMAL",
+                "required": false,
+                "description": "Either fromAmount or toAmount must be sent"
+            },
+            {
+                "name": "toAmount",
+                "type": "DECIMAL",
+                "required": false,
+                "description": "Either fromAmount or toAmount must be sent"
+            },
+            {
+                "name": "validTime",
+                "type": "ENUM",
+                "required": false,
+                "enumValues": [
+                    "10s"
+                ],
+                "description": "Default 10s"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Send quote request.",
+        "docUrl": "https://developers.binance.com/docs/derivatives/usds-margined-futures/convert/Send-quote-request"
     },
     {
-        "id": "usdm:PUT:/fapi/v1/listenKey",
+        "id": "usdm:POST:/fapi/v1/convert/acceptQuote",
         "apiGroup": "usdm",
-        "category": "User Data Streams",
-        "method": "PUT",
-        "path": "/fapi/v1/listenKey",
-        "security": "API_KEY",
-        "weight": 1,
-        "params": [],
-        "notes": "Keepalive user data stream.",
-        "docUrl": "https://developers.binance.com/docs/derivatives/usds-margined-futures/user-data-streams/rest-api/Keepalive-User-Data-Stream"
+        "category": "Convert",
+        "method": "POST",
+        "path": "/fapi/v1/convert/acceptQuote",
+        "security": "SIGNED",
+        "weight": 200,
+        "params": [
+            {
+                "name": "quoteId",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Accept the offered quote.",
+        "docUrl": "https://developers.binance.com/docs/derivatives/usds-margined-futures/convert/Accept-Quote"
     },
     {
-        "id": "usdm:DELETE:/fapi/v1/listenKey",
+        "id": "usdm:GET:/fapi/v1/convert/orderStatus",
         "apiGroup": "usdm",
-        "category": "User Data Streams",
-        "method": "DELETE",
-        "path": "/fapi/v1/listenKey",
-        "security": "API_KEY",
-        "weight": 1,
-        "params": [],
-        "notes": "Close user data stream.",
-        "docUrl": "https://developers.binance.com/docs/derivatives/usds-margined-futures/user-data-streams/rest-api/Close-User-Data-Stream"
+        "category": "Convert",
+        "method": "GET",
+        "path": "/fapi/v1/convert/orderStatus",
+        "security": "SIGNED",
+        "weight": 50,
+        "params": [
+            {
+                "name": "orderId",
+                "type": "STRING",
+                "required": false,
+                "description": "Either orderId or quoteId is required"
+            },
+            {
+                "name": "quoteId",
+                "type": "STRING",
+                "required": false,
+                "description": "Either orderId or quoteId is required"
+            }
+        ],
+        "notes": "Order status.",
+        "docUrl": "https://developers.binance.com/docs/derivatives/usds-margined-futures/convert/Order-Status"
+    },
+    {
+        "id": "usdm:GET:/fapi/v1/pmAccountInfo",
+        "apiGroup": "usdm",
+        "category": "Portfolio Margin Endpoints",
+        "method": "GET",
+        "path": "/fapi/v1/pmAccountInfo",
+        "security": "SIGNED",
+        "weight": 5,
+        "params": [
+            {
+                "name": "asset",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Classic portfolio margin account information.",
+        "docUrl": "https://developers.binance.com/docs/derivatives/usds-margined-futures/portfolio-margin-endpoints"
     }
 ]

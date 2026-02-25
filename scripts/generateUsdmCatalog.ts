@@ -52,10 +52,10 @@ function parseParamType(typeStr: string): string {
 function urlToCategory(url: string): string {
     const lower = url.toLowerCase();
     if (lower.includes('market-data')) return 'Market Data';
-    if (lower.includes('trade') && !lower.includes('user-data') && !lower.includes('account')) return 'Trading';
+    if (lower.includes('convert')) return 'Convert';
+    if (lower.includes('portfolio-margin')) return 'Portfolio Margin Endpoints';
+    if (lower.includes('trade') && !lower.includes('user-data') && !lower.includes('account')) return 'Trade';
     if (lower.includes('account')) return 'Account';
-    if (lower.includes('user-data') || lower.includes('user_data')) return 'User Data Streams';
-    if (lower.includes('portfolio-margin')) return 'Portfolio Margin';
     return 'General';
 }
 
@@ -178,20 +178,6 @@ function writeCatalog(catalog: CatalogEntry[]) {
  */
 function generateFallbackCatalog() {
     const catalog: CatalogEntry[] = [
-        // === General ===
-        {
-            id: 'usdm:GET:/fapi/v1/ping', apiGroup: 'usdm', category: 'General', method: 'GET', path: '/fapi/v1/ping',
-            security: 'NONE', weight: 1, params: [], notes: 'Test connectivity.', docUrl: 'https://developers.binance.com/docs/derivatives/usds-margined-futures/general-info',
-        },
-        {
-            id: 'usdm:GET:/fapi/v1/time', apiGroup: 'usdm', category: 'General', method: 'GET', path: '/fapi/v1/time',
-            security: 'NONE', weight: 1, params: [], notes: 'Check server time.', docUrl: 'https://developers.binance.com/docs/derivatives/usds-margined-futures/general-info',
-        },
-        {
-            id: 'usdm:GET:/fapi/v1/exchangeInfo', apiGroup: 'usdm', category: 'General', method: 'GET', path: '/fapi/v1/exchangeInfo',
-            security: 'NONE', weight: 1, params: [], notes: 'Exchange information.', docUrl: 'https://developers.binance.com/docs/derivatives/usds-margined-futures/general-info',
-        },
-
         // === Market Data ===
         {
             id: 'usdm:GET:/fapi/v1/depth', apiGroup: 'usdm', category: 'Market Data', method: 'GET', path: '/fapi/v1/depth',
@@ -398,9 +384,9 @@ function generateFallbackCatalog() {
             ], notes: 'Query index price constituents.', docUrl: 'https://developers.binance.com/docs/derivatives/usds-margined-futures/market-data/rest-api/Index-Price-Constituents',
         },
 
-        // === Trading ===
+        // === Trade ===
         {
-            id: 'usdm:POST:/fapi/v1/order', apiGroup: 'usdm', category: 'Trading', method: 'POST', path: '/fapi/v1/order',
+            id: 'usdm:POST:/fapi/v1/order', apiGroup: 'usdm', category: 'Trade', method: 'POST', path: '/fapi/v1/order',
             security: 'SIGNED', weight: 1, params: [
                 { name: 'symbol', type: 'STRING', required: true },
                 { name: 'side', type: 'ENUM', required: true, enumValues: ['BUY', 'SELL'] },
@@ -425,7 +411,7 @@ function generateFallbackCatalog() {
             ], notes: 'New order.', docUrl: 'https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/New-Order',
         },
         {
-            id: 'usdm:POST:/fapi/v1/order/test', apiGroup: 'usdm', category: 'Trading', method: 'POST', path: '/fapi/v1/order/test',
+            id: 'usdm:POST:/fapi/v1/order/test', apiGroup: 'usdm', category: 'Trade', method: 'POST', path: '/fapi/v1/order/test',
             security: 'SIGNED', weight: 1, params: [
                 { name: 'symbol', type: 'STRING', required: true },
                 { name: 'side', type: 'ENUM', required: true, enumValues: ['BUY', 'SELL'] },
@@ -447,7 +433,7 @@ function generateFallbackCatalog() {
             ], notes: 'Test new order (does not send to matching engine).', docUrl: 'https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/New-Order-Test',
         },
         {
-            id: 'usdm:PUT:/fapi/v1/order', apiGroup: 'usdm', category: 'Trading', method: 'PUT', path: '/fapi/v1/order',
+            id: 'usdm:PUT:/fapi/v1/order', apiGroup: 'usdm', category: 'Trade', method: 'PUT', path: '/fapi/v1/order',
             security: 'SIGNED', weight: 1, params: [
                 { name: 'orderId', type: 'LONG', required: false },
                 { name: 'origClientOrderId', type: 'STRING', required: false },
@@ -460,21 +446,21 @@ function generateFallbackCatalog() {
             ], notes: 'Modify order.', docUrl: 'https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Modify-Order',
         },
         {
-            id: 'usdm:POST:/fapi/v1/batchOrders', apiGroup: 'usdm', category: 'Trading', method: 'POST', path: '/fapi/v1/batchOrders',
+            id: 'usdm:POST:/fapi/v1/batchOrders', apiGroup: 'usdm', category: 'Trade', method: 'POST', path: '/fapi/v1/batchOrders',
             security: 'SIGNED', weight: 5, params: [
                 { name: 'batchOrders', type: 'STRING', required: true, description: 'JSON array of order objects, max 5 orders' },
                 { name: 'recvWindow', type: 'LONG', required: false },
             ], notes: 'Place multiple orders.', docUrl: 'https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Place-Multiple-Orders',
         },
         {
-            id: 'usdm:PUT:/fapi/v1/batchOrders', apiGroup: 'usdm', category: 'Trading', method: 'PUT', path: '/fapi/v1/batchOrders',
+            id: 'usdm:PUT:/fapi/v1/batchOrders', apiGroup: 'usdm', category: 'Trade', method: 'PUT', path: '/fapi/v1/batchOrders',
             security: 'SIGNED', weight: 5, params: [
                 { name: 'batchOrders', type: 'STRING', required: true, description: 'JSON array of order objects, max 5 orders' },
                 { name: 'recvWindow', type: 'LONG', required: false },
             ], notes: 'Modify multiple orders.', docUrl: 'https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Modify-Multiple-Orders',
         },
         {
-            id: 'usdm:GET:/fapi/v1/orderAmendment', apiGroup: 'usdm', category: 'Trading', method: 'GET', path: '/fapi/v1/orderAmendment',
+            id: 'usdm:GET:/fapi/v1/orderAmendment', apiGroup: 'usdm', category: 'Trade', method: 'GET', path: '/fapi/v1/orderAmendment',
             security: 'SIGNED', weight: 1, params: [
                 { name: 'symbol', type: 'STRING', required: true },
                 { name: 'orderId', type: 'LONG', required: false },
@@ -486,7 +472,7 @@ function generateFallbackCatalog() {
             ], notes: 'Get order modify history.', docUrl: 'https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Get-Order-Modify-History',
         },
         {
-            id: 'usdm:GET:/fapi/v1/order', apiGroup: 'usdm', category: 'Trading', method: 'GET', path: '/fapi/v1/order',
+            id: 'usdm:GET:/fapi/v1/order', apiGroup: 'usdm', category: 'Trade', method: 'GET', path: '/fapi/v1/order',
             security: 'SIGNED', weight: 1, params: [
                 { name: 'symbol', type: 'STRING', required: true },
                 { name: 'orderId', type: 'LONG', required: false },
@@ -495,7 +481,7 @@ function generateFallbackCatalog() {
             ], notes: 'Query order.', docUrl: 'https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Query-Order',
         },
         {
-            id: 'usdm:DELETE:/fapi/v1/order', apiGroup: 'usdm', category: 'Trading', method: 'DELETE', path: '/fapi/v1/order',
+            id: 'usdm:DELETE:/fapi/v1/order', apiGroup: 'usdm', category: 'Trade', method: 'DELETE', path: '/fapi/v1/order',
             security: 'SIGNED', weight: 1, params: [
                 { name: 'symbol', type: 'STRING', required: true },
                 { name: 'orderId', type: 'LONG', required: false },
@@ -504,14 +490,14 @@ function generateFallbackCatalog() {
             ], notes: 'Cancel order.', docUrl: 'https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Cancel-Order',
         },
         {
-            id: 'usdm:DELETE:/fapi/v1/allOpenOrders', apiGroup: 'usdm', category: 'Trading', method: 'DELETE', path: '/fapi/v1/allOpenOrders',
+            id: 'usdm:DELETE:/fapi/v1/allOpenOrders', apiGroup: 'usdm', category: 'Trade', method: 'DELETE', path: '/fapi/v1/allOpenOrders',
             security: 'SIGNED', weight: 1, params: [
                 { name: 'symbol', type: 'STRING', required: true },
                 { name: 'recvWindow', type: 'LONG', required: false },
             ], notes: 'Cancel all open orders.', docUrl: 'https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Cancel-All-Open-Orders',
         },
         {
-            id: 'usdm:DELETE:/fapi/v1/batchOrders', apiGroup: 'usdm', category: 'Trading', method: 'DELETE', path: '/fapi/v1/batchOrders',
+            id: 'usdm:DELETE:/fapi/v1/batchOrders', apiGroup: 'usdm', category: 'Trade', method: 'DELETE', path: '/fapi/v1/batchOrders',
             security: 'SIGNED', weight: 1, params: [
                 { name: 'symbol', type: 'STRING', required: true },
                 { name: 'orderIdList', type: 'STRING', required: false, description: 'JSON array of orderIds, max 10' },
@@ -520,7 +506,7 @@ function generateFallbackCatalog() {
             ], notes: 'Cancel multiple orders.', docUrl: 'https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Cancel-Multiple-Orders',
         },
         {
-            id: 'usdm:POST:/fapi/v1/countdownCancelAll', apiGroup: 'usdm', category: 'Trading', method: 'POST', path: '/fapi/v1/countdownCancelAll',
+            id: 'usdm:POST:/fapi/v1/countdownCancelAll', apiGroup: 'usdm', category: 'Trade', method: 'POST', path: '/fapi/v1/countdownCancelAll',
             security: 'SIGNED', weight: 10, params: [
                 { name: 'symbol', type: 'STRING', required: true },
                 { name: 'countdownTime', type: 'LONG', required: true, description: 'Countdown time in ms. 0 to cancel timer.' },
@@ -528,7 +514,7 @@ function generateFallbackCatalog() {
             ], notes: 'Auto-cancel all open orders (countdown).', docUrl: 'https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Auto-Cancel-All-Open-Orders',
         },
         {
-            id: 'usdm:GET:/fapi/v1/openOrder', apiGroup: 'usdm', category: 'Trading', method: 'GET', path: '/fapi/v1/openOrder',
+            id: 'usdm:GET:/fapi/v1/openOrder', apiGroup: 'usdm', category: 'Trade', method: 'GET', path: '/fapi/v1/openOrder',
             security: 'SIGNED', weight: 1, params: [
                 { name: 'symbol', type: 'STRING', required: true },
                 { name: 'orderId', type: 'LONG', required: false },
@@ -537,14 +523,14 @@ function generateFallbackCatalog() {
             ], notes: 'Query current open order.', docUrl: 'https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Query-Current-Open-Order',
         },
         {
-            id: 'usdm:GET:/fapi/v1/openOrders', apiGroup: 'usdm', category: 'Trading', method: 'GET', path: '/fapi/v1/openOrders',
+            id: 'usdm:GET:/fapi/v1/openOrders', apiGroup: 'usdm', category: 'Trade', method: 'GET', path: '/fapi/v1/openOrders',
             security: 'SIGNED', weight: 1, params: [
                 { name: 'symbol', type: 'STRING', required: false },
                 { name: 'recvWindow', type: 'LONG', required: false },
             ], notes: 'Current all open orders.', docUrl: 'https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Current-All-Open-Orders',
         },
         {
-            id: 'usdm:GET:/fapi/v1/allOrders', apiGroup: 'usdm', category: 'Trading', method: 'GET', path: '/fapi/v1/allOrders',
+            id: 'usdm:GET:/fapi/v1/allOrders', apiGroup: 'usdm', category: 'Trade', method: 'GET', path: '/fapi/v1/allOrders',
             security: 'SIGNED', weight: 5, params: [
                 { name: 'symbol', type: 'STRING', required: true },
                 { name: 'orderId', type: 'LONG', required: false },
@@ -555,7 +541,7 @@ function generateFallbackCatalog() {
             ], notes: 'All orders.', docUrl: 'https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/All-Orders',
         },
         {
-            id: 'usdm:GET:/fapi/v1/userTrades', apiGroup: 'usdm', category: 'Trading', method: 'GET', path: '/fapi/v1/userTrades',
+            id: 'usdm:GET:/fapi/v1/userTrades', apiGroup: 'usdm', category: 'Trade', method: 'GET', path: '/fapi/v1/userTrades',
             security: 'SIGNED', weight: 5, params: [
                 { name: 'symbol', type: 'STRING', required: true },
                 { name: 'orderId', type: 'LONG', required: false },
@@ -567,7 +553,7 @@ function generateFallbackCatalog() {
             ], notes: 'Account trade list.', docUrl: 'https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Account-Trade-List',
         },
         {
-            id: 'usdm:GET:/fapi/v1/forceOrders', apiGroup: 'usdm', category: 'Trading', method: 'GET', path: '/fapi/v1/forceOrders',
+            id: 'usdm:GET:/fapi/v1/forceOrders', apiGroup: 'usdm', category: 'Trade', method: 'GET', path: '/fapi/v1/forceOrders',
             security: 'SIGNED', weight: 20, params: [
                 { name: 'symbol', type: 'STRING', required: false },
                 { name: 'autoCloseType', type: 'ENUM', required: false, enumValues: ['LIQUIDATION', 'ADL'] },
@@ -736,18 +722,47 @@ function generateFallbackCatalog() {
             ], notes: 'Get futures transaction history download link by ID.', docUrl: 'https://developers.binance.com/docs/derivatives/usds-margined-futures/account/rest-api/Get-Futures-Transaction-History-Download-Link-by-Id',
         },
 
-        // === User Data Streams ===
+        // === Convert ===
         {
-            id: 'usdm:POST:/fapi/v1/listenKey', apiGroup: 'usdm', category: 'User Data Streams', method: 'POST', path: '/fapi/v1/listenKey',
-            security: 'API_KEY', weight: 1, params: [], notes: 'Start user data stream.', docUrl: 'https://developers.binance.com/docs/derivatives/usds-margined-futures/user-data-streams/rest-api/Start-User-Data-Stream',
+            id: 'usdm:GET:/fapi/v1/convert/exchangeInfo', apiGroup: 'usdm', category: 'Convert', method: 'GET', path: '/fapi/v1/convert/exchangeInfo',
+            security: 'NONE', weight: 20, params: [
+                { name: 'fromAsset', type: 'STRING', required: false, description: 'User spends coin' },
+                { name: 'toAsset', type: 'STRING', required: false, description: 'User receives coin' },
+            ], notes: 'List all convert pairs.', docUrl: 'https://developers.binance.com/docs/derivatives/usds-margined-futures/convert',
         },
         {
-            id: 'usdm:PUT:/fapi/v1/listenKey', apiGroup: 'usdm', category: 'User Data Streams', method: 'PUT', path: '/fapi/v1/listenKey',
-            security: 'API_KEY', weight: 1, params: [], notes: 'Keepalive user data stream.', docUrl: 'https://developers.binance.com/docs/derivatives/usds-margined-futures/user-data-streams/rest-api/Keepalive-User-Data-Stream',
+            id: 'usdm:POST:/fapi/v1/convert/getQuote', apiGroup: 'usdm', category: 'Convert', method: 'POST', path: '/fapi/v1/convert/getQuote',
+            security: 'SIGNED', weight: 50, params: [
+                { name: 'fromAsset', type: 'STRING', required: true },
+                { name: 'toAsset', type: 'STRING', required: true },
+                { name: 'fromAmount', type: 'DECIMAL', required: false, description: 'Either fromAmount or toAmount must be sent' },
+                { name: 'toAmount', type: 'DECIMAL', required: false, description: 'Either fromAmount or toAmount must be sent' },
+                { name: 'validTime', type: 'ENUM', required: false, enumValues: ['10s'], description: 'Default 10s' },
+                { name: 'recvWindow', type: 'LONG', required: false },
+            ], notes: 'Send quote request.', docUrl: 'https://developers.binance.com/docs/derivatives/usds-margined-futures/convert/Send-quote-request',
         },
         {
-            id: 'usdm:DELETE:/fapi/v1/listenKey', apiGroup: 'usdm', category: 'User Data Streams', method: 'DELETE', path: '/fapi/v1/listenKey',
-            security: 'API_KEY', weight: 1, params: [], notes: 'Close user data stream.', docUrl: 'https://developers.binance.com/docs/derivatives/usds-margined-futures/user-data-streams/rest-api/Close-User-Data-Stream',
+            id: 'usdm:POST:/fapi/v1/convert/acceptQuote', apiGroup: 'usdm', category: 'Convert', method: 'POST', path: '/fapi/v1/convert/acceptQuote',
+            security: 'SIGNED', weight: 200, params: [
+                { name: 'quoteId', type: 'STRING', required: true },
+                { name: 'recvWindow', type: 'LONG', required: false },
+            ], notes: 'Accept the offered quote.', docUrl: 'https://developers.binance.com/docs/derivatives/usds-margined-futures/convert/Accept-Quote',
+        },
+        {
+            id: 'usdm:GET:/fapi/v1/convert/orderStatus', apiGroup: 'usdm', category: 'Convert', method: 'GET', path: '/fapi/v1/convert/orderStatus',
+            security: 'SIGNED', weight: 50, params: [
+                { name: 'orderId', type: 'STRING', required: false, description: 'Either orderId or quoteId is required' },
+                { name: 'quoteId', type: 'STRING', required: false, description: 'Either orderId or quoteId is required' },
+            ], notes: 'Order status.', docUrl: 'https://developers.binance.com/docs/derivatives/usds-margined-futures/convert/Order-Status',
+        },
+
+        // === Portfolio Margin Endpoints ===
+        {
+            id: 'usdm:GET:/fapi/v1/pmAccountInfo', apiGroup: 'usdm', category: 'Portfolio Margin Endpoints', method: 'GET', path: '/fapi/v1/pmAccountInfo',
+            security: 'SIGNED', weight: 5, params: [
+                { name: 'asset', type: 'STRING', required: true },
+                { name: 'recvWindow', type: 'LONG', required: false },
+            ], notes: 'Classic portfolio margin account information.', docUrl: 'https://developers.binance.com/docs/derivatives/usds-margined-futures/portfolio-margin-endpoints',
         },
     ];
 
@@ -765,11 +780,12 @@ async function main() {
 
     const catalog: CatalogEntry[] = [];
     const seen = new Set<string>();
+    const allowedCategories = new Set(['Market Data', 'Trade', 'Account', 'Convert', 'Portfolio Margin Endpoints']);
 
     for (const url of urls) {
         console.log(`Parsing: ${url}`);
         const entry = await parseEndpointPage(url);
-        if (entry && !seen.has(entry.id)) {
+        if (entry && !seen.has(entry.id) && allowedCategories.has(entry.category)) {
             seen.add(entry.id);
             catalog.push(entry);
         }
