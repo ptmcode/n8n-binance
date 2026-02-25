@@ -34,23 +34,34 @@ export interface BinanceRequestOptions {
 
 /**
  * Encode params into a query string suitable for Binance signing.
- * Uses URLSearchParams which produces RFC3986-compliant encoding.
  * Filters out undefined/null/'' values.
- * Handles array values by appending each element as a separate key (e.g. asset=BTC&asset=USDT).
+ * Handles array of primitives by repeating the key (e.g. asset=BTC&asset=USDT).
+ * Handles array of objects by flattening with dot notation (e.g. orderArgs[0].symbol=BTCUSDT).
+ * Note: We manually build the string to avoid URLSearchParams encoding brackets,
+ * which would break Binance's signature verification.
  */
 export function encodeParams(params: Record<string, any>): string {
-    const sp = new URLSearchParams();
+    const parts: string[] = [];
     for (const [key, value] of Object.entries(params)) {
         if (value === undefined || value === null || value === '') continue;
         if (Array.isArray(value)) {
-            for (const item of value) {
-                sp.append(key, String(item));
+            for (let i = 0; i < value.length; i++) {
+                const item = value[i];
+                if (item !== null && typeof item === 'object') {
+                    // Flatten object entries with dot notation: orderArgs[0].symbol=BTCUSDT
+                    for (const [subKey, subVal] of Object.entries(item)) {
+                        if (subVal === undefined || subVal === null || subVal === '') continue;
+                        parts.push(`${key}[${i}].${subKey}=${encodeURIComponent(String(subVal))}`);
+                    }
+                } else {
+                    parts.push(`${encodeURIComponent(key)}=${encodeURIComponent(String(item))}`);
+                }
             }
         } else {
-            sp.append(key, String(value));
+            parts.push(`${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`);
         }
     }
-    return sp.toString();
+    return parts.join('&');
 }
 
 /**
@@ -180,9 +191,9 @@ export async function executeBinanceRequest(
                 headers['Content-Type'] = 'application/json';
                 requestBody = typeof body === 'string' ? body : JSON.stringify(body || {});
             } else {
-                // Default: send as form-encoded body
-                headers['Content-Type'] = 'application/x-www-form-urlencoded';
-                requestBody = signedString;
+                // Binance SAPI/FAPI endpoints expect signed params in the query string for POST/DELETE
+                // (same as GET). Sending them in the body causes -1022 signature errors.
+                fullUrl = url + '?' + signedString;
             }
         } else {
             // Non-signed POST/PUT/DELETE

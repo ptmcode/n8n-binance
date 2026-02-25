@@ -134,6 +134,13 @@ export class BinanceUniversal implements INodeType {
                                 // For ARRAY type, split comma-separated string into array for repeated params
                                 if (param.type === 'ARRAY' && typeof value === 'string') {
                                     params[param.name] = value.split(',').map((v: string) => v.trim()).filter((v: string) => v !== '');
+                                    // For LIST type, parse JSON string into an array of objects
+                                } else if (param.type === 'LIST' && typeof value === 'string') {
+                                    try {
+                                        params[param.name] = JSON.parse(value);
+                                    } catch {
+                                        params[param.name] = value;
+                                    }
                                 } else {
                                     params[param.name] = value;
                                 }

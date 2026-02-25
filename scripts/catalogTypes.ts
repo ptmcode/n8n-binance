@@ -2,15 +2,22 @@
  * Shared types for Binance endpoint catalogs.
  */
 
+export interface EnumOption {
+    name: string;
+    value: string;
+}
+
 export interface CatalogParam {
     name: string;
     type: string;
     required: boolean;
     description?: string;
-    enumValues?: string[];
+    enumValues?: (string | EnumOption)[];
     default?: string;
     /** Conditional requirement: param is required when another param has certain values */
     requiredWhen?: { param: string; values: string[] };
+    /** Number of rows for multi-line text input */
+    rows?: number;
 }
 
 export interface CatalogEntry {

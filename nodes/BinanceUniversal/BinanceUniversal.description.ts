@@ -169,23 +169,26 @@ function generateParamProperty(
                 [endpointField]: [endpointId],
             },
         },
-        default: inputType === 'boolean' ? false : (param.default ?? ''),
+        default: inputType === 'boolean' ? false : inputType === 'number' ? (param.default !== undefined ? Number(param.default) : '') : (param.default ?? ''),
         description: param.description || `Parameter: ${param.name}`,
         required: param.required,
         ...(param.type === 'ARRAY' ? { placeholder: 'e.g. BTC,USDT' } : {}),
+        ...(param.rows ? { typeOptions: { rows: param.rows } } : {}),
     };
 
     // Add enum options if available
     if (param.enumValues && param.enumValues.length > 0 && inputType === 'string') {
         (property as any).type = 'options';
+        const toOption = (v: string | { name: string; value: string }) =>
+            typeof v === 'string' ? { name: v, value: v } : { name: v.name, value: v.value };
         // For optional enums, add an empty option to allow clearing the selection
         if (!param.required) {
             (property as any).options = [
                 { name: '(None)', value: '' },
-                ...param.enumValues.map((v) => ({ name: v, value: v }))
+                ...param.enumValues.map(toOption)
             ];
         } else {
-            (property as any).options = param.enumValues.map((v) => ({ name: v, value: v }));
+            (property as any).options = param.enumValues.map(toOption);
         }
     }
 
