@@ -1754,9 +1754,14 @@
             },
             {
                 "name": "type",
-                "type": "STRING",
+                "type": "ENUM",
                 "required": true,
-                "description": "SPOT or MARGIN or FUTURES"
+                "description": "Account type",
+                "enumValues": [
+                    "SPOT",
+                    "MARGIN",
+                    "FUTURES"
+                ]
             },
             {
                 "name": "startTime",
@@ -1942,10 +1947,14 @@
                 "description": "Managed sub-account email"
             },
             {
-                "name": "futuresType",
-                "type": "INT",
+                "name": "accountType",
+                "type": "ENUM",
                 "required": false,
-                "description": "1:USDT-margined Futures, 2:COIN-margined Futures"
+                "description": "No input or input \"USDT_FUTURE\" to get UM Futures account details. Input \"COIN_FUTURE\" to get CM Futures account details.",
+                "enumValues": [
+                    "USDT_FUTURE",
+                    "COIN_FUTURE"
+                ]
             },
             {
                 "name": "recvWindow",
@@ -1962,43 +1971,6 @@
         ],
         "notes": "Query Managed Sub-account Futures Asset Details (For Investor Master Account)",
         "docUrl": "https://developers.binance.com/docs/sub_account/managed-sub-account/Query-Managed-Sub-account-Futures-Asset-Details"
-    },
-    {
-        "id": "managed_sub_account_margin_asset",
-        "apiGroup": "sub-account",
-        "category": "Managed Sub Account",
-        "method": "GET",
-        "path": "/sapi/v1/managed-subaccount/marginAsset",
-        "security": "SIGNED",
-        "weight": 1,
-        "params": [
-            {
-                "name": "email",
-                "type": "STRING",
-                "required": true,
-                "description": "Managed sub-account email"
-            },
-            {
-                "name": "marginType",
-                "type": "STRING",
-                "required": false,
-                "description": "CROSS or ISOLATED"
-            },
-            {
-                "name": "recvWindow",
-                "type": "LONG",
-                "required": false,
-                "description": "The value cannot be greater than 60000"
-            },
-            {
-                "name": "timestamp",
-                "type": "LONG",
-                "required": true,
-                "description": "Current timestamp in milliseconds"
-            }
-        ],
-        "notes": "Query Managed Sub-account Margin Asset Details (For Investor Master Account)",
-        "docUrl": "https://developers.binance.com/docs/sub_account/managed-sub-account/Query-Managed-Sub-account-Margin-Asset-Details"
     },
     {
         "id": "managed_sub_account_info",
@@ -2085,6 +2057,47 @@
         ],
         "notes": "Get Managed Sub-account Deposit Address (For Investor Master Account)",
         "docUrl": "https://developers.binance.com/docs/sub_account/managed-sub-account/Get-Managed-Sub-account-Deposit-Address"
+    },
+    {
+        "id": "managed_sub_account_margin_asset",
+        "apiGroup": "sub-account",
+        "category": "Managed Sub Account",
+        "method": "GET",
+        "path": "/sapi/v1/managed-subaccount/marginAsset",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "email",
+                "type": "STRING",
+                "required": true,
+                "description": "Managed Sub Account Email"
+            },
+            {
+                "name": "accountType",
+                "type": "ENUM",
+                "required": false,
+                "description": "No input or input \"MARGIN\" to get Cross Margin account details. Input \"ISOLATED_MARGIN\" to get Isolated Margin account details.",
+                "enumValues": [
+                    "MARGIN",
+                    "ISOLATED_MARGIN"
+                ]
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Query Managed Sub-account Margin Asset Details (For Investor Master Account)",
+        "docUrl": "https://developers.binance.com/docs/sub_account/managed-sub-account/Query-Managed-Sub-account-Margin-Asset-Details"
     },
     {
         "id": "managed_sub_account_query_trans_log",
