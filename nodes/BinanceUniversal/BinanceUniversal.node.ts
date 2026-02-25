@@ -87,6 +87,7 @@ export class BinanceUniversal implements INodeType {
                 let security: SecurityType;
                 let params: Record<string, any> = {};
                 let body: Record<string, any> | undefined;
+                let catalogCategory: string | undefined;
 
                 if (mode === 'catalog') {
                     // ─── Catalog Mode ───────────────────────────────────────────────
@@ -119,15 +120,23 @@ export class BinanceUniversal implements INodeType {
                     method = entry.method as IHttpRequestMethods;
                     path = entry.path;
                     security = entry.security;
+                    catalogCategory = entry.category;
 
                     // Collect parameters from dynamic endpoint-specific fields
                     for (const param of entry.params) {
+                        // Skip timestamp and signature - these are auto-added during signing
+                        if (param.name === 'timestamp' || param.name === 'signature') continue;
                         const fieldName = `param_${endpointId}_${param.name}`;
                         try {
                             const value = this.getNodeParameter(fieldName, i, undefined);
                             // Only add the parameter if it has a value (not empty string, undefined, or 0 for optional params)
                             if (value !== undefined && value !== '' && !(value === 0 && !param.required)) {
-                                params[param.name] = value;
+                                // For ARRAY type, split comma-separated string into array for repeated params
+                                if (param.type === 'ARRAY' && typeof value === 'string') {
+                                    params[param.name] = value.split(',').map((v: string) => v.trim()).filter((v: string) => v !== '');
+                                } else {
+                                    params[param.name] = value;
+                                }
                             }
                         } catch (error) {
                             // Field might not exist if it's a legacy workflow, skip silently
@@ -261,6 +270,8 @@ export class BinanceUniversal implements INodeType {
                     apiKey,
                     apiSecret,
                     recvWindow: 5000,
+                    apiGroup,
+                    category: catalogCategory,
                 });
 
                 returnData.push({

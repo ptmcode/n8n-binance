@@ -169,9 +169,10 @@ function generateParamProperty(
                 [endpointField]: [endpointId],
             },
         },
-        default: inputType === 'boolean' ? false : '',
+        default: inputType === 'boolean' ? false : (param.default ?? ''),
         description: param.description || `Parameter: ${param.name}`,
         required: param.required,
+        ...(param.type === 'ARRAY' ? { placeholder: 'e.g. BTC,USDT' } : {}),
     };
 
     // Add enum options if available
@@ -200,6 +201,7 @@ function generateAllParamProperties(): INodeProperties[] {
     // Generate for spot endpoints
     for (const entry of spotCatalog) {
         for (const param of entry.params) {
+            if (param.name === 'timestamp' || param.name === 'signature') continue;
             properties.push(generateParamProperty(param, entry.id, 'spot'));
         }
     }
@@ -207,6 +209,7 @@ function generateAllParamProperties(): INodeProperties[] {
     // Generate for usdm endpoints
     for (const entry of usdmCatalog) {
         for (const param of entry.params) {
+            if (param.name === 'timestamp' || param.name === 'signature') continue;
             properties.push(generateParamProperty(param, entry.id, 'usdm'));
         }
     }
@@ -214,6 +217,7 @@ function generateAllParamProperties(): INodeProperties[] {
     // Generate for wallet endpoints
     for (const entry of walletCatalog) {
         for (const param of entry.params) {
+            if (param.name === 'timestamp' || param.name === 'signature') continue;
             properties.push(generateParamProperty(param, entry.id, 'wallet'));
         }
     }
@@ -221,6 +225,7 @@ function generateAllParamProperties(): INodeProperties[] {
     // Generate for sub-account endpoints
     for (const entry of subAccountCatalog) {
         for (const param of entry.params) {
+            if (param.name === 'timestamp' || param.name === 'signature') continue;
             properties.push(generateParamProperty(param, entry.id, 'sub-account'));
         }
     }

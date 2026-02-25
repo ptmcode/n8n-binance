@@ -648,9 +648,19 @@
         "params": [
             {
                 "name": "asset",
-                "type": "STRING",
+                "type": "ARRAY",
                 "required": true,
-                "description": "Array of assets to convert, separated by comma"
+                "description": "Assets to convert, comma-separated (e.g. BTC,USDT)"
+            },
+            {
+                "name": "accountType",
+                "type": "ENUM",
+                "required": false,
+                "description": "SPOT or MARGIN, default SPOT",
+                "enumValues": [
+                    "SPOT",
+                    "MARGIN"
+                ]
             },
             {
                 "name": "recvWindow",
@@ -749,6 +759,31 @@
         "docUrl": "https://developers.binance.com/docs/wallet/asset/asset-detail"
     },
     {
+        "id": "wallet_asset_wallet_balance",
+        "apiGroup": "wallet",
+        "category": "Asset",
+        "method": "GET",
+        "path": "/sapi/v1/asset/wallet/balance",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Query user wallet balance.",
+        "docUrl": "https://developers.binance.com/docs/wallet/asset/wallet-balance"
+    },
+    {
         "id": "wallet_asset_trade_fee",
         "apiGroup": "wallet",
         "category": "Asset",
@@ -815,6 +850,43 @@
         ],
         "notes": "Get Funding Wallet balance.",
         "docUrl": "https://developers.binance.com/docs/wallet/asset/funding-wallet"
+    },
+    {
+        "id": "wallet_asset_get_user_asset",
+        "apiGroup": "wallet",
+        "category": "Asset",
+        "method": "POST",
+        "path": "/sapi/v3/asset/getUserAsset",
+        "security": "SIGNED",
+        "weight": 5,
+        "params": [
+            {
+                "name": "asset",
+                "type": "STRING",
+                "required": false,
+                "description": "If asset is blank, then query all positive assets of the user"
+            },
+            {
+                "name": "needBtcValuation",
+                "type": "BOOLEAN",
+                "required": false,
+                "description": "Whether to return BTC valuation"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Get user assets, just for positive data.",
+        "docUrl": "https://developers.binance.com/docs/wallet/asset/user-assets"
     },
     {
         "id": "wallet_asset_cloud_mining_history",
@@ -884,9 +956,80 @@
         "docUrl": "https://developers.binance.com/docs/wallet/asset/cloud-mining-history"
     },
     {
+        "id": "wallet_asset_custody_transfer_history",
+        "apiGroup": "wallet",
+        "category": "Asset",
+        "method": "GET",
+        "path": "/sapi/v1/asset/custody/transfer-history",
+        "security": "SIGNED",
+        "weight": 60,
+        "params": [
+            {
+                "name": "email",
+                "type": "STRING",
+                "required": true,
+                "description": "Sub-account email"
+            },
+            {
+                "name": "startTime",
+                "type": "LONG",
+                "required": true,
+                "description": "Start time in milliseconds"
+            },
+            {
+                "name": "endTime",
+                "type": "LONG",
+                "required": true,
+                "description": "End time in milliseconds"
+            },
+            {
+                "name": "type",
+                "type": "ENUM",
+                "required": false,
+                "description": "Delegate or Undelegate",
+                "enumValues": [
+                    "Delegate",
+                    "Undelegate"
+                ]
+            },
+            {
+                "name": "asset",
+                "type": "STRING",
+                "required": false,
+                "description": "Asset name"
+            },
+            {
+                "name": "current",
+                "type": "INTEGER",
+                "required": false,
+                "description": "Current page number (default 1)"
+            },
+            {
+                "name": "size",
+                "type": "INTEGER",
+                "required": false,
+                "description": "Number of records per page (default 10, max 100)"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Query custody asset transfer history.",
+        "docUrl": "https://developers.binance.com/docs/wallet/asset/custody-transfer-history"
+    },
+    {
         "id": "wallet_transfer_universal",
         "apiGroup": "wallet",
-        "category": "Transfer",
+        "category": "Asset",
         "method": "POST",
         "path": "/sapi/v1/asset/transfer",
         "security": "SIGNED",
@@ -959,9 +1102,9 @@
         "docUrl": "https://developers.binance.com/docs/wallet/asset/user-universal-transfer"
     },
     {
-        "id": "wallet_transfer_query",
+        "id": "wallet_asset_transfer_query",
         "apiGroup": "wallet",
-        "category": "Transfer",
+        "category": "Asset",
         "method": "GET",
         "path": "/sapi/v1/asset/transfer",
         "security": "SIGNED",
@@ -969,9 +1112,29 @@
         "params": [
             {
                 "name": "type",
-                "type": "STRING",
+                "type": "ENUM",
                 "required": true,
-                "description": "Transfer type"
+                "description": "Transfer type",
+                "enumValues": [
+                    "MAIN_UMFUTURE",
+                    "MAIN_CMFUTURE",
+                    "MAIN_MARGIN",
+                    "UMFUTURE_MAIN",
+                    "UMFUTURE_MARGIN",
+                    "CMFUTURE_MAIN",
+                    "CMFUTURE_MARGIN",
+                    "MARGIN_MAIN",
+                    "MARGIN_UMFUTURE",
+                    "MARGIN_CMFUTURE",
+                    "MAIN_FUNDING",
+                    "FUNDING_MAIN",
+                    "FUNDING_UMFUTURE",
+                    "FUNDING_CMFUTURE",
+                    "UMFUTURE_FUNDING",
+                    "CMFUTURE_FUNDING",
+                    "MAIN_OPTION",
+                    "OPTION_MAIN"
+                ]
             },
             {
                 "name": "startTime",
@@ -1024,5 +1187,201 @@
         ],
         "notes": "Query User Universal Transfer History.",
         "docUrl": "https://developers.binance.com/docs/wallet/asset/query-user-universal-transfer"
+    },
+    {
+        "id": "wallet_asset_bnb_burn",
+        "apiGroup": "wallet",
+        "category": "Asset",
+        "method": "POST",
+        "path": "/sapi/v1/bnbBurn",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "spotBNBBurn",
+                "type": "STRING",
+                "required": false,
+                "description": "\"true\" or \"false\"; Determines whether to use BNB to pay for trading fees on SPOT"
+            },
+            {
+                "name": "interestBNBBurn",
+                "type": "STRING",
+                "required": false,
+                "description": "\"true\" or \"false\"; Determines whether to use BNB to pay for margin loan's interest"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Toggle BNB Burn On Spot Trade And Margin Interest. \"spotBNBBurn\" and \"interestBNBBurn\" should be sent at least one.",
+        "docUrl": "https://developers.binance.com/docs/wallet/asset/Toggle-BNB-Burn-On-Spot-Trade-And-Margin-Interest"
+    },
+    {
+        "id": "wallet_asset_dust_btc",
+        "apiGroup": "wallet",
+        "category": "Asset",
+        "method": "POST",
+        "path": "/sapi/v1/asset/dust-btc",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "accountType",
+                "type": "ENUM",
+                "required": false,
+                "description": "SPOT or MARGIN, default SPOT",
+                "enumValues": [
+                    "SPOT",
+                    "MARGIN"
+                ]
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Get Assets That Can Be Converted Into BNB.",
+        "docUrl": "https://developers.binance.com/docs/wallet/asset/assets-can-convert-bnb"
+    },
+    {
+        "id": "wallet_asset_delist_schedule",
+        "apiGroup": "wallet",
+        "category": "Asset",
+        "method": "GET",
+        "path": "/sapi/v1/spot/delist-schedule",
+        "security": "SIGNED",
+        "weight": 100,
+        "params": [
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Get tokens or symbols delist schedule for spot trading.",
+        "docUrl": "https://developers.binance.com/docs/wallet/asset/delist-schedule"
+    },
+    {
+        "id": "wallet_asset_open_symbol_list",
+        "apiGroup": "wallet",
+        "category": "Asset",
+        "method": "GET",
+        "path": "/sapi/v1/spot/open-symbol-list",
+        "security": "SIGNED",
+        "weight": 100,
+        "params": [
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Get open symbol list for spot trading.",
+        "docUrl": "https://developers.binance.com/docs/wallet/asset/open-symbol-list"
+    },
+    {
+        "id": "wallet_asset_dust_convert_convert",
+        "apiGroup": "wallet",
+        "category": "Asset",
+        "method": "POST",
+        "path": "/sapi/v1/asset/dust-convert/convert",
+        "security": "SIGNED",
+        "weight": 10,
+        "params": [
+            {
+                "name": "asset",
+                "type": "ARRAY",
+                "required": true,
+                "description": "Assets to convert"
+            },
+            {
+                "name": "clientId",
+                "type": "STRING",
+                "required": false,
+                "description": "A unique id for the request"
+            },
+            {
+                "name": "targetAsset",
+                "type": "STRING",
+                "required": false,
+                "description": "Target asset to convert to"
+            },
+            {
+                "name": "thirdPartyClientId",
+                "type": "STRING",
+                "required": false,
+                "description": "Third party client ID"
+            },
+            {
+                "name": "dustQuotaAssetToTargetAssetPrice",
+                "type": "BIGDECIMAL",
+                "required": false,
+                "description": "Dust quota asset to target asset price"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Convert dust assets to a target asset.",
+        "docUrl": "https://developers.binance.com/docs/wallet/asset/dust-convert"
+    },
+    {
+        "id": "wallet_asset_dust_convert_query_convertible_assets",
+        "apiGroup": "wallet",
+        "category": "Asset",
+        "method": "POST",
+        "path": "/sapi/v1/asset/dust-convert/query-convertible-assets",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "targetAsset",
+                "type": "STRING",
+                "required": true,
+                "description": "Target asset to convert to"
+            },
+            {
+                "name": "dustQuotaAssetToTargetAssetPrice",
+                "type": "BIGDECIMAL",
+                "required": false,
+                "description": "Dust quota asset to target asset price"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Query convertible assets for dust conversion.",
+        "docUrl": "https://developers.binance.com/docs/wallet/asset/dust-convert-query-convertible-assets"
     }
 ]

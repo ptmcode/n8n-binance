@@ -28,18 +28,27 @@ export interface BinanceRequestOptions {
     apiKey?: string;
     apiSecret?: string;
     recvWindow?: number;
+    apiGroup?: string;
+    category?: string;
 }
 
 /**
  * Encode params into a query string suitable for Binance signing.
  * Uses URLSearchParams which produces RFC3986-compliant encoding.
  * Filters out undefined/null/'' values.
+ * Handles array values by appending each element as a separate key (e.g. asset=BTC&asset=USDT).
  */
 export function encodeParams(params: Record<string, any>): string {
     const sp = new URLSearchParams();
     for (const [key, value] of Object.entries(params)) {
         if (value === undefined || value === null || value === '') continue;
-        sp.append(key, String(value));
+        if (Array.isArray(value)) {
+            for (const item of value) {
+                sp.append(key, String(item));
+            }
+        } else {
+            sp.append(key, String(value));
+        }
     }
     return sp.toString();
 }
@@ -107,15 +116,17 @@ export async function executeBinanceRequest(
     data: any;
     meta: {
         apiGroup: string;
+        category?: string;
         method: string;
         path: string;
         baseUrl: string;
         requestId: string;
+        queryString?: Record<string, any>;
         rateLimits?: Record<string, string>;
     };
 }> {
     const requestId = generateRequestId();
-    const { baseUrl, method, path, security, sendAsJson, apiKey, apiSecret, recvWindow } = options;
+    const { baseUrl, method, path, security, sendAsJson, apiKey, apiSecret, recvWindow, apiGroup: passedApiGroup, category } = options;
     let { params, body } = options;
 
     // Validate API key presence for secured endpoints
@@ -281,14 +292,27 @@ export async function executeBinanceRequest(
             }
         }
 
+        // Determine apiGroup: use the explicitly passed value, fall back to path-based heuristic
+        const resolvedApiGroup = passedApiGroup
+            || (path.startsWith('/fapi') ? 'usdm' : path.startsWith('/sapi') ? 'wallet' : 'spot');
+
+        // Build query string snapshot (non-empty user-supplied params, excluding signature/timestamp added by signing)
+        const queryStringSnapshot: Record<string, any> = {};
+        for (const [key, value] of Object.entries(params)) {
+            if (value === undefined || value === null || value === '') continue;
+            queryStringSnapshot[key] = value;
+        }
+
         return {
             data: responseData,
             meta: {
-                apiGroup: path.startsWith('/fapi') ? 'usdm' : 'spot',
+                apiGroup: resolvedApiGroup,
+                ...(category ? { category } : {}),
                 method,
                 path,
                 baseUrl,
                 requestId,
+                ...(Object.keys(queryStringSnapshot).length > 0 ? { queryString: queryStringSnapshot } : {}),
                 ...(Object.keys(rateLimits).length > 0 ? { rateLimits } : {}),
             },
         };
