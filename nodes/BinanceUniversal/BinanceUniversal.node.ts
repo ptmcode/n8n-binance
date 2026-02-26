@@ -123,6 +123,7 @@ export class BinanceUniversal implements INodeType {
                     catalogCategory = entry.category;
 
                     // Collect parameters from dynamic endpoint-specific fields
+                    const seenExclusiveGroups = new Set<string>();
                     for (const param of entry.params) {
                         // Skip timestamp and signature - these are auto-added during signing
                         if (param.name === 'timestamp' || param.name === 'signature') continue;
@@ -131,6 +132,11 @@ export class BinanceUniversal implements INodeType {
                             const value = this.getNodeParameter(fieldName, i, undefined);
                             // Only add the parameter if it has a value (not empty string, undefined, or 0 for optional params)
                             if (value !== undefined && value !== '' && !(value === 0 && !param.required)) {
+                                // Skip if another param from the same exclusive group was already added
+                                if (param.exclusiveGroup) {
+                                    if (seenExclusiveGroups.has(param.exclusiveGroup)) continue;
+                                    seenExclusiveGroups.add(param.exclusiveGroup);
+                                }
                                 // For ARRAY type, split comma-separated string into array for repeated params
                                 if (param.type === 'ARRAY' && typeof value === 'string') {
                                     params[param.name] = value.split(',').map((v: string) => v.trim()).filter((v: string) => v !== '');

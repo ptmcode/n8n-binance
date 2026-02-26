@@ -1071,13 +1071,15 @@
                 "name": "cancelOrigClientOrderId",
                 "type": "STRING",
                 "required": false,
-                "description": "Either cancelOrderId or cancelOrigClientOrderId must be sent."
+                "description": "Either cancelOrderId or cancelOrigClientOrderId must be sent.",
+                "exclusiveGroup": "cancelOrderIdentifier"
             },
             {
                 "name": "cancelOrderId",
                 "type": "LONG",
                 "required": false,
-                "description": "Either cancelOrderId or cancelOrigClientOrderId must be sent."
+                "description": "Either cancelOrderId or cancelOrigClientOrderId must be sent.",
+                "exclusiveGroup": "cancelOrderIdentifier"
             },
             {
                 "name": "newClientOrderId",

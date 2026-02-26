@@ -18,6 +18,8 @@ export interface CatalogParam {
     requiredWhen?: { param: string; values: string[] };
     /** Number of rows for multi-line text input */
     rows?: number;
+    /** Mutually exclusive group: only the first filled param from this group will be sent */
+    exclusiveGroup?: string;
 }
 
 export interface CatalogEntry {

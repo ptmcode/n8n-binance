@@ -735,8 +735,8 @@ function generateFallbackCatalog() {
             security: 'SIGNED', weight: 50, params: [
                 { name: 'fromAsset', type: 'STRING', required: true },
                 { name: 'toAsset', type: 'STRING', required: true },
-                { name: 'fromAmount', type: 'DECIMAL', required: false, description: 'Either fromAmount or toAmount must be sent' },
-                { name: 'toAmount', type: 'DECIMAL', required: false, description: 'Either fromAmount or toAmount must be sent' },
+                { name: 'fromAmount', type: 'DECIMAL', required: false, description: 'Either fromAmount or toAmount must be sent', exclusiveGroup: 'convertAmount' },
+                { name: 'toAmount', type: 'DECIMAL', required: false, description: 'Either fromAmount or toAmount must be sent', exclusiveGroup: 'convertAmount' },
                 { name: 'validTime', type: 'ENUM', required: false, enumValues: ['10s'], description: 'Default 10s' },
                 { name: 'recvWindow', type: 'LONG', required: false },
             ], notes: 'Send quote request.', docUrl: 'https://developers.binance.com/docs/derivatives/usds-margined-futures/convert/Send-quote-request',
