@@ -1,5 +1,16 @@
 # n8n-nodes-binance-universal
 
+## Donate
+
+If this project has been helpful to you, consider supporting its development with a donation via Binance Pay.
+
+**Name:** `Chansothea_Keo`  
+**Binance Pay ID:** `206 630 63`
+
+![Binance Pay QR](binance-pay-qr.jpg)
+
+---
+
 A comprehensive **n8n community node** for calling **all Binance REST API endpoints** — both **Spot** (`/api/*`, `/sapi/*`) and **USDⓈ-M Futures** (`/fapi/*`).
 
 ## Features
