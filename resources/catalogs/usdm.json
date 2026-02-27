@@ -1093,8 +1093,13 @@
             },
             {
                 "name": "reduceOnly",
-                "type": "STRING",
-                "required": false
+                "type": "ENUM",
+                "required": false,
+                "description": "default \"false\". Cannot be sent in Hedge Mode as enum",
+                "enumValues": [
+                    "true",
+                    "false"
+                ]
             },
             {
                 "name": "quantity",
@@ -1256,8 +1261,13 @@
             },
             {
                 "name": "reduceOnly",
-                "type": "STRING",
-                "required": false
+                "type": "ENUM",
+                "required": false,
+                "description": "default \"false\". Cannot be sent in Hedge Mode as enum",
+                "enumValues": [
+                    "true",
+                    "false"
+                ]
             },
             {
                 "name": "quantity",
@@ -1283,6 +1293,7 @@
                 "name": "timeInForce",
                 "type": "ENUM",
                 "required": false,
+                "default": "GTC",
                 "enumValues": [
                     "GTC",
                     "IOC",
@@ -1364,7 +1375,18 @@
             {
                 "name": "priceMatch",
                 "type": "ENUM",
-                "required": false
+                "required": false,
+                "description": "Only available for LIMIT/STOP/TAKE_PROFIT order. Can't be passed together with price",
+                "enumValues": [
+                    "OPPONENT",
+                    "OPPONENT_5",
+                    "OPPONENT_10",
+                    "OPPONENT_20",
+                    "QUEUE",
+                    "QUEUE_5",
+                    "QUEUE_10",
+                    "QUEUE_20"
+                ]
             },
             {
                 "name": "recvWindow",
@@ -1388,7 +1410,8 @@
                 "name": "batchOrders",
                 "type": "STRING",
                 "required": true,
-                "description": "JSON array of order objects, max 5 orders"
+                "description": "JSON array of order objects, max 5 orders",
+                "rows": 5
             },
             {
                 "name": "recvWindow",
@@ -1747,9 +1770,588 @@
         "docUrl": "https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Users-Force-Orders"
     },
     {
+        "id": "usdm:PUT:/fapi/v1/batchOrders",
+        "apiGroup": "usdm",
+        "category": "Trade",
+        "method": "PUT",
+        "path": "/fapi/v1/batchOrders",
+        "security": "SIGNED",
+        "weight": 5,
+        "params": [
+            {
+                "name": "batchOrders",
+                "type": "STRING",
+                "required": true,
+                "description": "JSON array of order modification objects, max 5 orders"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Modify multiple orders.",
+        "docUrl": "https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Modify-Multiple-Orders"
+    },
+    {
+        "id": "usdm:GET:/fapi/v1/orderAmendment",
+        "apiGroup": "usdm",
+        "category": "Trade",
+        "method": "GET",
+        "path": "/fapi/v1/orderAmendment",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "orderId",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "origClientOrderId",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "startTime",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "endTime",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "limit",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Get order modification history.",
+        "docUrl": "https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Get-Order-Modify-History"
+    },
+    {
+        "id": "usdm:POST:/fapi/v1/multiAssetsMargin",
+        "apiGroup": "usdm",
+        "category": "Trade",
+        "method": "POST",
+        "path": "/fapi/v1/multiAssetsMargin",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "multiAssetsMargin",
+                "type": "ENUM",
+                "required": true,
+                "description": "\"true\": Multi-Assets Mode; \"false\": Single-Asset Mode",
+                "enumValues": [
+                    "true",
+                    "false"
+                ]
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Change multi-assets mode.",
+        "docUrl": "https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Change-Multi-Assets-Mode"
+    },
+    {
+        "id": "usdm:GET:/fapi/v1/adlQuantile",
+        "apiGroup": "usdm",
+        "category": "Trade",
+        "method": "GET",
+        "path": "/fapi/v1/adlQuantile",
+        "security": "SIGNED",
+        "weight": 5,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Position ADL quantile estimation.",
+        "docUrl": "https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Position-ADL-Quantile-Estimation"
+    },
+    {
+        "id": "usdm:GET:/fapi/v1/positionMargin/history",
+        "apiGroup": "usdm",
+        "category": "Trade",
+        "method": "GET",
+        "path": "/fapi/v1/positionMargin/history",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "type",
+                "type": "ENUM",
+                "required": false,
+                "description": "1: Add position margin; 2: Reduce position margin",
+                "enumValues": [
+                    {
+                        "name": "1 - Add position margin",
+                        "value": "1"
+                    },
+                    {
+                        "name": "2 - Reduce position margin",
+                        "value": "2"
+                    }
+                ]
+            },
+            {
+                "name": "startTime",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "endTime",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "limit",
+                "type": "LONG",
+                "required": false,
+                "description": "Default: 500"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Get position margin change history.",
+        "docUrl": "https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Get-Position-Margin-Change-History"
+    },
+    {
+        "id": "usdm:POST:/fapi/v1/algoOrder",
+        "apiGroup": "usdm",
+        "category": "Trade",
+        "method": "POST",
+        "path": "/fapi/v1/algoOrder",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "algoType",
+                "type": "ENUM",
+                "required": true,
+                "description": "Only CONDITIONAL is supported",
+                "default": "CONDITIONAL",
+                "enumValues": [
+                    "CONDITIONAL"
+                ]
+            },
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "side",
+                "type": "ENUM",
+                "required": true,
+                "enumValues": [
+                    "BUY",
+                    "SELL"
+                ]
+            },
+            {
+                "name": "positionSide",
+                "type": "ENUM",
+                "required": false,
+                "description": "Default BOTH for One-way Mode; LONG or SHORT for Hedge Mode. Must be sent in Hedge Mode",
+                "enumValues": [
+                    "BOTH",
+                    "LONG",
+                    "SHORT"
+                ]
+            },
+            {
+                "name": "type",
+                "type": "ENUM",
+                "required": true,
+                "description": "For CONDITIONAL algoType: STOP_MARKET / TAKE_PROFIT_MARKET / STOP / TAKE_PROFIT / TRAILING_STOP_MARKET",
+                "enumValues": [
+                    "STOP_MARKET",
+                    "TAKE_PROFIT_MARKET",
+                    "STOP",
+                    "TAKE_PROFIT",
+                    "TRAILING_STOP_MARKET"
+                ]
+            },
+            {
+                "name": "timeInForce",
+                "type": "ENUM",
+                "required": false,
+                "description": "IOC, GTC, FOK or GTX. Default GTC",
+                "default": "GTC",
+                "enumValues": [
+                    "GTC",
+                    "IOC",
+                    "FOK",
+                    "GTX"
+                ]
+            },
+            {
+                "name": "quantity",
+                "type": "DECIMAL",
+                "required": false,
+                "description": "Cannot be sent with closePosition=true (Close-All)"
+            },
+            {
+                "name": "price",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "triggerPrice",
+                "type": "DECIMAL",
+                "required": false
+            },
+            {
+                "name": "workingType",
+                "type": "ENUM",
+                "required": false,
+                "description": "triggerPrice triggered by: MARK_PRICE or CONTRACT_PRICE. Default CONTRACT_PRICE",
+                "enumValues": [
+                    "CONTRACT_PRICE",
+                    "MARK_PRICE"
+                ]
+            },
+            {
+                "name": "priceMatch",
+                "type": "ENUM",
+                "required": false,
+                "description": "Only available for LIMIT/STOP/TAKE_PROFIT order. Can't be passed together with price",
+                "enumValues": [
+                    {
+                        "name": "OPPONENT",
+                        "value": "OPPONENT"
+                    },
+                    {
+                        "name": "OPPONENT_5",
+                        "value": "OPPONENT_5"
+                    },
+                    {
+                        "name": "OPPONENT_10",
+                        "value": "OPPONENT_10"
+                    },
+                    {
+                        "name": "OPPONENT_20",
+                        "value": "OPPONENT_20"
+                    },
+                    {
+                        "name": "QUEUE",
+                        "value": "QUEUE"
+                    },
+                    {
+                        "name": "QUEUE_5",
+                        "value": "QUEUE_5"
+                    },
+                    {
+                        "name": "QUEUE_10",
+                        "value": "QUEUE_10"
+                    },
+                    {
+                        "name": "QUEUE_20",
+                        "value": "QUEUE_20"
+                    }
+                ]
+            },
+            {
+                "name": "closePosition",
+                "type": "ENUM",
+                "required": false,
+                "description": "Close-All, used with STOP_MARKET or TAKE_PROFIT_MARKET",
+                "enumValues": [
+                    "true",
+                    "false"
+                ]
+            },
+            {
+                "name": "priceProtect",
+                "type": "ENUM",
+                "required": false,
+                "description": "Default FALSE. Used with STOP_MARKET or TAKE_PROFIT_MARKET. When price reaches triggerPrice, difference rate between MARK_PRICE and CONTRACT_PRICE cannot be larger than the Price Protection Threshold",
+                "enumValues": [
+                    "TRUE",
+                    "FALSE"
+                ]
+            },
+            {
+                "name": "reduceOnly",
+                "type": "ENUM",
+                "required": false,
+                "description": "default \"false\". Cannot be sent in Hedge Mode; cannot be sent with closePosition=true",
+                "default": "",
+                "enumValues": [
+                    "true",
+                    "false"
+                ]
+            },
+            {
+                "name": "activatePrice",
+                "type": "DECIMAL",
+                "required": false,
+                "description": "Used with TRAILING_STOP_MARKET orders, default as the latest price"
+            },
+            {
+                "name": "callbackRate",
+                "type": "DECIMAL",
+                "required": false,
+                "description": "Used with TRAILING_STOP_MARKET orders, min 0.1, max 10 where 1 for 1%"
+            },
+            {
+                "name": "clientAlgoId",
+                "type": "STRING",
+                "required": false,
+                "description": "A unique id among open orders. Auto-generated if not sent. Pattern: ^[\\.A-Z\\:/a-z0-9_-]{1,36}$"
+            },
+            {
+                "name": "newOrderRespType",
+                "type": "ENUM",
+                "required": false,
+                "description": "Default ACK",
+                "enumValues": [
+                    "ACK",
+                    "RESULT"
+                ]
+            },
+            {
+                "name": "selfTradePreventionMode",
+                "type": "ENUM",
+                "required": false,
+                "description": "EXPIRE_TAKER: expire taker order when STP triggers; EXPIRE_MAKER: expire maker order when STP triggers; EXPIRE_BOTH: expire both orders when STP triggers. Default NONE",
+                "enumValues": [
+                    "NONE",
+                    "EXPIRE_TAKER",
+                    "EXPIRE_MAKER",
+                    "EXPIRE_BOTH"
+                ]
+            },
+            {
+                "name": "goodTillDate",
+                "type": "LONG",
+                "required": false,
+                "description": "Order cancel time for timeInForce GTD. Mandatory when timeInForce=GTD. Must be greater than current time + 600s and less than 253402300799000"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "New algo order (CONDITIONAL).",
+        "docUrl": "https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/New-Future-Algo-Order"
+    },
+    {
+        "id": "usdm:DELETE:/fapi/v1/algoOrder",
+        "apiGroup": "usdm",
+        "category": "Trade",
+        "method": "DELETE",
+        "path": "/fapi/v1/algoOrder",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "algoId",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "clientAlgoId",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Cancel an algo order.",
+        "docUrl": "https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Cancel-Algo-Order"
+    },
+    {
+        "id": "usdm:DELETE:/fapi/v1/algoOpenOrders",
+        "apiGroup": "usdm",
+        "category": "Trade",
+        "method": "DELETE",
+        "path": "/fapi/v1/algoOpenOrders",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Cancel all open algo orders.",
+        "docUrl": "https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Cancel-All-Algo-Orders"
+    },
+    {
+        "id": "usdm:GET:/fapi/v1/algoOrder",
+        "apiGroup": "usdm",
+        "category": "Trade",
+        "method": "GET",
+        "path": "/fapi/v1/algoOrder",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "algoId",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "clientAlgoId",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Query an algo order.",
+        "docUrl": "https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Query-Current-Algo-Open-Orders"
+    },
+    {
+        "id": "usdm:GET:/fapi/v1/openAlgoOrders",
+        "apiGroup": "usdm",
+        "category": "Trade",
+        "method": "GET",
+        "path": "/fapi/v1/openAlgoOrders",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "algoType",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "algoId",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Get all open algo orders.",
+        "docUrl": "https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Query-Current-Algo-Open-Orders"
+    },
+    {
+        "id": "usdm:GET:/fapi/v1/allAlgoOrders",
+        "apiGroup": "usdm",
+        "category": "Trade",
+        "method": "GET",
+        "path": "/fapi/v1/allAlgoOrders",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "algoId",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "startTime",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "endTime",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "page",
+                "type": "LONG",
+                "required": false
+            },
+            {
+                "name": "pageSize",
+                "type": "LONG",
+                "required": false,
+                "description": "Default 100, max 300"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Get historical algo orders.",
+        "docUrl": "https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Query-Historical-Algo-Orders"
+    },
+    {
+        "id": "usdm:POST:/fapi/v1/stock/contract",
+        "apiGroup": "usdm",
+        "category": "Trade",
+        "method": "POST",
+        "path": "/fapi/v1/stock/contract",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Stock contract order.",
+        "docUrl": "https://developers.binance.com/docs/derivatives/usds-margined-futures/trade"
+    },
+    {
         "id": "usdm:POST:/fapi/v1/positionSide/dual",
         "apiGroup": "usdm",
-        "category": "Account",
+        "category": "Trade",
         "method": "POST",
         "path": "/fapi/v1/positionSide/dual",
         "security": "SIGNED",
@@ -1757,9 +2359,13 @@
         "params": [
             {
                 "name": "dualSidePosition",
-                "type": "STRING",
+                "type": "ENUM",
                 "required": true,
-                "description": "\"true\": Hedge Mode; \"false\": One-way Mode"
+                "description": "\"true\": Hedge Mode; \"false\": One-way Mode",
+                "enumValues": [
+                    "true",
+                    "false"
+                ]
             },
             {
                 "name": "recvWindow",
@@ -1791,7 +2397,7 @@
     {
         "id": "usdm:POST:/fapi/v1/marginType",
         "apiGroup": "usdm",
-        "category": "Account",
+        "category": "Trade",
         "method": "POST",
         "path": "/fapi/v1/marginType",
         "security": "SIGNED",
@@ -1823,7 +2429,7 @@
     {
         "id": "usdm:POST:/fapi/v1/positionMargin",
         "apiGroup": "usdm",
-        "category": "Account",
+        "category": "Trade",
         "method": "POST",
         "path": "/fapi/v1/positionMargin",
         "security": "SIGNED",
@@ -1851,9 +2457,19 @@
             },
             {
                 "name": "type",
-                "type": "LONG",
+                "type": "ENUM",
                 "required": true,
-                "description": "1: Add; 2: Reduce"
+                "description": "1: Add position margin; 2: Reduce position margin",
+                "enumValues": [
+                    {
+                        "name": "1 - Add position margin",
+                        "value": "1"
+                    },
+                    {
+                        "name": "2 - Reduce position margin",
+                        "value": "2"
+                    }
+                ]
             },
             {
                 "name": "recvWindow",
@@ -1867,7 +2483,7 @@
     {
         "id": "usdm:GET:/fapi/v2/positionRisk",
         "apiGroup": "usdm",
-        "category": "Account",
+        "category": "Trade",
         "method": "GET",
         "path": "/fapi/v2/positionRisk",
         "security": "SIGNED",
@@ -1890,7 +2506,7 @@
     {
         "id": "usdm:GET:/fapi/v3/positionRisk",
         "apiGroup": "usdm",
-        "category": "Account",
+        "category": "Trade",
         "method": "GET",
         "path": "/fapi/v3/positionRisk",
         "security": "SIGNED",
@@ -1985,7 +2601,7 @@
     {
         "id": "usdm:POST:/fapi/v1/leverage",
         "apiGroup": "usdm",
-        "category": "Account",
+        "category": "Trade",
         "method": "POST",
         "path": "/fapi/v1/leverage",
         "security": "SIGNED",
@@ -2000,7 +2616,8 @@
                 "name": "leverage",
                 "type": "LONG",
                 "required": true,
-                "description": "target initial leverage: int from 1 to 125"
+                "description": "target initial leverage: int from 1 to 125",
+                "default": 10
             },
             {
                 "name": "recvWindow",
