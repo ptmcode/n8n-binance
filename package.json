@@ -1,7 +1,7 @@
 {
     "name": "n8n-nodes-binance-universal",
     "version": "1.0.0",
-    "description": "n8n community node for all Binance REST endpoints (Spot + USDⓈ-M Futures + Sub Accounts)",
+    "description": "n8n community node for all Binance REST endpoints (Spot + USDⓈ-M Futures + Sub Accounts + Wallet)",
     "keywords": [
         "n8n-community-node-package",
         "n8n",
@@ -10,7 +10,8 @@
         "spot",
         "futures",
         "usd-m",
-        "sub-accounts"
+        "sub-accounts",
+        "wallet"
     ],
     "license": "MIT",
     "homepage": "https://github.com/ptmcode/n8n-binance",
