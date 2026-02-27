@@ -57,7 +57,7 @@ This node does **not** use n8n credential types. Instead, the API Key and Secret
 ### Catalog Mode (recommended)
 
 1. Add the **Binance Universal (REST)** node to your workflow.
-2. Set **API Group** to `Spot` or `USD-M Futures`.
+2. Set **API Group** to one of: `Spot`, `USD-M Futures`, `Wallet`, or `Sub-Account`.
 3. Set **Mode** to `Catalog Endpoint`.
 4. Select a **Category** (e.g. Market Data, Trading, Account).
 5. Select an **Endpoint** from the dropdown.
@@ -203,48 +203,77 @@ npm run dev
 └── jest.config.js
 ```
 
-## Supported Endpoint Categories
+## API Reference
 
-### Spot (`/api/*`, `/sapi/*`)
+This node covers **4 API Groups** and **227 endpoints** total. Select the API Group in the node's **API Group** dropdown to access the relevant categories.
 
-| Category | Examples |
-|----------|----------|
-| General | Ping, Server Time, Exchange Info |
-| Market Data | Depth, Trades, Klines, Ticker, Avg Price |
-| Trading | New Order, Cancel, Query, OCO, SOR |
-| Account | Account Info, Trade List |
-| User Data Streams | Create/Keepalive/Close listen key |
-| Margin | Cross Margin Transfer, Borrow, Repay |
-| Convert | Accept Quote |
+| API Group | Base Path | Endpoints | Description |
+|-----------|-----------|-----------|-------------|
+| [Spot](#spot-apiv3-sapiv1) | `/api/v3`, `/sapi/*` | 44 | Spot trading, market data, and account management |
+| [USD-M Futures](#usd-m-futures-fapiv1) | `/fapi/v1–v3`, `/futures/data/*` | 92 | Perpetual and delivery futures trading |
+| [Wallet](#wallet-sapiv1) | `/sapi/v1–v4` | 46 | Deposits, withdrawals, assets, and travel-rule compliance |
+| [Sub-Account](#sub-account-sapiv1) | `/sapi/v1–v4` | 45 | Sub-account creation, transfers, and managed accounts |
 
-### Wallet (`/sapi/*`)
+---
 
-| Category | Examples |
-|----------|----------|
-| System | System Status |
-| Capital | All Coins Info, Withdraw, Deposit History, Deposit Address |
-| Account | Account Snapshot, Fast Withdraw Switch, Account Status, API Trading Status, API Key Permissions |
-| Asset | Dust Log, Dust Transfer, Asset Dividend, Asset Detail, Trade Fee, Funding Wallet, Cloud Mining History |
-| Transfer | Universal Transfer, Query Transfer History |
+### Spot (`/api/v3`, `/sapi/*`)
 
-### USD-M Futures (`/fapi/*`)
+The Spot API group covers all standard spot market operations on Binance.
 
-| Category | Examples |
-|----------|----------|
-| General | Ping, Server Time, Exchange Info |
-| Market Data | Depth, Trades, Klines, Funding Rate, Open Interest, Ticker |
-| Trading | New Order, Batch Orders, Cancel, Modify, Force Orders |
-| Account | Position Risk, Balance, Leverage, Margin Type, Income, Commission |
-| User Data Streams | Create/Keepalive/Close listen key |
+| Category | Endpoints | Auth Required | Description |
+|----------|-----------|---------------|-------------|
+| **General** | 3 | None | Connectivity check (`/ping`), server time, and full exchange trading rules & symbol info (`/exchangeInfo`) |
+| **Market Data** | 12 | None | Public market data: order book depth, recent & historical trades, aggregated trades, candlestick/kline data, UI klines, average price, 24 h rolling tickers, trading-day tickers, price tickers, and best bid/ask |
+| **Trading** | 15 | Signed | Place, cancel, replace, and amend orders; supports standard orders, OCO (One-Cancels-the-Other), OTO, OTOCO, OPO, OPOCO, and Smart Order Routing (SOR) orders; includes test-order endpoints for validation without execution |
+| **Account** | 14 | Signed | Query open orders, all orders, trade history, prevented matches, allocations, order amendments, account balances, commission rates, and current rate-limit usage |
 
-### Sub-Account (`/sapi/*`)
+**Key use-cases:** Live price feeds, automated spot trading bots, order history auditing, commission analysis.
 
-| Category | Examples |
-|----------|----------|
-| Account Management | Create Virtual Sub-account, Query Sub-account List, Enable Margin/Futures |
-| API Management | Create API Key, Query API Key |
-| Asset Management | Query Sub-account Assets, Universal Transfer |
-| Managed Sub Account | Query Managed Sub-account List, Deposits, Withdrawals |
+---
+
+### USD-M Futures (`/fapi/v1–v3`, `/futures/data/*`)
+
+The USD-M Futures group covers perpetual and delivery futures contracts settled in USDT/USDC.
+
+| Category | Endpoints | Auth Required | Description |
+|----------|-----------|---------------|-------------|
+| **Market Data** | 34 | None (most) | Order book, trades, klines (standard, index, mark-price, premium-index, continuous-contract), funding rates & history, open interest (snapshot + historical), long/short ratios (accounts & positions), taker buy/sell volume, delivery prices, composite index, asset index, insurance fund balance, ADL risk, and trading schedule |
+| **Trade** | 32 | Signed | Place, modify, cancel, and batch-manage futures orders; query open/all orders, user trades, force-liquidation orders, and order amendments; manage position side (hedge/one-way), margin type (isolated/cross), leverage, position margin; algo orders; stock contract placement; and async data-download initiation |
+| **Account** | 21 | Signed | Account & balance snapshots (v2/v3), leverage bracket info, income history (with async download), commission rates, account/symbol config, multi-assets margin mode, API trading status, fee-burn toggle, and rate-limit order count |
+| **Convert** | 4 | Signed | Query available convert pairs and rates, request a conversion quote, accept a quote, and check conversion order status |
+| **Portfolio Margin Endpoints** | 1 | Signed | Query Portfolio Margin account information (`/fapi/v1/pmAccountInfo`) |
+
+**Key use-cases:** Algorithmic futures trading, funding-rate arbitrage, open-interest analysis, long/short sentiment monitoring.
+
+---
+
+### Wallet (`/sapi/v1–v4`)
+
+The Wallet group provides management of funds across all wallet types, coin configs, deposit/withdrawal flows, and regulatory travel-rule tooling.
+
+| Category | Endpoints | Auth Required | Description |
+|----------|-----------|---------------|-------------|
+| **Capital** | 9 | Signed | List all supported coins and their networks, submit withdrawals, query deposit and withdrawal history, list withdrawal addresses, check withdrawal quotas, generate deposit addresses (single or list), and submit credit-apply for deposits |
+| **Asset** | 18 | Signed | Query dust conversion log, convert small balances to BNB, asset-dividend history, asset detail (min withdraw, deposit status), wallet balances, trading fees, funding-wallet balances, universal asset transfer & history, toggle BNB burn for spot/margin fees, cloud-mining transfer history, custody transfer history, spot delist schedules, open symbol list, and dust-convert utilities |
+| **Account** | 7 | Signed | Account daily snapshots (spot, margin, futures), enable/disable fast-withdraw switch, account status, account API trading status, and API key restriction details |
+| **Travel Rule** | 12 | Signed | Regulatory compliance endpoints: local-entity withdrawals, deposit info submission (v1/v2), deposit/withdrawal history (v1/v2), VASP list lookup, address verification list, broker-specific withdrawal and deposit info, and questionnaire-requirement queries |
+
+**Key use-cases:** Automated withdrawal pipelines, multi-coin deposit monitoring, regulatory compliance workflows, fee optimization.
+
+---
+
+### Sub-Account (`/sapi/v1–v4`)
+
+The Sub-Account group enables master-account holders to create and manage child accounts, control their API keys, move assets, and use managed-sub-account features for fund management.
+
+| Category | Endpoints | Auth Required | Description |
+|----------|-----------|---------------|-------------|
+| **Account Management** | 8 | Signed | Create virtual sub-accounts, list all sub-accounts, query sub-account status, enable futures or European Options trading for a sub-account, query futures position risk (v1/v2), and retrieve transaction statistics |
+| **Asset Management** | 23 | Signed | Sub-to-sub and sub-to-master transfers, universal transfers & history, futures and margin wallet transfers, internal futures transfers, futures position move, deposit addresses and history for sub-accounts, futures/margin account details and summaries (v1/v2), sub-account asset queries (v3/v4), and spot summary |
+| **API Management** | 3 | Signed | Query IP restrictions on a sub-account API key, add IP restrictions, and delete IP restriction entries |
+| **Managed Sub Account** | 11 | Signed | Deposit and withdraw assets to/from managed sub-accounts, query managed sub-account snapshots and asset lists, transaction log queries for both investor and trade-parent sides, fetch future assets, query managed-account info, generate deposit addresses, query margin assets, and full transaction-log search |
+
+**Key use-cases:** Fund-management platforms, broker/rebate programs, multi-user trading infrastructure, automated sub-account onboarding.
 
 ## License
 
