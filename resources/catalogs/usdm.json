@@ -2744,6 +2744,305 @@
         "docUrl": "https://developers.binance.com/docs/derivatives/usds-margined-futures/account/rest-api/User-Commission-Rate"
     },
     {
+        "id": "usdm:GET:/fapi/v1/accountConfig",
+        "apiGroup": "usdm",
+        "category": "Account",
+        "method": "GET",
+        "path": "/fapi/v1/accountConfig",
+        "security": "SIGNED",
+        "weight": 5,
+        "params": [
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Get current account configuration.",
+        "docUrl": "https://developers.binance.com/docs/derivatives/usds-margined-futures/account/rest-api/Get-Current-Account-Configuration"
+    },
+    {
+        "id": "usdm:GET:/fapi/v1/symbolConfig",
+        "apiGroup": "usdm",
+        "category": "Account",
+        "method": "GET",
+        "path": "/fapi/v1/symbolConfig",
+        "security": "SIGNED",
+        "weight": 5,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Get current symbol configuration.",
+        "docUrl": "https://developers.binance.com/docs/derivatives/usds-margined-futures/account/rest-api/Symbol-Config"
+    },
+    {
+        "id": "usdm:GET:/fapi/v1/rateLimit/order",
+        "apiGroup": "usdm",
+        "category": "Account",
+        "method": "GET",
+        "path": "/fapi/v1/rateLimit/order",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Query user's order count per minute.",
+        "docUrl": "https://developers.binance.com/docs/derivatives/usds-margined-futures/account/rest-api/Query-Rate-Limit"
+    },
+    {
+        "id": "usdm:GET:/fapi/v1/multiAssetsMargin",
+        "apiGroup": "usdm",
+        "category": "Account",
+        "method": "GET",
+        "path": "/fapi/v1/multiAssetsMargin",
+        "security": "SIGNED",
+        "weight": 30,
+        "params": [
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Get current multi-assets mode.",
+        "docUrl": "https://developers.binance.com/docs/derivatives/usds-margined-futures/account/rest-api/Get-Current-Multi-Assets-Mode"
+    },
+    {
+        "id": "usdm:GET:/fapi/v1/apiTradingStatus",
+        "apiGroup": "usdm",
+        "category": "Account",
+        "method": "GET",
+        "path": "/fapi/v1/apiTradingStatus",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "symbol",
+                "type": "STRING",
+                "required": false
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Futures trading quantitative rules indicators.",
+        "docUrl": "https://developers.binance.com/docs/derivatives/usds-margined-futures/account/rest-api/Futures-Trading-Quantitative-Rules-Indicators"
+    },
+    {
+        "id": "usdm:GET:/fapi/v1/income/asyn",
+        "apiGroup": "usdm",
+        "category": "Account",
+        "method": "GET",
+        "path": "/fapi/v1/income/asyn",
+        "security": "SIGNED",
+        "weight": 1500,
+        "params": [
+            {
+                "name": "startTime",
+                "type": "LONG",
+                "required": true
+            },
+            {
+                "name": "endTime",
+                "type": "LONG",
+                "required": true
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Get download ID for futures transaction history.",
+        "docUrl": "https://developers.binance.com/docs/derivatives/usds-margined-futures/account/rest-api/Get-Download-Id-For-Futures-Transaction-History"
+    },
+    {
+        "id": "usdm:GET:/fapi/v1/income/asyn/id",
+        "apiGroup": "usdm",
+        "category": "Account",
+        "method": "GET",
+        "path": "/fapi/v1/income/asyn/id",
+        "security": "SIGNED",
+        "weight": 10,
+        "params": [
+            {
+                "name": "downloadId",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Get futures transaction history download link by ID.",
+        "docUrl": "https://developers.binance.com/docs/derivatives/usds-margined-futures/account/rest-api/Get-Futures-Transaction-History-Download-Link-by-Id"
+    },
+    {
+        "id": "usdm:GET:/fapi/v1/order/asyn",
+        "apiGroup": "usdm",
+        "category": "Account",
+        "method": "GET",
+        "path": "/fapi/v1/order/asyn",
+        "security": "SIGNED",
+        "weight": 1500,
+        "params": [
+            {
+                "name": "startTime",
+                "type": "LONG",
+                "required": true
+            },
+            {
+                "name": "endTime",
+                "type": "LONG",
+                "required": true
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Get download ID for futures order history.",
+        "docUrl": "https://developers.binance.com/docs/derivatives/usds-margined-futures/account/rest-api/Get-Download-Id-For-Futures-Order-History"
+    },
+    {
+        "id": "usdm:GET:/fapi/v1/order/asyn/id",
+        "apiGroup": "usdm",
+        "category": "Account",
+        "method": "GET",
+        "path": "/fapi/v1/order/asyn/id",
+        "security": "SIGNED",
+        "weight": 10,
+        "params": [
+            {
+                "name": "downloadId",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Get futures order history download link by ID.",
+        "docUrl": "https://developers.binance.com/docs/derivatives/usds-margined-futures/account/rest-api/Get-Futures-Order-History-Download-Link-by-Id"
+    },
+    {
+        "id": "usdm:GET:/fapi/v1/trade/asyn",
+        "apiGroup": "usdm",
+        "category": "Account",
+        "method": "GET",
+        "path": "/fapi/v1/trade/asyn",
+        "security": "SIGNED",
+        "weight": 1500,
+        "params": [
+            {
+                "name": "startTime",
+                "type": "LONG",
+                "required": true
+            },
+            {
+                "name": "endTime",
+                "type": "LONG",
+                "required": true
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Get download ID for futures trade history.",
+        "docUrl": "https://developers.binance.com/docs/derivatives/usds-margined-futures/account/rest-api/Get-Download-Id-For-Futures-Trade-History"
+    },
+    {
+        "id": "usdm:GET:/fapi/v1/trade/asyn/id",
+        "apiGroup": "usdm",
+        "category": "Account",
+        "method": "GET",
+        "path": "/fapi/v1/trade/asyn/id",
+        "security": "SIGNED",
+        "weight": 10,
+        "params": [
+            {
+                "name": "downloadId",
+                "type": "STRING",
+                "required": true
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Get futures trade history download link by ID.",
+        "docUrl": "https://developers.binance.com/docs/derivatives/usds-margined-futures/account/rest-api/Get-Futures-Trade-History-Download-Link-by-Id"
+    },
+    {
+        "id": "usdm:POST:/fapi/v1/feeBurn",
+        "apiGroup": "usdm",
+        "category": "Account",
+        "method": "POST",
+        "path": "/fapi/v1/feeBurn",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "feeBurn",
+                "type": "ENUM",
+                "required": true,
+                "description": "\"true\": Fee Discount On; \"false\": Fee Discount Off",
+                "enumValues": [
+                    "true",
+                    "false"
+                ]
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Toggle BNB Burn On Futures Trade.",
+        "docUrl": "https://developers.binance.com/docs/derivatives/usds-margined-futures/account/rest-api/Toggle-BNB-Burn-On-Futures-Trade"
+    },
+    {
+        "id": "usdm:GET:/fapi/v1/feeBurn",
+        "apiGroup": "usdm",
+        "category": "Account",
+        "method": "GET",
+        "path": "/fapi/v1/feeBurn",
+        "security": "SIGNED",
+        "weight": 30,
+        "params": [
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false
+            }
+        ],
+        "notes": "Get BNB Burn Status.",
+        "docUrl": "https://developers.binance.com/docs/derivatives/usds-margined-futures/account/rest-api/Get-BNB-Burn-Status"
+    },
+    {
         "id": "usdm:GET:/fapi/v1/convert/exchangeInfo",
         "apiGroup": "usdm",
         "category": "Convert",
