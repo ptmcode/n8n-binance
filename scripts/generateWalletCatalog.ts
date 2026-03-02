@@ -15,7 +15,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
-import { CatalogEntry, CatalogParam } from './catalogTypes';
+import { CatalogEntry } from './catalogTypes';
 
 // Base documentation URL
 const BASE_DOC_URL = 'https://developers.binance.com/docs/wallet';

@@ -18,7 +18,7 @@ import * as path from 'path';
 import { CatalogEntry, CatalogParam } from './catalogTypes';
 
 const SITEMAP_URL = 'https://developers.binance.com/sitemap.xml';
-const DOCS_BASE = 'https://developers.binance.com/docs/derivatives/usds-margined-futures';
+const _DOCS_BASE = 'https://developers.binance.com/docs/derivatives/usds-margined-futures';
 const REST_API_PATH_PATTERN = /\/docs\/derivatives\/usds-margined-futures\/.*rest-api/i;
 
 // Rate limit: wait between fetches
@@ -95,7 +95,7 @@ async function parseEndpointPage(url: string): Promise<CatalogEntry | null> {
         // Find HTTP method and path
         let method = '';
         let apiPath = '';
-        const httpRequestSection = $('*').filter((_, el) => {
+        const _httpRequestSection = $('*').filter((_, el) => {
             return $(el).text().includes('HTTP Request') || $(el).text().includes('API Description');
         });
 

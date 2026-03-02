@@ -12,12 +12,14 @@ import spotCatalogJson from '../../resources/catalogs/spot.json';
 import usdmCatalogJson from '../../resources/catalogs/usdm.json';
 import walletCatalogJson from '../../resources/catalogs/wallet.json';
 import subAccountCatalogJson from '../../resources/catalogs/sub-account.json';
+import dualInvestmentCatalogJson from '../../resources/catalogs/dual-investment.json';
 import type { CatalogEntry } from './catalogTypes';
 
 const spotCatalog: CatalogEntry[] = spotCatalogJson as unknown as CatalogEntry[];
 const usdmCatalog: CatalogEntry[] = usdmCatalogJson as unknown as CatalogEntry[];
 const walletCatalog: CatalogEntry[] = walletCatalogJson as unknown as CatalogEntry[];
 const subAccountCatalog: CatalogEntry[] = subAccountCatalogJson as unknown as CatalogEntry[];
+const dualInvestmentCatalog: CatalogEntry[] = dualInvestmentCatalogJson as unknown as CatalogEntry[];
 
 /** Get unique categories for a given API group */
 function getCategories(catalog: CatalogEntry[]): Array<{ name: string; value: string }> {
@@ -43,6 +45,7 @@ const spotCategories = getCategories(spotCatalog);
 const usdmCategories = getCategories(usdmCatalog);
 const walletCategories = getCategories(walletCatalog);
 const subAccountCategories = getCategories(subAccountCatalog);
+const dualInvestmentCategories = getCategories(dualInvestmentCatalog);
 
 // Create endpoint options grouped by category
 const spotEndpointsByCategory = new Map<string, Array<{ name: string; value: string; description?: string }>>();
@@ -65,6 +68,11 @@ for (const category of subAccountCategories) {
     subAccountEndpointsByCategory.set(category.value, getEndpointOptions(subAccountCatalog, category.value));
 }
 
+const dualInvestmentEndpointsByCategory = new Map<string, Array<{ name: string; value: string; description?: string }>>();
+for (const category of dualInvestmentCategories) {
+    dualInvestmentEndpointsByCategory.set(category.value, getEndpointOptions(dualInvestmentCatalog, category.value));
+}
+
 // Create index maps for security type lookups
 const spotSecurityMap = new Map<string, string>();
 for (const entry of spotCatalog) {
@@ -84,6 +92,11 @@ for (const entry of walletCatalog) {
 const subAccountSecurityMap = new Map<string, string>();
 for (const entry of subAccountCatalog) {
     subAccountSecurityMap.set(entry.id, entry.security);
+}
+
+const dualInvestmentSecurityMap = new Map<string, string>();
+for (const entry of dualInvestmentCatalog) {
+    dualInvestmentSecurityMap.set(entry.id, entry.security);
 }
 
 // Get endpoint IDs that require API_KEY or SIGNED security
@@ -119,6 +132,14 @@ const subAccountEndpointsRequiringSigned = subAccountCatalog
     .filter((e) => e.security === 'SIGNED')
     .map((e) => e.id);
 
+const dualInvestmentEndpointsRequiringApiKey = dualInvestmentCatalog
+    .filter((e) => e.security === 'API_KEY' || e.security === 'SIGNED')
+    .map((e) => e.id);
+
+const dualInvestmentEndpointsRequiringSigned = dualInvestmentCatalog
+    .filter((e) => e.security === 'SIGNED')
+    .map((e) => e.id);
+
 // ─── Dynamic Parameter Generation ──────────────────────────────────────────
 
 /**
@@ -127,7 +148,7 @@ const subAccountEndpointsRequiringSigned = subAccountCatalog
 function generateParamProperty(
     param: CatalogEntry['params'][0],
     endpointId: string,
-    apiGroup: 'spot' | 'usdm' | 'wallet' | 'sub-account',
+    apiGroup: 'spot' | 'usdm' | 'wallet' | 'sub-account' | 'dual-investment',
 ): INodeProperties {
     const fieldName = `param_${endpointId}_${param.name}`;
     let endpointField: string;
@@ -144,6 +165,9 @@ function generateParamProperty(
             break;
         case 'sub-account':
             endpointField = 'endpointIdSubAccount';
+            break;
+        case 'dual-investment':
+            endpointField = 'endpointIdDualInvestment';
             break;
     }
 
@@ -233,6 +257,14 @@ function generateAllParamProperties(): INodeProperties[] {
         }
     }
 
+    // Generate for dual-investment endpoints
+    for (const entry of dualInvestmentCatalog) {
+        for (const param of entry.params) {
+            if (param.name === 'timestamp' || param.name === 'signature') continue;
+            properties.push(generateParamProperty(param, entry.id, 'dual-investment'));
+        }
+    }
+
     return properties;
 }
 
@@ -251,6 +283,7 @@ export const nodeProperties: INodeProperties[] = [
             { name: 'USD-M Futures', value: 'usdm' },
             { name: 'Wallet', value: 'wallet' },
             { name: 'Sub Account', value: 'sub-account' },
+            { name: 'Dual Investment', value: 'dual-investment' },
         ],
         default: 'spot',
         description: 'Select the Binance API group to use',
@@ -328,6 +361,25 @@ export const nodeProperties: INodeProperties[] = [
         default: 'https://api.binance.com',
         description: 'Binance Sub Account API base URL',
     },
+    {
+        displayName: 'Base URL',
+        name: 'baseUrlDualInvestment',
+        type: 'options',
+        displayOptions: {
+            show: { apiGroup: ['dual-investment'] },
+        },
+        options: [
+            { name: 'api.binance.com (Primary)', value: 'https://api.binance.com' },
+            { name: 'api1.binance.com', value: 'https://api1.binance.com' },
+            { name: 'api2.binance.com', value: 'https://api2.binance.com' },
+            { name: 'api3.binance.com', value: 'https://api3.binance.com' },
+            { name: 'api4.binance.com', value: 'https://api4.binance.com' },
+            { name: 'api-gcp.binance.com (GCP)', value: 'https://api-gcp.binance.com' },
+            { name: 'Testnet (testnet.binance.vision)', value: 'https://testnet.binance.vision' },
+        ],
+        default: 'https://api.binance.com',
+        description: 'Binance Dual Investment API base URL',
+    },
 
     // === Mode ===
     {
@@ -400,6 +452,18 @@ export const nodeProperties: INodeProperties[] = [
         default: subAccountCategories[0]?.value || '',
         description: 'Sub Account API endpoint category',
     },
+    // Dual Investment category
+    {
+        displayName: 'Category',
+        name: 'categoryDualInvestment',
+        type: 'options',
+        displayOptions: {
+            show: { mode: ['catalog'], apiGroup: ['dual-investment'] },
+        },
+        options: dualInvestmentCategories,
+        default: dualInvestmentCategories[0]?.value || '',
+        description: 'Dual Investment API endpoint category',
+    },
 
     // Generate Spot endpoint fields for each category
     ...Array.from(spotEndpointsByCategory.entries()).map(([category, endpoints]) => ({
@@ -467,6 +531,23 @@ export const nodeProperties: INodeProperties[] = [
         options: endpoints,
         default: '',
         description: 'Select a Sub Account API endpoint from the catalog',
+    })),
+
+    // Generate Dual Investment endpoint fields for each category
+    ...Array.from(dualInvestmentEndpointsByCategory.entries()).map(([category, endpoints]) => ({
+        displayName: 'Endpoint',
+        name: 'endpointIdDualInvestment',
+        type: 'options' as const,
+        displayOptions: {
+            show: {
+                mode: ['catalog'],
+                apiGroup: ['dual-investment'],
+                categoryDualInvestment: [category],
+            },
+        },
+        options: endpoints,
+        default: '',
+        description: 'Select a Dual Investment API endpoint from the catalog',
     })),
 
     // === Authentication (Catalog Mode - Spot) ===
@@ -598,6 +679,40 @@ export const nodeProperties: INodeProperties[] = [
                 mode: ['catalog'],
                 apiGroup: ['sub-account'],
                 endpointIdSubAccount: subAccountEndpointsRequiringSigned,
+            },
+        },
+        default: '',
+        description: 'Binance API Secret. Use expressions like {{$json.binanceApiSecret}} to pass dynamically.',
+        placeholder: 'Your Binance API Secret',
+    },
+
+    // === Authentication (Catalog Mode - Dual Investment) ===
+    {
+        displayName: 'API Key',
+        name: 'apiKey',
+        type: 'string',
+        typeOptions: { password: true },
+        displayOptions: {
+            show: {
+                mode: ['catalog'],
+                apiGroup: ['dual-investment'],
+                endpointIdDualInvestment: dualInvestmentEndpointsRequiringApiKey,
+            },
+        },
+        default: '',
+        description: 'Binance API Key. Use expressions like {{$json.binanceApiKey}} to pass dynamically.',
+        placeholder: 'Your Binance API Key',
+    },
+    {
+        displayName: 'API Secret',
+        name: 'apiSecret',
+        type: 'string',
+        typeOptions: { password: true },
+        displayOptions: {
+            show: {
+                mode: ['catalog'],
+                apiGroup: ['dual-investment'],
+                endpointIdDualInvestment: dualInvestmentEndpointsRequiringSigned,
             },
         },
         default: '',

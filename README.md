@@ -11,7 +11,7 @@ If this project has been helpful to you, consider supporting its development wit
 
 ---
 
-A comprehensive **n8n community node** for calling **all Binance REST API endpoints** — both **Spot** (`/api/*`, `/sapi/*`) and **USDⓈ-M Futures** (`/fapi/*`).
+A comprehensive **n8n community node** for calling **all Binance REST API endpoints** — **Spot** (`/api/*`, `/sapi/*`), **USDⓈ-M Futures** (`/fapi/*`), and **Dual Investment** (`/sapi/v1/dci/*`).
 
 ## Features
 
@@ -68,7 +68,7 @@ This node does **not** use n8n credential types. Instead, the API Key and Secret
 ### Catalog Mode (recommended)
 
 1. Add the **Binance Universal (REST)** node to your workflow.
-2. Set **API Group** to one of: `Spot`, `USD-M Futures`, `Wallet`, or `Sub-Account`.
+3. Set **API Group** to one of: `Spot`, `USD-M Futures`, `Wallet`, `Sub-Account`, or `Dual Investment`.
 3. Set **Mode** to `Catalog Endpoint`.
 4. Select a **Category** (e.g. Market Data, Trading, Account).
 5. Select an **Endpoint** from the dropdown.
@@ -198,8 +198,9 @@ npm run dev
 │   └── catalogs/
 │       ├── spot.json                      # Spot API endpoints
 │       ├── usdm.json                      # USD-M Futures endpoints
-│       ├── wallet.json                    # Wallet API endpoints (21 endpoints)
-│       └── sub-account.json               # Sub-Account endpoints
+│       ├── wallet.json                    # Wallet API endpoints
+│       ├── sub-account.json               # Sub-Account endpoints
+│       └── dual-investment.json           # Dual Investment endpoints (5 endpoints)
 ├── scripts/
 │   ├── catalogTypes.ts                    # Shared types for generators
 │   ├── generateSpotCatalog.ts             # Spot catalog generator
@@ -216,7 +217,7 @@ npm run dev
 
 ## API Reference
 
-This node covers **4 API Groups** and **227 endpoints** total. Select the API Group in the node's **API Group** dropdown to access the relevant categories.
+This node covers **5 API Groups** and **232 endpoints** total. Select the API Group in the node's **API Group** dropdown to access the relevant categories.
 
 | API Group | Base Path | Endpoints | Description |
 |-----------|-----------|-----------|-------------|
@@ -224,6 +225,7 @@ This node covers **4 API Groups** and **227 endpoints** total. Select the API Gr
 | [USD-M Futures](#usd-m-futures-fapiv1) | `/fapi/v1–v3`, `/futures/data/*` | 92 | Perpetual and delivery futures trading |
 | [Wallet](#wallet-sapiv1) | `/sapi/v1–v4` | 46 | Deposits, withdrawals, assets, and travel-rule compliance |
 | [Sub-Account](#sub-account-sapiv1) | `/sapi/v1–v4` | 45 | Sub-account creation, transfers, and managed accounts |
+| [Dual Investment](#dual-investment-sapiv1dci) | `/sapi/v1/dci/*` | 5 | Structured earn products (CALL/PUT), subscriptions, and auto-compound management |
 
 ---
 
@@ -285,6 +287,19 @@ The Sub-Account group enables master-account holders to create and manage child 
 | **Managed Sub Account** | 11 | Signed | Deposit and withdraw assets to/from managed sub-accounts, query managed sub-account snapshots and asset lists, transaction log queries for both investor and trade-parent sides, fetch future assets, query managed-account info, generate deposit addresses, query margin assets, and full transaction-log search |
 
 **Key use-cases:** Fund-management platforms, broker/rebate programs, multi-user trading infrastructure, automated sub-account onboarding.
+
+---
+
+### Dual Investment (`/sapi/v1/dci/*`)
+
+The Dual Investment group provides access to Binance's structured earn product that lets users subscribe to CALL (Sell High) or PUT (Buy Low) options-linked savings products.
+
+| Category | Endpoints | Auth Required | Description |
+|----------|-----------|---------------|-------------|
+| **Market Data** | 1 | Signed | List available Dual Investment products filtered by option type (`CALL`/`PUT`), exercised coin, and invest coin, with pagination support |
+| **Trade** | 4 | Signed | Subscribe to a Dual Investment product with auto-compound plan selection; query open positions by status with pagination; check Dual Investment account balances; and change the auto-compound plan (`NONE`, `STANDARD`, `ADVANCED`) for an existing position |
+
+**Key use-cases:** Automated yield strategy execution, monitoring Dual Investment positions and settlement status, managing auto-compound preferences programmatically.
 
 ## License
 

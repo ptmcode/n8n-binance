@@ -24,7 +24,7 @@ export interface CatalogParam {
 
 export interface CatalogEntry {
     id: string;
-    apiGroup: 'spot' | 'usdm' | 'wallet' | 'sub-account';
+    apiGroup: 'spot' | 'usdm' | 'wallet' | 'sub-account' | 'dual-investment';
     category: string;
     method: string;
     path: string;

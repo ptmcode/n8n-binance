@@ -1,0 +1,242 @@
+[
+    {
+        "id": "dual-investment:GET:/sapi/v1/dci/product/list",
+        "apiGroup": "dual-investment",
+        "category": "Market Data",
+        "method": "GET",
+        "path": "/sapi/v1/dci/product/list",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "optionType",
+                "type": "STRING",
+                "required": true,
+                "description": "Input CALL or PUT",
+                "enumValues": [
+                    {
+                        "name": "CALL: Sell High",
+                        "value": "CALL"
+                    },
+                    {
+                        "name": "PUT: Buy Low",
+                        "value": "PUT"
+                    }
+                ]
+            },
+            {
+                "name": "exercisedCoin",
+                "type": "STRING",
+                "required": true,
+                "description": "Target exercised asset, e.g.: if you subscribe to a high sell product (call option), you should input: optionType:CALL,exercisedCoin:USDT,investCoin:BNB; if you subscribe to a low buy product (put option), you should input: optionType:PUT,exercisedCoin:BNB,investCoin:USDT"
+            },
+            {
+                "name": "investCoin",
+                "type": "STRING",
+                "required": true,
+                "description": "Asset used for subscribing, e.g.: if you subscribe to a high sell product (call option), you should input: optionType:CALL,exercisedCoin:USDT,investCoin:BNB; if you subscribe to a low buy product (put option), you should input: optionType:PUT,exercisedCoin:BNB,investCoin:USDT"
+            },
+            {
+                "name": "pageSize",
+                "type": "LONG",
+                "required": false,
+                "description": "Default: 10, Maximum: 100"
+            },
+            {
+                "name": "pageIndex",
+                "type": "INT",
+                "required": false,
+                "description": "Default: 1"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Get Dual Investment product list.",
+        "docUrl": "https://developers.binance.com/docs/advanced_earn/dual-investment/market-data"
+    },
+    {
+        "id": "dual-investment:POST:/sapi/v1/dci/product/subscribe",
+        "apiGroup": "dual-investment",
+        "category": "Trade",
+        "method": "POST",
+        "path": "/sapi/v1/dci/product/subscribe",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "id",
+                "type": "STRING",
+                "required": true,
+                "description": "Get id from /sapi/v1/dci/product/list"
+            },
+            {
+                "name": "orderId",
+                "type": "STRING",
+                "required": true,
+                "description": "Get orderId from /sapi/v1/dci/product/list"
+            },
+            {
+                "name": "depositAmount",
+                "type": "DECIMAL",
+                "required": true,
+                "description": "The amount for subscribing"
+            },
+            {
+                "name": "autoCompoundPlan",
+                "type": "ENUM",
+                "required": true,
+                "default": "NONE",
+                "description": "NONE: switch off the plan, STANDARD: standard plan, ADVANCED: advanced plan",
+                "enumValues": [
+                    "NONE",
+                    "STANDARD",
+                    "ADVANCED"
+                ]
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Subscribe Dual Investment products.",
+        "docUrl": "https://developers.binance.com/docs/advanced_earn/dual-investment/trade"
+    },
+    {
+        "id": "dual-investment:GET:/sapi/v1/dci/product/positions",
+        "apiGroup": "dual-investment",
+        "category": "Trade",
+        "method": "GET",
+        "path": "/sapi/v1/dci/product/positions",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "status",
+                "type": "ENUM",
+                "required": false,
+                "description": "PENDING: Products are purchasing; PURCHASE_SUCCESS: purchase successfully; SETTLED: Products are finished settling; PURCHASE_FAIL: fail to purchase; REFUNDING: refund ongoing; REFUND_SUCCESS: refunded to spot account; SETTLING: Products are settling. If not filled, returns all position statuses.",
+                "enumValues": [
+                    "PENDING",
+                    "PURCHASE_SUCCESS",
+                    "SETTLED",
+                    "PURCHASE_FAIL",
+                    "REFUNDING",
+                    "REFUND_SUCCESS",
+                    "SETTLING"
+                ]
+            },
+            {
+                "name": "pageSize",
+                "type": "LONG",
+                "required": false,
+                "description": "Default: 10, Max: 100"
+            },
+            {
+                "name": "pageIndex",
+                "type": "INT",
+                "required": false,
+                "description": "Default: 1"
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Get Dual Investment positions (batch).",
+        "docUrl": "https://developers.binance.com/docs/advanced_earn/dual-investment/trade/Get-Dual-Investment-positions"
+    },
+    {
+        "id": "dual-investment:GET:/sapi/v1/dci/product/accounts",
+        "apiGroup": "dual-investment",
+        "category": "Trade",
+        "method": "GET",
+        "path": "/sapi/v1/dci/product/accounts",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Check Dual Investment accounts.",
+        "docUrl": "https://developers.binance.com/docs/advanced_earn/dual-investment/trade/Check-Dual-Investment-accounts"
+    },
+    {
+        "id": "dual-investment:POST:/sapi/v1/dci/product/auto_compound/edit-status",
+        "apiGroup": "dual-investment",
+        "category": "Trade",
+        "method": "POST",
+        "path": "/sapi/v1/dci/product/auto_compound/edit-status",
+        "security": "SIGNED",
+        "weight": 1,
+        "params": [
+            {
+                "name": "positionId",
+                "type": "STRING",
+                "required": true,
+                "description": "Get positionId from /sapi/v1/dci/product/positions"
+            },
+            {
+                "name": "AutoCompoundPlan",
+                "type": "STRING",
+                "required": true,
+                "default": "NONE",
+                "description": "Auto-compound plan to set",
+                "enumValues": [
+                    "NONE",
+                    "STANDARD",
+                    "ADVANCED"
+                ]
+            },
+            {
+                "name": "recvWindow",
+                "type": "LONG",
+                "required": false,
+                "description": "The value cannot be greater than 60000"
+            },
+            {
+                "name": "timestamp",
+                "type": "LONG",
+                "required": true,
+                "description": "Current timestamp in milliseconds"
+            }
+        ],
+        "notes": "Change Auto-Compound status. Note: this function is disabled between 15:31 ~ 16:00 UTC+8.",
+        "docUrl": "https://developers.binance.com/docs/advanced_earn/dual-investment/trade/Change-Auto-Compound-status"
+    }
+]
