@@ -37,7 +37,10 @@
         "generate:catalog:usdm": "ts-node scripts/generateUsdmCatalog.ts",
         "generate:catalog:wallet": "ts-node scripts/generateWalletCatalog.ts",
         "generate:catalog:sub-account": "ts-node scripts/generateSubAccountCatalog.ts",
-        "generate:catalogs": "npm run generate:catalog:spot && npm run generate:catalog:usdm && npm run generate:catalog:wallet && npm run generate:catalog:sub-account"
+        "generate:catalogs": "npm run generate:catalog:spot && npm run generate:catalog:usdm && npm run generate:catalog:wallet && npm run generate:catalog:sub-account",
+        "test": "jest",
+        "test:watch": "jest --watch",
+        "test:coverage": "jest --coverage"
     },
     "files": [
         "dist"
